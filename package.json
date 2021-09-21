@@ -1,0 +1,23 @@
+{
+  "name": "laundry_backend",
+  "version": "1.0.0",
+  "description": "Backend for private laundries",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klukovka/laundry_backend.git"
+  },
+  "keywords": [
+    "laundry",
+    "backend"
+  ],
+  "author": "Yuliia Koba",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/klukovka/laundry_backend/issues"
+  },
+  "homepage": "https://github.com/klukovka/laundry_backend#readme"
+}
