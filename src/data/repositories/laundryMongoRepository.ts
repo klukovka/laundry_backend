@@ -44,9 +44,8 @@ export class LaundryMongoRepository implements LaundryRepository {
           laundry.phone,
           laundry?._id.toString()
         );
-      } else {
-        return null;
       }
+      return null;
     } catch (error) {
       throw error;
     }

@@ -50,7 +50,13 @@ export class DatabaseMongo {
   }
 
   async deleteLaundry(idLaundry: string): Promise<void> {
-    const laundry = await LaundrySchema.findOne({ _id: idLaundry });
+    let laundry;
+    try {
+      laundry = await LaundrySchema.findOne({ _id: idLaundry });
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+
     if (laundry) {
       try {
         await LaundrySchema.deleteOne({ _id: idLaundry });
@@ -76,17 +82,24 @@ export class DatabaseMongo {
   }
 
   async getLaundry(idLaundry: string): Promise<any | null> {
-    return LaundrySchema.findOne({ _id: idLaundry })
-      .exec()
-      .then((laundry: any) => {
-        if (!laundry) {
-          return null;
-        }
+    try {
+      const laundry = await LaundrySchema.findOne({ _id: idLaundry });
+      if (laundry) {
         return laundry;
-      })
-      .catch((error: Error) => {
-        throw error;
-      });
+      }
+      return null;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+
+    /* return new Laundry(
+          laundry.name,
+          laundry.city,
+          laundry.street,
+          laundry.house,
+          laundry.phone,
+          laundry?._id.toString()
+        );*/
   }
 
   async getAllLaundries(): Promise<any> {

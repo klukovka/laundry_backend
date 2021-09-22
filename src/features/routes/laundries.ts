@@ -55,4 +55,23 @@ router.patch('/:idLaundry', (req: Request, res: Response, next: any) => {
     });
 });
 
+router.get('/:idLaundry', (req: Request, res: Response, next: any) => {
+  laundryService
+    .getById(req.params.idLaundry)
+    .then((laundry) => {
+      if (laundry) {
+        res.status(StatusCodes.OK).json(laundry);
+      } else {
+        res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ message: 'Laundry is not exist' });
+      }
+    })
+    .catch((error) => {
+      res.status(StatusCodes.INTERNAL_ERROR).json({
+        message: error.message,
+      });
+    });
+});
+
 export default router;
