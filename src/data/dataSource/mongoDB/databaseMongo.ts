@@ -1,6 +1,7 @@
 import mongoose, { Connection } from 'mongoose';
 import Laundry from './models/laundry';
 import AdditionalMode from './models/additionalMode';
+import Mode from './models/mode';
 
 export class DatabaseMongo {
   private static db: DatabaseMongo;
@@ -62,6 +63,19 @@ export class DatabaseMongo {
     }
   }
 
+  async createMode(mode: any): Promise<void> {
+    try {
+      await new Mode({
+        _id: new mongoose.Types.ObjectId(),
+        name: mode.name,
+        time: mode.time,
+        costs: mode.costs,
+      }).save();
+    } catch (error) {
+      throw new Error('Mode creating is failed');
+    }
+  }
+
   async deleteLaundry(idLaundry: string): Promise<void> {
     let laundry;
     try {
@@ -100,6 +114,25 @@ export class DatabaseMongo {
     }
   }
 
+  async deleteMode(idMode: string): Promise<void> {
+    let mode;
+    try {
+      mode = await Mode.findOne({ _id: idMode });
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+
+    if (mode) {
+      try {
+        await Mode.deleteOne({ _id: idMode });
+      } catch (error) {
+        throw new Error('Mode deleting is failed');
+      }
+    } else {
+      throw new Error('Mode has already been deleted!');
+    }
+  }
+
   async updateLaundry(idLaundry: string, options: any): Promise<void> {
     const laundry = await Laundry.findOne({ _id: idLaundry });
     if (laundry) {
@@ -134,6 +167,21 @@ export class DatabaseMongo {
     }
   }
 
+  async updateMode(idMode: string, options: any): Promise<void> {
+    const mode = await Mode.findOne({
+      _id: idMode,
+    });
+    if (mode) {
+      try {
+        await Mode.updateOne({ _id: idMode }, { $set: options });
+      } catch (error) {
+        throw new Error('Mode updating is failed');
+      }
+    } else {
+      throw new Error('Mode is not exist');
+    }
+  }
+
   async getLaundry(idLaundry: string): Promise<any> {
     try {
       return await Laundry.findOne({ _id: idLaundry });
@@ -150,6 +198,14 @@ export class DatabaseMongo {
     }
   }
 
+  async getMode(idMode: string): Promise<any> {
+    try {
+      return await Mode.findOne({ _id: idMode });
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
   async getAllLaundries(): Promise<any> {
     try {
       return await Laundry.find();
@@ -161,6 +217,14 @@ export class DatabaseMongo {
   async getAllAdditionalModes(): Promise<any> {
     try {
       return await AdditionalMode.find();
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getAllModes(): Promise<any> {
+    try {
+      return await Mode.find();
     } catch (error: any) {
       throw new Error(error.message);
     }
