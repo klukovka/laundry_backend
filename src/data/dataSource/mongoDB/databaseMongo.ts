@@ -56,7 +56,7 @@ export class DatabaseMongo {
         name: additionalMode.name,
         time: additionalMode.time,
         costs: additionalMode.costs,
-      });
+      }).save();
     } catch (error) {
       throw new Error('Additional Mode creating is failed');
     }
@@ -122,7 +122,10 @@ export class DatabaseMongo {
     });
     if (additionalMode) {
       try {
-        await Laundry.updateOne({ _id: idAdditionalMode }, { $set: options });
+        await AdditionalMode.updateOne(
+          { _id: idAdditionalMode },
+          { $set: options }
+        );
       } catch (error) {
         throw new Error('Additional Mode updating is failed');
       }

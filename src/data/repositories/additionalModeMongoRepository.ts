@@ -35,7 +35,7 @@ export class AdditionalModeMongoRepository implements AdditionalModeRepository {
       throw new Error(error.message);
     }
   }
-  async get(idAdditionalMode: string): Promise<AdditionalMode> {
+  async get(idAdditionalMode: string): Promise<AdditionalMode | null> {
     try {
       const additionalMode = await DatabaseMongo.getDB.getAdditionalMode(
         idAdditionalMode

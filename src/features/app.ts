@@ -3,6 +3,7 @@ import { urlencoded, json } from 'body-parser';
 import express, { Application, Request, Response } from 'express';
 import StatusCodes from './utils/statusCodes';
 import laundryRoutes from './routes/laundries';
+import additionalModeRoutes from './routes/additionalModes';
 
 const app: Application = express();
 
@@ -24,6 +25,7 @@ app.use((req: Request, res: Response, next: any) => {
 });
 
 app.use('/laundries', laundryRoutes);
+app.use('/additionalModes', additionalModeRoutes);
 
 //endpoint doesn't exist
 app.use((req: Request, res: Response, next: any) => {
