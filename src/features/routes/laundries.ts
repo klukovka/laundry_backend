@@ -74,4 +74,17 @@ router.get('/:idLaundry', (req: Request, res: Response, next: any) => {
     });
 });
 
+router.get('/', (req: Request, res: Response, next: any) => {
+  laundryService
+    .getAll()
+    .then((laundries) => {
+      res.status(StatusCodes.OK).json(laundries);
+    })
+    .catch((error) => {
+      res.status(StatusCodes.INTERNAL_ERROR).json({
+        message: error.message,
+      });
+    });
+});
+
 export default router;

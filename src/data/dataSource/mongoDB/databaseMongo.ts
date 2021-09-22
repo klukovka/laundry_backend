@@ -81,35 +81,19 @@ export class DatabaseMongo {
     }
   }
 
-  async getLaundry(idLaundry: string): Promise<any | null> {
+  async getLaundry(idLaundry: string): Promise<any> {
     try {
-      const laundry = await LaundrySchema.findOne({ _id: idLaundry });
-      if (laundry) {
-        return laundry;
-      }
-      return null;
+      return await LaundrySchema.findOne({ _id: idLaundry });
     } catch (error: any) {
       throw new Error(error.message);
     }
-
-    /* return new Laundry(
-          laundry.name,
-          laundry.city,
-          laundry.street,
-          laundry.house,
-          laundry.phone,
-          laundry?._id.toString()
-        );*/
   }
 
   async getAllLaundries(): Promise<any> {
-    return LaundrySchema.find()
-      .exec()
-      .then((documents: any) => {
-        return documents;
-      })
-      .catch((error: Error) => {
-        throw error;
-      });
+    try {
+      return await LaundrySchema.find();
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
   }
 }

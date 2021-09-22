@@ -55,17 +55,19 @@ export class LaundryMongoRepository implements LaundryRepository {
       const documents = await DatabaseMongo.getDB.getAllLaundries();
 
       let laundries = new Array<Laundry>();
-      for (let i = 0; i < documents.length; i++) {
-        laundries.push(
-          new Laundry(
-            documents[i].name,
-            documents[i].city,
-            documents[i].street,
-            documents[i].house,
-            documents[i].phone,
-            documents[i]?._id.toString()
-          )
-        );
+      if (documents) {
+        for (let i = 0; i < documents.length; i++) {
+          laundries.push(
+            new Laundry(
+              documents[i].name,
+              documents[i].city,
+              documents[i].street,
+              documents[i].house,
+              documents[i].phone,
+              documents[i]?._id.toString()
+            )
+          );
+        }
       }
       return laundries;
     } catch (error) {
