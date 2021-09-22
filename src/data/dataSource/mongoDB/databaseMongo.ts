@@ -1,6 +1,6 @@
 import mongoose, { Connection } from 'mongoose';
-import { Laundry } from '../../../domain/models/laundry';
-import LaundrySchema from './models/laundry';
+import Laundry from './models/laundry';
+import AdditionalMode from './models/additionalMode';
 
 export class DatabaseMongo {
   private static db: DatabaseMongo;
@@ -34,9 +34,9 @@ export class DatabaseMongo {
       .then(() => console.log('MongoDB connection closed!'));
   }
 
-  async createLaundry(laundry: Laundry): Promise<void> {
+  async createLaundry(laundry: any): Promise<void> {
     try {
-      await new LaundrySchema({
+      await new Laundry({
         _id: new mongoose.Types.ObjectId(),
         name: laundry.name,
         city: laundry.city,
@@ -49,17 +49,30 @@ export class DatabaseMongo {
     }
   }
 
+  async createAdditionalMode(additionalMode: any): Promise<void> {
+    try {
+      await new AdditionalMode({
+        _id: new mongoose.Types.ObjectId(),
+        name: additionalMode.name,
+        time: additionalMode.time,
+        costs: additionalMode.costs,
+      });
+    } catch (error) {
+      throw new Error('Additional Mode creating is failed');
+    }
+  }
+
   async deleteLaundry(idLaundry: string): Promise<void> {
     let laundry;
     try {
-      laundry = await LaundrySchema.findOne({ _id: idLaundry });
+      laundry = await Laundry.findOne({ _id: idLaundry });
     } catch (error: any) {
       throw new Error(error.message);
     }
 
     if (laundry) {
       try {
-        await LaundrySchema.deleteOne({ _id: idLaundry });
+        await Laundry.deleteOne({ _id: idLaundry });
       } catch (error) {
         throw new Error('Laundry deleting is failed');
       }
@@ -68,11 +81,30 @@ export class DatabaseMongo {
     }
   }
 
+  async deleteAdditionalMode(idAdditionalMode: string): Promise<void> {
+    let additionalMode;
+    try {
+      additionalMode = await AdditionalMode.findOne({ _id: idAdditionalMode });
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+
+    if (additionalMode) {
+      try {
+        await AdditionalMode.deleteOne({ _id: idAdditionalMode });
+      } catch (error) {
+        throw new Error('Additional Mode deleting is failed');
+      }
+    } else {
+      throw new Error('Additional Mode has already been deleted!');
+    }
+  }
+
   async updateLaundry(idLaundry: string, options: any): Promise<void> {
-    const laundry = await LaundrySchema.findOne({ _id: idLaundry });
+    const laundry = await Laundry.findOne({ _id: idLaundry });
     if (laundry) {
       try {
-        await LaundrySchema.updateOne({ _id: idLaundry }, { $set: options });
+        await Laundry.updateOne({ _id: idLaundry }, { $set: options });
       } catch (error) {
         throw new Error('Laundry updating is failed');
       }
@@ -81,9 +113,35 @@ export class DatabaseMongo {
     }
   }
 
+  async updateAdditionalMode(
+    idAdditionalMode: string,
+    options: any
+  ): Promise<void> {
+    const additionalMode = await AdditionalMode.findOne({
+      _id: idAdditionalMode,
+    });
+    if (additionalMode) {
+      try {
+        await Laundry.updateOne({ _id: idAdditionalMode }, { $set: options });
+      } catch (error) {
+        throw new Error('Additional Mode updating is failed');
+      }
+    } else {
+      throw new Error('Additional Mode is not exist');
+    }
+  }
+
   async getLaundry(idLaundry: string): Promise<any> {
     try {
-      return await LaundrySchema.findOne({ _id: idLaundry });
+      return await Laundry.findOne({ _id: idLaundry });
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getAdditionalMode(idAdditionalMode: string): Promise<any> {
+    try {
+      return await AdditionalMode.findOne({ _id: idAdditionalMode });
     } catch (error: any) {
       throw new Error(error.message);
     }
@@ -91,7 +149,15 @@ export class DatabaseMongo {
 
   async getAllLaundries(): Promise<any> {
     try {
-      return await LaundrySchema.find();
+      return await Laundry.find();
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getAllAdditionalModes(): Promise<any> {
+    try {
+      return await AdditionalMode.find();
     } catch (error: any) {
       throw new Error(error.message);
     }
