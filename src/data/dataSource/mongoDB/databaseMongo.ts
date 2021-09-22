@@ -35,7 +35,6 @@ export class DatabaseMongo {
   }
 
   async createLaundry(laundry: Laundry): Promise<void> {
-    console.log('db works');
     try {
       await new LaundrySchema({
         _id: new mongoose.Types.ObjectId(),
@@ -48,30 +47,16 @@ export class DatabaseMongo {
     } catch (error) {
       throw new Error('Laundry creating is failed');
     }
-    /*  new LaundrySchema({
-      _id: new mongoose.Types.ObjectId(),
-      name: laundry.name,
-      city: laundry.city,
-      street: laundry.street,
-      house: laundry.house,
-      phone: laundry.phone,
-    })
-      .save()
-      .then()
-      .catch((error: any) => {
-        console.log('db error');
-        throw new Error('Laundry creating is failed');
-      }); */
   }
 
   async deleteLaundry(idLaundry: string): Promise<void> {
     const laundry = await LaundrySchema.findOne({ _id: idLaundry });
     if (laundry) {
-      LaundrySchema.deleteOne({ _id: idLaundry })
-        .then()
-        .catch((error: Error) => {
-          throw error;
-        });
+      try {
+        await LaundrySchema.deleteOne({ _id: idLaundry });
+      } catch (error) {
+        throw new Error('Laundry deleting is failed');
+      }
     } else {
       throw new Error('Laundry has already been deleted!');
     }

@@ -7,7 +7,6 @@ export class LaundryMongoRepository implements LaundryRepository {
     try {
       await DatabaseMongo.getDB.createLaundry(laundry);
     } catch (error: any) {
-      console.log('rep error');
       throw new Error(error.message);
     }
   }
@@ -21,12 +20,11 @@ export class LaundryMongoRepository implements LaundryRepository {
       });
   }
   async delete(idLaundry: string): Promise<void> {
-    return DatabaseMongo.getDB
-      .deleteLaundry(idLaundry)
-      .then()
-      .catch((error: Error) => {
-        throw error;
-      });
+    try {
+      await DatabaseMongo.getDB.deleteLaundry(idLaundry);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
   }
   async get(idLaundry: string): Promise<Laundry | null> {
     try {
