@@ -2,6 +2,7 @@ import morgan from 'morgan';
 import { urlencoded, json } from 'body-parser';
 import express, { Application, Request, Response } from 'express';
 import StatusCodes from './utils/statusCodes';
+import laundryRoutes from './routes/laundries';
 
 const app: Application = express();
 
@@ -21,6 +22,8 @@ app.use((req: Request, res: Response, next: any) => {
   }
   next();
 });
+
+app.use('/laundries', laundryRoutes);
 
 //endpoint doesn't exist
 app.use((req: Request, res: Response, next: any) => {

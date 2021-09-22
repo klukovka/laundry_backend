@@ -35,7 +35,20 @@ export class DatabaseMongo {
   }
 
   async createLaundry(laundry: Laundry): Promise<void> {
-    new LaundrySchema({
+    console.log('db works');
+    try {
+      await new LaundrySchema({
+        _id: new mongoose.Types.ObjectId(),
+        name: laundry.name,
+        city: laundry.city,
+        street: laundry.street,
+        house: laundry.house,
+        phone: laundry.phone,
+      }).save();
+    } catch (error) {
+      throw new Error('Laundry creating is failed');
+    }
+    /*  new LaundrySchema({
       _id: new mongoose.Types.ObjectId(),
       name: laundry.name,
       city: laundry.city,
@@ -45,9 +58,10 @@ export class DatabaseMongo {
     })
       .save()
       .then()
-      .catch((error: Error) => {
-        throw error;
-      });
+      .catch((error: any) => {
+        console.log('db error');
+        throw new Error('Laundry creating is failed');
+      }); */
   }
 
   async deleteLaundry(idLaundry: string): Promise<void> {

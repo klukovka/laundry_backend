@@ -4,13 +4,14 @@ import { DatabaseMongo } from '../dataSource/mongoDB/databaseMongo';
 
 export class LaundryMongoRepository implements LaundryRepository {
   async create(laundry: Laundry): Promise<void> {
-    return DatabaseMongo.getDB
-      .createLaundry(laundry)
-      .then()
-      .catch((error: Error) => {
-        throw error;
-      });
+    try {
+      await DatabaseMongo.getDB.createLaundry(laundry);
+    } catch (error: any) {
+      console.log('rep error');
+      throw new Error(error.message);
+    }
   }
+
   async update(idLaundry: string, options: Map<string, any>): Promise<void> {
     return DatabaseMongo.getDB
       .updateLaundry(idLaundry, options)

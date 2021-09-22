@@ -10,8 +10,10 @@ export class LaundryService {
 
   async create(laundry: Laundry): Promise<void> {
     try {
+      console.log('service works');
       return await this._repository.create(laundry);
     } catch (error) {
+      console.log('service error');
       throw error;
     }
   }
