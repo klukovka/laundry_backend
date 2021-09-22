@@ -40,4 +40,19 @@ router.delete('/:idLaundry', (req: Request, res: Response, next: any) => {
     });
 });
 
+router.patch('/:idLaundry', (req: Request, res: Response, next: any) => {
+  laundryService
+    .update(req.params.idLaundry, req.body)
+    .then(() => {
+      res.status(StatusCodes.OK).json({
+        message: 'Laundry was updated!',
+      });
+    })
+    .catch((error) => {
+      res.status(StatusCodes.INTERNAL_ERROR).json({
+        message: error.message,
+      });
+    });
+});
+
 export default router;

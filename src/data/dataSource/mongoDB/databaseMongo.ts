@@ -62,17 +62,14 @@ export class DatabaseMongo {
     }
   }
 
-  async updateLaundry(
-    idLaundry: string,
-    options: Map<string, any>
-  ): Promise<void> {
+  async updateLaundry(idLaundry: string, options: any): Promise<void> {
     const laundry = await LaundrySchema.findOne({ _id: idLaundry });
     if (laundry) {
-      LaundrySchema.updateOne({ _id: idLaundry }, { $set: options })
-        .then()
-        .catch((error: Error) => {
-          throw error;
-        });
+      try {
+        await LaundrySchema.updateOne({ _id: idLaundry }, { $set: options });
+      } catch (error) {
+        throw new Error('Laundry updating is failed');
+      }
     } else {
       throw new Error('Laundry is not exist');
     }

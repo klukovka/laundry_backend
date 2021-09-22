@@ -1,3 +1,4 @@
+import { Mappers } from '../../features/utils/mappers';
 import { Laundry } from '../models/laundry';
 import { LaundryRepository } from '../repositories/laundryRepository';
 
@@ -16,9 +17,15 @@ export class LaundryService {
     }
   }
 
-  async update(idLaundry: string, options: Map<string, any>): Promise<void> {
+  async update(
+    idLaundry: string,
+    options: [{ propName: string; value: any }]
+  ): Promise<void> {
     try {
-      return await this._repository.update(idLaundry, options);
+      return await this._repository.update(
+        idLaundry,
+        Mappers.mapRequestParamsToMap(options)
+      );
     } catch (error) {
       throw error;
     }

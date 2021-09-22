@@ -12,12 +12,18 @@ export class LaundryMongoRepository implements LaundryRepository {
   }
 
   async update(idLaundry: string, options: Map<string, any>): Promise<void> {
-    return DatabaseMongo.getDB
-      .updateLaundry(idLaundry, options)
-      .then()
-      .catch((error: Error) => {
-        throw error;
-      });
+    try {
+      const objectOptions = {
+        name: options.get('name'),
+        city: options.get('city'),
+        street: options.get('street'),
+        house: options.get('house'),
+        phone: options.get('phone'),
+      };
+      await DatabaseMongo.getDB.updateLaundry(idLaundry, objectOptions);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
   }
   async delete(idLaundry: string): Promise<void> {
     try {
