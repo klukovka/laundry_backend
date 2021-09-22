@@ -79,45 +79,25 @@ export class DatabaseMongo {
     }
   }
 
-  async getLaundry(idLaundry: string): Promise<Laundry | null> {
+  async getLaundry(idLaundry: string): Promise<any | null> {
     return LaundrySchema.findOne({ _id: idLaundry })
       .exec()
       .then((laundry: any) => {
         if (!laundry) {
           return null;
         }
-        return new Laundry(
-          laundry.name,
-          laundry.city,
-          laundry.street,
-          laundry.house,
-          laundry.phone,
-          laundry?._id.toString()
-        );
+        return laundry;
       })
       .catch((error: Error) => {
         throw error;
       });
   }
 
-  async getAllLaundries(): Promise<Array<Laundry>> {
+  async getAllLaundries(): Promise<any> {
     return LaundrySchema.find()
       .exec()
       .then((documents: any) => {
-        let laundries = new Array<Laundry>();
-        for (let i = 0; i < documents.length; i++) {
-          laundries.push(
-            new Laundry(
-              documents[i].name,
-              documents[i].city,
-              documents[i].street,
-              documents[i].house,
-              documents[i].phone,
-              documents[i]?._id.toString()
-            )
-          );
-        }
-        return laundries;
+        return documents;
       })
       .catch((error: Error) => {
         throw error;
