@@ -27,17 +27,21 @@ export class LaundryMongoRepository implements LaundryRepository {
         throw error;
       });
   }
-  async get(idLaundry: string): Promise<Laundry> {
+  async get(idLaundry: string): Promise<Laundry | null> {
     try {
       const laundry = await DatabaseMongo.getDB.getLaundry(idLaundry);
-      return new Laundry(
-        laundry.name,
-        laundry.city,
-        laundry.street,
-        laundry.house,
-        laundry.phone,
-        laundry?._id.toString()
-      );
+      if (laundry) {
+        return new Laundry(
+          laundry.name,
+          laundry.city,
+          laundry.street,
+          laundry.house,
+          laundry.phone,
+          laundry?._id.toString()
+        );
+      } else {
+        return null;
+      }
     } catch (error) {
       throw error;
     }
