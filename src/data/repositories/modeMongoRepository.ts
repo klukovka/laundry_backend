@@ -31,9 +31,9 @@ export class ModeMongoRepository implements ModeRepository {
   }
   async get(idMode: string): Promise<Mode | null> {
     try {
-      const Mode = await DatabaseMongo.getDB.getMode(idMode);
-      if (Mode) {
-        return new Mode(Mode.name, Mode.time, Mode.costs, Mode?._id.toString());
+      const mode = await DatabaseMongo.getDB.getMode(idMode);
+      if (mode) {
+        return new Mode(mode.name, mode.time, mode.costs, mode?._id.toString());
       }
       return null;
     } catch (error: any) {
@@ -44,11 +44,11 @@ export class ModeMongoRepository implements ModeRepository {
     try {
       const documents = await DatabaseMongo.getDB.getAllModes();
 
-      let Modes = new Array<Mode>();
+      let modes = new Array<Mode>();
 
       if (documents) {
         for (let i = 0; i < documents.length; i++) {
-          Modes.push(
+          modes.push(
             new Mode(
               documents[i].name,
               documents[i].time,
@@ -58,7 +58,7 @@ export class ModeMongoRepository implements ModeRepository {
           );
         }
       }
-      return Modes;
+      return modes;
     } catch (error: any) {
       throw new Error(error.message);
     }
