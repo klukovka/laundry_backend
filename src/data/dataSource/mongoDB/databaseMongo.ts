@@ -2,6 +2,7 @@ import mongoose, { Connection } from 'mongoose';
 import Laundry from './models/laundry';
 import AdditionalMode from './models/additionalMode';
 import Mode from './models/mode';
+import WashMachine from './models/washMachine';
 
 export class DatabaseMongo {
   private static db: DatabaseMongo;
@@ -76,6 +77,22 @@ export class DatabaseMongo {
     }
   }
 
+  async createWashMachine(washMachine: any): Promise<void> {
+    try {
+      await new WashMachine({
+        _id: new mongoose.Types.ObjectId(),
+        model: washMachine.model,
+        manufacturer: washMachine.manufacturer,
+        capacity: washMachine.capacity,
+        powerUsage: washMachine.powerUsage,
+        spinningSpeed: washMachine.spinningSpeed,
+        laundry: washMachine.laundry,
+      }).save();
+    } catch (error) {
+      throw new Error('WashMachine creating is failed');
+    }
+  }
+
   async deleteLaundry(idLaundry: string): Promise<void> {
     let laundry;
     try {
@@ -133,6 +150,25 @@ export class DatabaseMongo {
     }
   }
 
+  async deleteWashMachine(idWashMachine: string): Promise<void> {
+    let washMachine;
+    try {
+      washMachine = await WashMachine.findOne({ _id: idWashMachine });
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+
+    if (washMachine) {
+      try {
+        await WashMachine.deleteOne({ _id: idWashMachine });
+      } catch (error) {
+        throw new Error('WashMachine deleting is failed');
+      }
+    } else {
+      throw new Error('WashMachine has already been deleted!');
+    }
+  }
+
   async updateLaundry(idLaundry: string, options: any): Promise<void> {
     const laundry = await Laundry.findOne({ _id: idLaundry });
     if (laundry) {
@@ -182,6 +218,19 @@ export class DatabaseMongo {
     }
   }
 
+  async updateWashMachine(idWashMachine: string, options: any): Promise<void> {
+    const washMachine = await WashMachine.findOne({ _id: idWashMachine });
+    if (washMachine) {
+      try {
+        await WashMachine.updateOne({ _id: idWashMachine }, { $set: options });
+      } catch (error) {
+        throw new Error('WashMachine updating is failed');
+      }
+    } else {
+      throw new Error('WashMachine is not exist');
+    }
+  }
+
   async getLaundry(idLaundry: string): Promise<any> {
     try {
       return await Laundry.findOne({ _id: idLaundry });
@@ -206,6 +255,23 @@ export class DatabaseMongo {
     }
   }
 
+  async getWashMachine(idWashMachine: string): Promise<any> {
+    try {
+      return await WashMachine.findOne({ _id: idWashMachine });
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+  async getWashMachineWithLaundry(idWashMachine: string): Promise<any> {
+    try {
+      return await (
+        await WashMachine.findOne({ _id: idWashMachine })
+      ).populate('laundry');
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
   async getAllLaundries(): Promise<any> {
     try {
       return await Laundry.find();
@@ -221,10 +287,25 @@ export class DatabaseMongo {
       throw new Error(error.message);
     }
   }
-
   async getAllModes(): Promise<any> {
     try {
       return await Mode.find();
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getAllWashMachines(): Promise<any> {
+    try {
+      return await WashMachine.find();
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getAllWashMachinesWithLaundry(): Promise<any> {
+    try {
+      return await WashMachine.find().populate('laundry');
     } catch (error: any) {
       throw new Error(error.message);
     }

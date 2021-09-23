@@ -6,6 +6,6 @@ export interface WashMachineRepository {
   delete(idWashMachine: string): Promise<void>;
   get(idWashMachine: string): Promise<WashMachine | null>;
   getAll(): Promise<Array<WashMachine>>;
-  getWithCompany(idWashMachine: string): Promise<WashMachine | null>;
-  getAllWithCompany(): Promise<Array<WashMachine>>;
+  getWithLaundry(idWashMachine: string): Promise<WashMachine | null>;
+  getAllWithLaundry(): Promise<Array<WashMachine>>;
 }
