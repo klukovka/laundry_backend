@@ -2,6 +2,7 @@ import { Laundry } from './laundry';
 
 export class WashMachine {
   idWashMachine?: string | null;
+  model: string;
   manufacturer: string;
   capacity: Number;
   powerUsage: Number;
@@ -10,6 +11,7 @@ export class WashMachine {
   idLaundry: string;
 
   constructor(
+    model: string,
     manufacturer: string,
     capacity: Number,
     powerUsage: Number,
@@ -18,6 +20,7 @@ export class WashMachine {
     idWashMachine: string | null = null,
     laundry: Laundry | null = null
   ) {
+    this.model = model;
     this.manufacturer = manufacturer;
     this.capacity = capacity;
     this.powerUsage = powerUsage;
