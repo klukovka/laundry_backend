@@ -3,6 +3,7 @@ import Laundry from './models/laundry';
 import AdditionalMode from './models/additionalMode';
 import Mode from './models/mode';
 import WashMachine from './models/washMachine';
+import User from './models/user';
 
 export class DatabaseMongo {
   private static db: DatabaseMongo;
@@ -98,6 +99,19 @@ export class DatabaseMongo {
     }
   }
 
+  async createUser(user: any): Promise<void> {
+    try {
+      await new User({
+        _id: new mongoose.Types.ObjectId(),
+        email: user.email,
+        password: user.password,
+        role: user.role,
+      }).save();
+    } catch (error) {
+      throw new Error('User creating is failed');
+    }
+  }
+
   async deleteLaundry(idLaundry: string): Promise<void> {
     const laundry = await this.getLaundry(idLaundry);
 
@@ -151,6 +165,20 @@ export class DatabaseMongo {
       }
     } else {
       throw new Error('WashMachine has already been deleted!');
+    }
+  }
+
+  async deleteUser(idUser: string): Promise<void> {
+    const user = await this.getUserById(idUser);
+
+    if (user) {
+      try {
+        await User.deleteOne({ _id: idUser });
+      } catch (error) {
+        throw new Error('User deleting is failed');
+      }
+    } else {
+      throw new Error('User has already been deleted!');
     }
   }
 
@@ -220,6 +248,19 @@ export class DatabaseMongo {
     }
   }
 
+  async updateUser(idUser: string, options: any): Promise<void> {
+    const user = await this.getUserById(idUser);
+    if (user) {
+      try {
+        await User.updateOne({ _id: idUser }, { $set: options });
+      } catch (error) {
+        throw new Error('User updating is failed');
+      }
+    } else {
+      throw new Error('User is not exist');
+    }
+  }
+
   async getLaundry(idLaundry: string): Promise<any> {
     try {
       return await Laundry.findOne({ _id: idLaundry });
@@ -258,6 +299,22 @@ export class DatabaseMongo {
         .exec();
       console.log(l);
       return l;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getUserById(idUser: string): Promise<any> {
+    try {
+      return await User.findOne({ _id: idUser });
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getUserByEmail(email: string): Promise<any> {
+    try {
+      return await User.findOne({ email });
     } catch (error: any) {
       throw new Error(error.message);
     }
