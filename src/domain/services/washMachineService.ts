@@ -55,17 +55,17 @@ export class WashMachineService {
     }
   }
 
-  async getWithCompany(idWashMachine: string): Promise<WashMachine | null> {
+  async getWithLaundry(idWashMachine: string): Promise<WashMachine | null> {
     try {
-      return await this._repository.getWithCompany(idWashMachine);
+      return await this._repository.getWithLaundry(idWashMachine);
     } catch (error) {
       throw error;
     }
   }
 
-  async getAllWithCompany(): Promise<Array<WashMachine>> {
+  async getAllWithLaundry(): Promise<Array<WashMachine>> {
     try {
-      return await this._repository.getAllWithCompany();
+      return await this._repository.getAllWithLaundry();
     } catch (error) {
       throw error;
     }

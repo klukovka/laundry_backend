@@ -1,3 +1,4 @@
+import { Laundry } from '../../domain/models/laundry';
 import { WashMachine } from '../../domain/models/washMachine';
 import { WashMachineRepository } from '../../domain/repositories/washMachineRepository';
 import { DatabaseMongo } from '../dataSource/mongoDB/databaseMongo';
@@ -36,7 +37,7 @@ export class WashMachineMongoRepository implements WashMachineRepository {
       throw new Error(error.message);
     }
   }
-  async get(idWashMachine: string): Promise<WashMachine> {
+  async get(idWashMachine: string): Promise<WashMachine | null> {
     try {
       const washMachine = await DatabaseMongo.getDB.getWashMachine(
         idWashMachine
@@ -82,9 +83,9 @@ export class WashMachineMongoRepository implements WashMachineRepository {
       throw new Error(error.message);
     }
   }
-  async getWithLaundry(idWashMachine: string): Promise<WashMachine> {
+  async getWithLaundry(idWashMachine: string): Promise<WashMachine | null> {
     try {
-      const washMachine = await DatabaseMongo.getDB.getWashMachine(
+      const washMachine = await DatabaseMongo.getDB.getWashMachineWithLaundry(
         idWashMachine
       );
       if (washMachine) {
@@ -96,7 +97,14 @@ export class WashMachineMongoRepository implements WashMachineRepository {
           washMachine.spinningSpeed,
           washMachine.laundry?._id.toString(),
           washMachine?._id.toString(),
-          washMachine.laundry
+          new Laundry(
+            washMachine.laundry?.name,
+            washMachine.laundry?.city,
+            washMachine.laundry?.street,
+            washMachine.laundry?.house,
+            washMachine.laundry?.phone,
+            washMachine.laundry?._id.toString()
+          )
         );
       }
       return null;
@@ -106,7 +114,8 @@ export class WashMachineMongoRepository implements WashMachineRepository {
   }
   async getAllWithLaundry(): Promise<WashMachine[]> {
     try {
-      const documents = await DatabaseMongo.getDB.getAllWashMachines();
+      const documents =
+        await DatabaseMongo.getDB.getAllWashMachinesWithLaundry();
 
       let washMachines = new Array<WashMachine>();
       if (documents) {
@@ -120,7 +129,14 @@ export class WashMachineMongoRepository implements WashMachineRepository {
               documents[i].spinningSpeed,
               documents[i].laundry?._id.toString(),
               documents[i]?._id.toString(),
-              documents[i].laundry
+              new Laundry(
+                documents[i].laundry?.name,
+                documents[i].laundry?.city,
+                documents[i].laundry?.street,
+                documents[i].laundry?.house,
+                documents[i].laundry?.phone,
+                documents[i].laundry?._id.toString()
+              )
             )
           );
         }

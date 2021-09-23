@@ -78,28 +78,28 @@ export class DatabaseMongo {
   }
 
   async createWashMachine(washMachine: any): Promise<void> {
-    try {
-      await new WashMachine({
-        _id: new mongoose.Types.ObjectId(),
-        model: washMachine.model,
-        manufacturer: washMachine.manufacturer,
-        capacity: washMachine.capacity,
-        powerUsage: washMachine.powerUsage,
-        spinningSpeed: washMachine.spinningSpeed,
-        laundry: washMachine.laundry,
-      }).save();
-    } catch (error) {
-      throw new Error('WashMachine creating is failed');
+    const laundry = await this.getLaundry(washMachine.idLaundry);
+    if (laundry) {
+      try {
+        await new WashMachine({
+          _id: new mongoose.Types.ObjectId(),
+          model: washMachine.model,
+          manufacturer: washMachine.manufacturer,
+          capacity: washMachine.capacity,
+          powerUsage: washMachine.powerUsage,
+          spinningSpeed: washMachine.spinningSpeed,
+          laundry: washMachine.idLaundry,
+        }).save();
+      } catch (error) {
+        throw new Error('WashMachine creating is failed');
+      }
+    } else {
+      throw new Error('Laundry is not exist');
     }
   }
 
   async deleteLaundry(idLaundry: string): Promise<void> {
-    let laundry;
-    try {
-      laundry = await Laundry.findOne({ _id: idLaundry });
-    } catch (error: any) {
-      throw new Error(error.message);
-    }
+    const laundry = await this.getLaundry(idLaundry);
 
     if (laundry) {
       try {
@@ -113,12 +113,7 @@ export class DatabaseMongo {
   }
 
   async deleteAdditionalMode(idAdditionalMode: string): Promise<void> {
-    let additionalMode;
-    try {
-      additionalMode = await AdditionalMode.findOne({ _id: idAdditionalMode });
-    } catch (error: any) {
-      throw new Error(error.message);
-    }
+    const additionalMode = await this.getAdditionalMode(idAdditionalMode);
 
     if (additionalMode) {
       try {
@@ -132,12 +127,7 @@ export class DatabaseMongo {
   }
 
   async deleteMode(idMode: string): Promise<void> {
-    let mode;
-    try {
-      mode = await Mode.findOne({ _id: idMode });
-    } catch (error: any) {
-      throw new Error(error.message);
-    }
+    const mode = await this.getMode(idMode);
 
     if (mode) {
       try {
@@ -151,12 +141,7 @@ export class DatabaseMongo {
   }
 
   async deleteWashMachine(idWashMachine: string): Promise<void> {
-    let washMachine;
-    try {
-      washMachine = await WashMachine.findOne({ _id: idWashMachine });
-    } catch (error: any) {
-      throw new Error(error.message);
-    }
+    const washMachine = await this.getWashMachine(idWashMachine);
 
     if (washMachine) {
       try {
@@ -170,7 +155,7 @@ export class DatabaseMongo {
   }
 
   async updateLaundry(idLaundry: string, options: any): Promise<void> {
-    const laundry = await Laundry.findOne({ _id: idLaundry });
+    const laundry = await this.getLaundry(idLaundry);
     if (laundry) {
       try {
         await Laundry.updateOne({ _id: idLaundry }, { $set: options });
@@ -186,9 +171,7 @@ export class DatabaseMongo {
     idAdditionalMode: string,
     options: any
   ): Promise<void> {
-    const additionalMode = await AdditionalMode.findOne({
-      _id: idAdditionalMode,
-    });
+    const additionalMode = await this.getAdditionalMode(idAdditionalMode);
     if (additionalMode) {
       try {
         await AdditionalMode.updateOne(
@@ -204,9 +187,7 @@ export class DatabaseMongo {
   }
 
   async updateMode(idMode: string, options: any): Promise<void> {
-    const mode = await Mode.findOne({
-      _id: idMode,
-    });
+    const mode = await this.getMode(idMode);
     if (mode) {
       try {
         await Mode.updateOne({ _id: idMode }, { $set: options });
@@ -219,15 +200,23 @@ export class DatabaseMongo {
   }
 
   async updateWashMachine(idWashMachine: string, options: any): Promise<void> {
-    const washMachine = await WashMachine.findOne({ _id: idWashMachine });
-    if (washMachine) {
-      try {
-        await WashMachine.updateOne({ _id: idWashMachine }, { $set: options });
-      } catch (error) {
-        throw new Error('WashMachine updating is failed');
+    const washMachine = await this.getWashMachine(idWashMachine);
+    const laundry = await this.getLaundry(options.laundry);
+    if (laundry) {
+      if (washMachine) {
+        try {
+          await WashMachine.updateOne(
+            { _id: idWashMachine },
+            { $set: options }
+          );
+        } catch (error) {
+          throw new Error('WashMachine updating is failed');
+        }
+      } else {
+        throw new Error('WashMachine is not exist');
       }
     } else {
-      throw new Error('WashMachine is not exist');
+      throw new Error('Laundry is not exist');
     }
   }
 
@@ -264,9 +253,11 @@ export class DatabaseMongo {
   }
   async getWashMachineWithLaundry(idWashMachine: string): Promise<any> {
     try {
-      return await (
-        await WashMachine.findOne({ _id: idWashMachine })
-      ).populate('laundry');
+      let l = await WashMachine.findOne({ _id: idWashMachine })
+        .populate('laundry')
+        .exec();
+      console.log(l);
+      return l;
     } catch (error: any) {
       throw new Error(error.message);
     }
