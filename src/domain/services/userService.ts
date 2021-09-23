@@ -14,13 +14,13 @@ export class UserService {
   async create(user: User): Promise<void> {
     let hashedPassword;
     try {
-      hashedPassword = await hash(user.password, 10);
+      hashedPassword = await hash(user.password!, 10);
     } catch (error: any) {
       throw Error(`Hash error: ${error.toString()}`);
     }
 
     try {
-      const hashUser = new User(user.email, user.role, hashedPassword);
+      const hashUser = new User(user.email, hashedPassword, user.role);
       return await this._repository.create(hashUser);
     } catch (error) {
       throw error;
@@ -32,10 +32,12 @@ export class UserService {
     options: [{ propName: string; value: any }]
   ): Promise<void> {
     try {
-      return await this._repository.update(
-        idUser,
-        Mappers.mapRequestParamsToMap(options)
-      );
+      let mappedOptions = Mappers.mapRequestParamsToMap(options);
+      if (mappedOptions.get('password')) {
+        const hashedPassword = await hash(mappedOptions.get('password'), 10);
+        mappedOptions.set('password', hashedPassword);
+      }
+      return await this._repository.update(idUser, mappedOptions);
     } catch (error) {
       throw error;
     }
@@ -54,7 +56,12 @@ export class UserService {
     const userInRep = await this.getByEmail(email);
 
     if (userInRep) {
-      const result = await compare(password, userInRep.password);
+      let result;
+      try {
+        result = await compare(password!, userInRep.password!);
+      } catch (error) {
+        throw new Error('Auth failed');
+      }
       if (result) {
         const secret = process.env.SECRET || 'SECRET';
         try {

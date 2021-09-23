@@ -51,6 +51,6 @@ export class UserMongoRepository implements UserRepository {
     if (!user) {
       return null;
     }
-    return new User(user.email, user.role, user.password, user?._id.toString());
+    return new User(user.email, user.password, user.role, user?._id.toString());
   }
 }
