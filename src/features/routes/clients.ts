@@ -76,7 +76,7 @@ router.get('/byId/:clientId', (req: Request, res: Response, next: any) => {
 
 router.get('/allInfo/:clientId', (req: Request, res: Response, next: any) => {
   clientService
-    .getWithLaundry(req.params.clientId)
+    .getWithInfo(req.params.clientId)
     .then((client) => {
       if (client) {
         res.status(StatusCodes.OK).json(client);
@@ -108,7 +108,7 @@ router.get('/', (req: Request, res: Response, next: any) => {
 
 router.get('/allInfo/', (req: Request, res: Response, next: any) => {
   clientService
-    .getAllWithLaundry()
+    .getAllWithInfo()
     .then((clients) => {
       res.status(StatusCodes.OK).json(clients);
     })

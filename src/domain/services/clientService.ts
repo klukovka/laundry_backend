@@ -55,7 +55,7 @@ export class ClientService {
     }
   }
 
-  async getWithLaundry(clientId: string): Promise<Client | null> {
+  async getWithInfo(clientId: string): Promise<Client | null> {
     try {
       return await this._repository.getWithInfo(clientId);
     } catch (error) {
@@ -63,7 +63,7 @@ export class ClientService {
     }
   }
 
-  async getAllWithLaundry(): Promise<Array<Client>> {
+  async getAllWithInfo(): Promise<Array<Client>> {
     try {
       return await this._repository.getAllWithInfo();
     } catch (error) {
