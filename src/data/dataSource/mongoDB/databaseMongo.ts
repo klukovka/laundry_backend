@@ -139,6 +139,7 @@ export class DatabaseMongo {
     if (laundry) {
       try {
         await Laundry.deleteOne({ _id: laundryId });
+        await WashMachine.deleteMany({ laundry: laundryId });
       } catch (error) {
         throw new Error('Laundry deleting is failed');
       }
@@ -191,9 +192,9 @@ export class DatabaseMongo {
 
   async deleteClient(clientId: string): Promise<void> {
     const client = await this.getClient(clientId);
-    await this.deleteUser(client.userId);
 
     if (client) {
+      await this.deleteUser(client.userId);
       try {
         await Client.deleteOne({ _id: clientId });
       } catch (error) {
@@ -210,6 +211,7 @@ export class DatabaseMongo {
     if (user) {
       try {
         await User.deleteOne({ _id: userId });
+        await Client.deleteMany({ user: userId });
       } catch (error) {
         throw new Error('User deleting is failed');
       }
