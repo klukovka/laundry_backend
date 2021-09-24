@@ -131,7 +131,7 @@ export class DatabaseMongo {
           surname: employee.surname,
           phone: employee.phone,
           birthday: employee.birthday,
-          laundry: employee.laundry,
+          laundry: employee.laundryId,
           user: employee.userId,
         }).save();
       } catch (error) {
@@ -346,7 +346,7 @@ export class DatabaseMongo {
     }
   }
 
-  private async laundryProps(optionsLaundry): Promise<any> {
+  private async laundryProps(optionsLaundry: any): Promise<any> {
     let laundry;
     if (optionsLaundry == undefined) {
       laundry = true;

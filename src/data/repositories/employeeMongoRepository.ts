@@ -18,7 +18,11 @@ export class EmployeeMongoRepository implements EmployeeRepository {
         name: options.get('name'),
         surname: options.get('surname'),
         phone: options.get('phone'),
-        birthday: options.get('birthday'),
+        birthday: new Date(
+          options.get('year'),
+          options.get('month'),
+          options.get('day')
+        ),
         laundry: options.get('laundry'),
         user: options.get('user'),
       };
@@ -115,7 +119,7 @@ export class EmployeeMongoRepository implements EmployeeRepository {
   }
   async getAllWithInfo(): Promise<Employee[]> {
     try {
-      const documents = await DatabaseMongo.getDB.getAllEmployees();
+      const documents = await DatabaseMongo.getDB.getAllEmployeesWithInfo();
       let clients = new Array<Employee>();
 
       if (documents) {
