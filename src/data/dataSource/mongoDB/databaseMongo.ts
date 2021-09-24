@@ -4,6 +4,7 @@ import AdditionalMode from './models/additionalMode';
 import Mode from './models/mode';
 import WashMachine from './models/washMachine';
 import User from './models/user';
+import Client from './models/client';
 
 export class DatabaseMongo {
   private static db: DatabaseMongo;
@@ -99,6 +100,25 @@ export class DatabaseMongo {
     }
   }
 
+  async createClient(client: any): Promise<void> {
+    const user = await this.getUserById(client.userId);
+    if (user) {
+      try {
+        await new Client({
+          _id: new mongoose.Types.ObjectId(),
+          name: client.name,
+          surname: client.surname,
+          phone: client.phone,
+          user: client.userId,
+        });
+      } catch (error) {
+        throw new Error('Client creating is failed');
+      }
+    } else {
+      throw new Error('User is not exist');
+    }
+  }
+
   async createUser(user: any): Promise<string> {
     try {
       const createdUser = await new User({
@@ -166,6 +186,21 @@ export class DatabaseMongo {
       }
     } else {
       throw new Error('WashMachine has already been deleted!');
+    }
+  }
+
+  async deleteClient(clientId: string): Promise<void> {
+    const client = await this.getClient(clientId);
+    await this.deleteUser(client.userId);
+
+    if (client) {
+      try {
+        await Client.deleteOne({ _id: clientId });
+      } catch (error) {
+        throw new Error('Client deleting is failed');
+      }
+    } else {
+      throw new Error('Client has already been deleted!');
     }
   }
 
@@ -254,6 +289,30 @@ export class DatabaseMongo {
     }
   }
 
+  async updateClient(clientId: string, options: any): Promise<void> {
+    const client = await this.getClient(clientId);
+    let user;
+    if (options.user == undefined) {
+      user = true;
+    } else {
+      user = await this.getUserById(client.user);
+    }
+
+    if (user) {
+      if (client) {
+        try {
+          await Client.updateOne({ _id: clientId }, { $set: options });
+        } catch (error) {
+          throw new Error('WashMachine updating is failed');
+        }
+      } else {
+        throw new Error('Client is not exist');
+      }
+    } else {
+      throw new Error('User is not exist');
+    }
+  }
+
   async updateUser(userId: string, options: any): Promise<void> {
     const user = await this.getUserById(userId);
     if (user) {
@@ -300,11 +359,25 @@ export class DatabaseMongo {
   }
   async getWashMachineWithLaundry(washMachineId: string): Promise<any> {
     try {
-      let l = await WashMachine.findOne({ _id: washMachineId })
+      return await WashMachine.findOne({ _id: washMachineId })
         .populate('laundry')
         .exec();
-      console.log(l);
-      return l;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getClient(clientId: string): Promise<any> {
+    try {
+      return await Client.findOne({ _id: clientId });
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getClientWithInfo(clientId: string): Promise<any> {
+    try {
+      return await Client.findOne({ _id: clientId }).populate('user').exec();
     } catch (error: any) {
       throw new Error(error.message);
     }
@@ -360,6 +433,21 @@ export class DatabaseMongo {
   async getAllWashMachinesWithLaundry(): Promise<any> {
     try {
       return await WashMachine.find().populate('laundry');
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getAllClients(): Promise<any> {
+    try {
+      return await Client.find();
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+  async getAllClientsWithInfo(): Promise<any> {
+    try {
+      return await Client.find().populate('user');
     } catch (error: any) {
       throw new Error(error.message);
     }
