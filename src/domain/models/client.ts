@@ -1,29 +1,29 @@
 import { User } from './user';
 
 export class Client {
-  idClient?: string | null;
+  clientId?: string | null;
   name: string;
   surname: string;
   phone: string;
   bonuses: Number;
   user?: User | null;
-  idUser: string;
+  userId: string;
 
   constructor(
     name: string,
     surname: string,
     phone: string,
-    idUser: string,
+    userId: string,
     bonuses: Number = 0,
-    idClient: string | null = null,
+    clientId: string | null = null,
     user: User | null = null
   ) {
     this.name = name;
     this.surname = surname;
     this.phone = phone;
     this.bonuses = bonuses;
-    this.idClient = idClient;
+    this.clientId = clientId;
     this.user = user;
-    this.idUser = idUser;
+    this.userId = userId;
   }
 }

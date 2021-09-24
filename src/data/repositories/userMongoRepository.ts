@@ -3,14 +3,14 @@ import { UserRepository } from '../../domain/repositories/userRepository';
 import { DatabaseMongo } from '../dataSource/mongoDB/databaseMongo';
 
 export class UserMongoRepository implements UserRepository {
-  async create(user: User): Promise<void> {
+  async create(user: User): Promise<string> {
     try {
       return await DatabaseMongo.getDB.createUser(user);
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
-  async update(idUser: string, options: Map<string, any>): Promise<void> {
+  async update(userId: string, options: Map<string, any>): Promise<void> {
     try {
       const objectOptions = {
         email: options.get('email'),
@@ -18,14 +18,14 @@ export class UserMongoRepository implements UserRepository {
         role: options.get('role'),
       };
 
-      return await DatabaseMongo.getDB.updateUser(idUser, objectOptions);
+      return await DatabaseMongo.getDB.updateUser(userId, objectOptions);
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
-  async delete(idUser: string): Promise<void> {
+  async delete(userId: string): Promise<void> {
     try {
-      return await DatabaseMongo.getDB.deleteUser(idUser);
+      return await DatabaseMongo.getDB.deleteUser(userId);
     } catch (error: any) {
       throw new Error(error.message);
     }
@@ -38,9 +38,9 @@ export class UserMongoRepository implements UserRepository {
       throw new Error(error.message);
     }
   }
-  async getById(idUser: string): Promise<User | null> {
+  async getById(userId: string): Promise<User | null> {
     try {
-      const user = await DatabaseMongo.getDB.getUserById(idUser);
+      const user = await DatabaseMongo.getDB.getUserById(userId);
       return this.getUser(user);
     } catch (error: any) {
       throw new Error(error.message);

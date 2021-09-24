@@ -11,7 +11,7 @@ export class LaundryMongoRepository implements LaundryRepository {
     }
   }
 
-  async update(idLaundry: string, options: Map<string, any>): Promise<void> {
+  async update(laundryId: string, options: Map<string, any>): Promise<void> {
     try {
       const objectOptions = {
         name: options.get('name'),
@@ -20,21 +20,21 @@ export class LaundryMongoRepository implements LaundryRepository {
         house: options.get('house'),
         phone: options.get('phone'),
       };
-      await DatabaseMongo.getDB.updateLaundry(idLaundry, objectOptions);
+      await DatabaseMongo.getDB.updateLaundry(laundryId, objectOptions);
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
-  async delete(idLaundry: string): Promise<void> {
+  async delete(laundryId: string): Promise<void> {
     try {
-      await DatabaseMongo.getDB.deleteLaundry(idLaundry);
+      await DatabaseMongo.getDB.deleteLaundry(laundryId);
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
-  async get(idLaundry: string): Promise<Laundry | null> {
+  async get(laundryId: string): Promise<Laundry | null> {
     try {
-      const laundry = await DatabaseMongo.getDB.getLaundry(idLaundry);
+      const laundry = await DatabaseMongo.getDB.getLaundry(laundryId);
       if (laundry) {
         return new Laundry(
           laundry.name,

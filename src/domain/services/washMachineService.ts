@@ -18,12 +18,12 @@ export class WashMachineService {
   }
 
   async update(
-    idWashMachine: string,
+    washMachineId: string,
     options: [{ propName: string; value: any }]
   ): Promise<void> {
     try {
       return await this._repository.update(
-        idWashMachine,
+        washMachineId,
         Mappers.mapRequestParamsToMap(options)
       );
     } catch (error) {
@@ -31,17 +31,17 @@ export class WashMachineService {
     }
   }
 
-  async delete(idWashMachine: string): Promise<void> {
+  async delete(washMachineId: string): Promise<void> {
     try {
-      return await this._repository.delete(idWashMachine);
+      return await this._repository.delete(washMachineId);
     } catch (error) {
       throw error;
     }
   }
 
-  async get(idWashMachine: string): Promise<WashMachine | null> {
+  async get(washMachineId: string): Promise<WashMachine | null> {
     try {
-      return await this._repository.get(idWashMachine);
+      return await this._repository.get(washMachineId);
     } catch (error) {
       throw error;
     }
@@ -55,9 +55,9 @@ export class WashMachineService {
     }
   }
 
-  async getWithLaundry(idWashMachine: string): Promise<WashMachine | null> {
+  async getWithLaundry(washMachineId: string): Promise<WashMachine | null> {
     try {
-      return await this._repository.getWithLaundry(idWashMachine);
+      return await this._repository.getWithLaundry(washMachineId);
     } catch (error) {
       throw error;
     }

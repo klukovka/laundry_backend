@@ -1,5 +1,5 @@
 export class AdditionalMode {
-  idAdditionalMode?: string | null;
+  additionalModeId?: string | null;
   name: string;
   time: Number;
   costs: Number;
@@ -8,10 +8,10 @@ export class AdditionalMode {
     name: string,
     time: Number,
     costs: Number,
-    idAdditionalMode: string | null = null
+    additionalModeId: string | null = null
   ) {
     this.costs = costs;
-    this.idAdditionalMode = idAdditionalMode;
+    this.additionalModeId = additionalModeId;
     this.name = name;
     this.time = time;
   }

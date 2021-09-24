@@ -2,24 +2,24 @@ import { Laundry } from './laundry';
 import { User } from './user';
 
 export class Employee {
-  idEmployee?: string | null;
+  employeeId?: string | null;
   name: string;
   surname: string;
   phone: string;
   birthday: Date;
   laundry?: Laundry | null;
-  idLaundry: string;
+  laundryId: string;
   user?: User | null;
-  idUser: string;
+  userId: string;
 
   constructor(
     name: string,
     surname: string,
     phone: string,
     birthday: Date,
-    idLaundry: string,
-    idUser: string,
-    idEmployee: string | null = null,
+    laundryId: string,
+    userId: string,
+    employeeId: string | null = null,
     laundry: Laundry | null = null,
     user: User | null = null
   ) {
@@ -28,9 +28,9 @@ export class Employee {
     this.phone = phone;
     this.birthday = birthday;
     this.laundry = laundry;
-    this.idEmployee = idEmployee;
+    this.employeeId = employeeId;
     this.user = user;
-    this.idLaundry = idLaundry;
-    this.idUser = idUser;
+    this.laundryId = laundryId;
+    this.userId = userId;
   }
 }

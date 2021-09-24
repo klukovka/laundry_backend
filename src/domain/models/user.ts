@@ -1,5 +1,5 @@
 export class User {
-  idUser?: string | null;
+  userId?: string | null;
   email: string;
   password?: string;
   role: string | null;
@@ -8,9 +8,9 @@ export class User {
     email: string,
     password: string,
     role: string | null = null,
-    idUser: string | null = null
+    userId: string | null = null
   ) {
-    this.idUser = idUser;
+    this.userId = userId;
     this.email = email;
     this.password = password;
     this.role = role;

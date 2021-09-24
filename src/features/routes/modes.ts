@@ -25,9 +25,9 @@ router.post('/', (req: Request, res: Response, next: any) => {
     });
 });
 
-router.delete('/:idMode', (req: Request, res: Response, next: any) => {
+router.delete('/:modeId', (req: Request, res: Response, next: any) => {
   modeService
-    .delete(req.params.idMode)
+    .delete(req.params.modeId)
     .then(() => {
       res.status(StatusCodes.OK).json({
         message: 'Mode was deleted!',
@@ -40,9 +40,9 @@ router.delete('/:idMode', (req: Request, res: Response, next: any) => {
     });
 });
 
-router.patch('/:idMode', (req: Request, res: Response, next: any) => {
+router.patch('/:modeId', (req: Request, res: Response, next: any) => {
   modeService
-    .update(req.params.idMode, req.body)
+    .update(req.params.modeId, req.body)
     .then(() => {
       res.status(StatusCodes.OK).json({
         message: 'Mode was updated!',
@@ -55,9 +55,9 @@ router.patch('/:idMode', (req: Request, res: Response, next: any) => {
     });
 });
 
-router.get('/:idMode', (req: Request, res: Response, next: any) => {
+router.get('/:modeId', (req: Request, res: Response, next: any) => {
   modeService
-    .getById(req.params.idMode)
+    .getById(req.params.modeId)
     .then((mode) => {
       if (mode) {
         res.status(StatusCodes.OK).json(mode);

@@ -1,14 +1,14 @@
 import { Laundry } from './laundry';
 
 export class WashMachine {
-  idWashMachine?: string | null;
+  washMachineId?: string | null;
   model: string;
   manufacturer: string;
   capacity: Number;
   powerUsage: Number;
   spinningSpeed: Number;
   laundry?: Laundry | null;
-  idLaundry: string;
+  laundryId: string;
 
   constructor(
     model: string,
@@ -16,8 +16,8 @@ export class WashMachine {
     capacity: Number,
     powerUsage: Number,
     spinningSpeed: Number,
-    idLaundry: string,
-    idWashMachine: string | null = null,
+    laundryId: string,
+    washMachineId: string | null = null,
     laundry: Laundry | null = null
   ) {
     this.model = model;
@@ -26,7 +26,7 @@ export class WashMachine {
     this.powerUsage = powerUsage;
     this.spinningSpeed = spinningSpeed;
     this.laundry = laundry;
-    this.idWashMachine = idWashMachine;
-    this.idLaundry = idLaundry;
+    this.washMachineId = washMachineId;
+    this.laundryId = laundryId;
   }
 }

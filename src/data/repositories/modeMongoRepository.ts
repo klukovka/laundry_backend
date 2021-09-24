@@ -10,28 +10,28 @@ export class ModeMongoRepository implements ModeRepository {
       throw new Error(error.message);
     }
   }
-  async update(idMode: string, options: Map<string, any>): Promise<void> {
+  async update(modeId: string, options: Map<string, any>): Promise<void> {
     try {
       const objectOptions = {
         name: options.get('name'),
         time: options.get('time'),
         costs: options.get('costs'),
       };
-      await DatabaseMongo.getDB.updateMode(idMode, objectOptions);
+      await DatabaseMongo.getDB.updateMode(modeId, objectOptions);
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
-  async delete(idMode: string): Promise<void> {
+  async delete(modeId: string): Promise<void> {
     try {
-      await DatabaseMongo.getDB.deleteMode(idMode);
+      await DatabaseMongo.getDB.deleteMode(modeId);
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
-  async get(idMode: string): Promise<Mode | null> {
+  async get(modeId: string): Promise<Mode | null> {
     try {
-      const mode = await DatabaseMongo.getDB.getMode(idMode);
+      const mode = await DatabaseMongo.getDB.getMode(modeId);
       if (mode) {
         return new Mode(mode.name, mode.time, mode.costs, mode?._id.toString());
       }

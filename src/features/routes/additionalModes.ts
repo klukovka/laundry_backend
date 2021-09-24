@@ -28,10 +28,10 @@ router.post('/', (req: Request, res: Response, next: any) => {
 });
 
 router.delete(
-  '/:idAdditionalMode',
+  '/:additionalModeId',
   (req: Request, res: Response, next: any) => {
     additionalModeService
-      .delete(req.params.idAdditionalMode)
+      .delete(req.params.additionalModeId)
       .then(() => {
         res.status(StatusCodes.OK).json({
           message: 'Additional Mode was deleted!',
@@ -45,9 +45,9 @@ router.delete(
   }
 );
 
-router.patch('/:idAdditionalMode', (req: Request, res: Response, next: any) => {
+router.patch('/:additionalModeId', (req: Request, res: Response, next: any) => {
   additionalModeService
-    .update(req.params.idAdditionalMode, req.body)
+    .update(req.params.additionalModeId, req.body)
     .then(() => {
       res.status(StatusCodes.OK).json({
         message: 'Additional Mode was updated!',
@@ -60,9 +60,9 @@ router.patch('/:idAdditionalMode', (req: Request, res: Response, next: any) => {
     });
 });
 
-router.get('/:idAdditionalMode', (req: Request, res: Response, next: any) => {
+router.get('/:additionalModeId', (req: Request, res: Response, next: any) => {
   additionalModeService
-    .getById(req.params.idAdditionalMode)
+    .getById(req.params.additionalModeId)
     .then((additionalMode) => {
       if (additionalMode) {
         res.status(StatusCodes.OK).json(additionalMode);
