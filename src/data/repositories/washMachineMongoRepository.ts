@@ -49,7 +49,7 @@ export class WashMachineMongoRepository implements WashMachineRepository {
           washMachine.capacity,
           washMachine.powerUsage,
           washMachine.spinningSpeed,
-          washMachine.laundry._id.toString(),
+          washMachine.laundry?._id.toString(),
           washMachine?._id.toString()
         );
       }
@@ -72,7 +72,7 @@ export class WashMachineMongoRepository implements WashMachineRepository {
               documents[i].capacity,
               documents[i].powerUsage,
               documents[i].spinningSpeed,
-              documents[i].laundry._id.toString(),
+              documents[i].laundry?._id.toString(),
               documents[i]?._id.toString()
             )
           );
