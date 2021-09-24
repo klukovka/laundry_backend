@@ -110,7 +110,7 @@ export class DatabaseMongo {
           surname: client.surname,
           phone: client.phone,
           user: client.userId,
-        });
+        }).save();
       } catch (error) {
         throw new Error('Client creating is failed');
       }
@@ -192,9 +192,8 @@ export class DatabaseMongo {
 
   async deleteClient(clientId: string): Promise<void> {
     const client = await this.getClient(clientId);
-
     if (client) {
-      await this.deleteUser(client.userId);
+      await this.deleteUser(client.user);
       try {
         await Client.deleteOne({ _id: clientId });
       } catch (error) {

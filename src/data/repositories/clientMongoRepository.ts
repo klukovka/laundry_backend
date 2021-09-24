@@ -102,7 +102,7 @@ export class ClientMongoRepository implements ClientRepository {
   }
   async getAllWithInfo(): Promise<Client[]> {
     try {
-      const documents = await DatabaseMongo.getDB.getAllClients();
+      const documents = await DatabaseMongo.getDB.getAllClientsWithInfo();
       let clients = new Array<Client>();
 
       if (documents) {
