@@ -16,7 +16,7 @@ router.post('/', (req: Request, res: Response, next: any) => {
     capacity,
     powerUsage,
     spinningSpeed,
-    idLaundry,
+    laundryId,
   } = req.body;
 
   const newWashMachine = new WashMachine(
@@ -25,7 +25,7 @@ router.post('/', (req: Request, res: Response, next: any) => {
     capacity,
     powerUsage,
     spinningSpeed,
-    idLaundry
+    laundryId
   );
 
   washMachineService
@@ -42,9 +42,9 @@ router.post('/', (req: Request, res: Response, next: any) => {
     });
 });
 
-router.delete('/:idWashMachine', (req: Request, res: Response, next: any) => {
+router.delete('/:washMachineId', (req: Request, res: Response, next: any) => {
   washMachineService
-    .delete(req.params.idWashMachine)
+    .delete(req.params.washMachineId)
     .then(() => {
       res.status(StatusCodes.OK).json({
         message: 'WashMachine was deleted!',
@@ -57,9 +57,9 @@ router.delete('/:idWashMachine', (req: Request, res: Response, next: any) => {
     });
 });
 
-router.patch('/:idWashMachine', (req: Request, res: Response, next: any) => {
+router.patch('/:washMachineId', (req: Request, res: Response, next: any) => {
   washMachineService
-    .update(req.params.idWashMachine, req.body)
+    .update(req.params.washMachineId, req.body)
     .then(() => {
       res.status(StatusCodes.OK).json({
         message: 'WashMachine was updated!',
@@ -72,9 +72,9 @@ router.patch('/:idWashMachine', (req: Request, res: Response, next: any) => {
     });
 });
 
-router.get('/byId/:idWashMachine', (req: Request, res: Response, next: any) => {
+router.get('/byId/:washMachineId', (req: Request, res: Response, next: any) => {
   washMachineService
-    .get(req.params.idWashMachine)
+    .get(req.params.washMachineId)
     .then((washMachine) => {
       if (washMachine) {
         res.status(StatusCodes.OK).json(washMachine);
@@ -92,10 +92,10 @@ router.get('/byId/:idWashMachine', (req: Request, res: Response, next: any) => {
 });
 
 router.get(
-  '/allInfo/:idWashMachine',
+  '/allInfo/:washMachineId',
   (req: Request, res: Response, next: any) => {
     washMachineService
-      .getWithLaundry(req.params.idWashMachine)
+      .getWithLaundry(req.params.washMachineId)
       .then((washMachine) => {
         if (washMachine) {
           res.status(StatusCodes.OK).json(washMachine);

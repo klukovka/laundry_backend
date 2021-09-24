@@ -25,9 +25,9 @@ router.post('/', (req: Request, res: Response, next: any) => {
     });
 });
 
-router.delete('/:idLaundry', (req: Request, res: Response, next: any) => {
+router.delete('/:laundryId', (req: Request, res: Response, next: any) => {
   laundryService
-    .delete(req.params.idLaundry)
+    .delete(req.params.laundryId)
     .then(() => {
       res.status(StatusCodes.OK).json({
         message: 'Laundry was deleted!',
@@ -40,9 +40,9 @@ router.delete('/:idLaundry', (req: Request, res: Response, next: any) => {
     });
 });
 
-router.patch('/:idLaundry', (req: Request, res: Response, next: any) => {
+router.patch('/:laundryId', (req: Request, res: Response, next: any) => {
   laundryService
-    .update(req.params.idLaundry, req.body)
+    .update(req.params.laundryId, req.body)
     .then(() => {
       res.status(StatusCodes.OK).json({
         message: 'Laundry was updated!',
@@ -55,9 +55,9 @@ router.patch('/:idLaundry', (req: Request, res: Response, next: any) => {
     });
 });
 
-router.get('/:idLaundry', (req: Request, res: Response, next: any) => {
+router.get('/:laundryId', (req: Request, res: Response, next: any) => {
   laundryService
-    .getById(req.params.idLaundry)
+    .getById(req.params.laundryId)
     .then((laundry) => {
       if (laundry) {
         res.status(StatusCodes.OK).json(laundry);

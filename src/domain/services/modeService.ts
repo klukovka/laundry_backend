@@ -18,12 +18,12 @@ export class ModeService {
   }
 
   async update(
-    idMode: string,
+    modeId: string,
     options: [{ propName: string; value: any }]
   ): Promise<void> {
     try {
       return await this._repository.update(
-        idMode,
+        modeId,
         Mappers.mapRequestParamsToMap(options)
       );
     } catch (error) {
@@ -31,17 +31,17 @@ export class ModeService {
     }
   }
 
-  async delete(idMode: string): Promise<void> {
+  async delete(modeId: string): Promise<void> {
     try {
-      return await this._repository.delete(idMode);
+      return await this._repository.delete(modeId);
     } catch (error) {
       throw error;
     }
   }
 
-  async getById(idMode: string): Promise<Mode | null> {
+  async getById(modeId: string): Promise<Mode | null> {
     try {
-      return await this._repository.get(idMode);
+      return await this._repository.get(modeId);
     } catch (error) {
       throw error;
     }

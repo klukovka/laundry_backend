@@ -7,6 +7,7 @@ import additionalModeRoutes from './routes/additionalModes';
 import modeRoutes from './routes/modes';
 import washMachineRoutes from './routes/washMachines';
 import userRoutes from './routes/users';
+import clientRoutes from './routes/clients';
 
 const app: Application = express();
 
@@ -32,6 +33,7 @@ app.use('/additionalModes', additionalModeRoutes);
 app.use('/modes', modeRoutes);
 app.use('/washMachines', washMachineRoutes);
 app.use('/users', userRoutes);
+app.use('/clients', clientRoutes);
 
 //endpoint doesn't exist
 app.use((req: Request, res: Response, next: any) => {

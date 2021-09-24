@@ -11,7 +11,7 @@ export class AdditionalModeMongoRepository implements AdditionalModeRepository {
     }
   }
   async update(
-    idAdditionalMode: string,
+    additionalModeId: string,
     options: Map<string, any>
   ): Promise<void> {
     try {
@@ -21,24 +21,24 @@ export class AdditionalModeMongoRepository implements AdditionalModeRepository {
         costs: options.get('costs'),
       };
       await DatabaseMongo.getDB.updateAdditionalMode(
-        idAdditionalMode,
+        additionalModeId,
         objectOptions
       );
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
-  async delete(idAdditionalMode: string): Promise<void> {
+  async delete(additionalModeId: string): Promise<void> {
     try {
-      await DatabaseMongo.getDB.deleteAdditionalMode(idAdditionalMode);
+      await DatabaseMongo.getDB.deleteAdditionalMode(additionalModeId);
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
-  async get(idAdditionalMode: string): Promise<AdditionalMode | null> {
+  async get(additionalModeId: string): Promise<AdditionalMode | null> {
     try {
       const additionalMode = await DatabaseMongo.getDB.getAdditionalMode(
-        idAdditionalMode
+        additionalModeId
       );
       if (additionalMode) {
         return new AdditionalMode(

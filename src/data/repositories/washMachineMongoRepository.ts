@@ -12,7 +12,7 @@ export class WashMachineMongoRepository implements WashMachineRepository {
     }
   }
   async update(
-    idWashMachine: string,
+    washMachineId: string,
     options: Map<string, any>
   ): Promise<void> {
     try {
@@ -25,22 +25,22 @@ export class WashMachineMongoRepository implements WashMachineRepository {
         laundry: options.get('laundry'),
       };
 
-      await DatabaseMongo.getDB.updateWashMachine(idWashMachine, objectOptions);
+      await DatabaseMongo.getDB.updateWashMachine(washMachineId, objectOptions);
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
-  async delete(idWashMachine: string): Promise<void> {
+  async delete(washMachineId: string): Promise<void> {
     try {
-      await DatabaseMongo.getDB.deleteWashMachine(idWashMachine);
+      await DatabaseMongo.getDB.deleteWashMachine(washMachineId);
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
-  async get(idWashMachine: string): Promise<WashMachine | null> {
+  async get(washMachineId: string): Promise<WashMachine | null> {
     try {
       const washMachine = await DatabaseMongo.getDB.getWashMachine(
-        idWashMachine
+        washMachineId
       );
       if (washMachine) {
         return new WashMachine(
@@ -49,7 +49,7 @@ export class WashMachineMongoRepository implements WashMachineRepository {
           washMachine.capacity,
           washMachine.powerUsage,
           washMachine.spinningSpeed,
-          washMachine.laundry._id.toString(),
+          washMachine.laundry?._id.toString(),
           washMachine?._id.toString()
         );
       }
@@ -72,7 +72,7 @@ export class WashMachineMongoRepository implements WashMachineRepository {
               documents[i].capacity,
               documents[i].powerUsage,
               documents[i].spinningSpeed,
-              documents[i].laundry._id.toString(),
+              documents[i].laundry?._id.toString(),
               documents[i]?._id.toString()
             )
           );
@@ -83,10 +83,10 @@ export class WashMachineMongoRepository implements WashMachineRepository {
       throw new Error(error.message);
     }
   }
-  async getWithLaundry(idWashMachine: string): Promise<WashMachine | null> {
+  async getWithLaundry(washMachineId: string): Promise<WashMachine | null> {
     try {
       const washMachine = await DatabaseMongo.getDB.getWashMachineWithLaundry(
-        idWashMachine
+        washMachineId
       );
       if (washMachine) {
         return new WashMachine(

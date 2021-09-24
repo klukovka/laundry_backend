@@ -22,8 +22,9 @@ router.post('/signup', (req: Request, res: Response, next: any) => {
 
       userService
         .create(newUser)
-        .then((_) => {
+        .then((userId) => {
           return res.status(StatusCodes.CREATED).json({
+            userId: userId,
             message: 'User created',
           });
         })

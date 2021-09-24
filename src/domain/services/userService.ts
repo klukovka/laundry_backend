@@ -11,7 +11,7 @@ export class UserService {
     this._repository = repository;
   }
 
-  async create(user: User): Promise<void> {
+  async create(user: User): Promise<string> {
     let hashedPassword;
     try {
       hashedPassword = await hash(user.password!, 10);
@@ -28,7 +28,7 @@ export class UserService {
   }
 
   async update(
-    idUser: string,
+    userId: string,
     options: [{ propName: string; value: any }]
   ): Promise<void> {
     try {
@@ -37,15 +37,15 @@ export class UserService {
         const hashedPassword = await hash(mappedOptions.get('password'), 10);
         mappedOptions.set('password', hashedPassword);
       }
-      return await this._repository.update(idUser, mappedOptions);
+      return await this._repository.update(userId, mappedOptions);
     } catch (error) {
       throw error;
     }
   }
 
-  async delete(idUser: string): Promise<void> {
+  async delete(userId: string): Promise<void> {
     try {
-      return await this._repository.delete(idUser);
+      return await this._repository.delete(userId);
     } catch (error) {
       throw error;
     }
@@ -67,7 +67,7 @@ export class UserService {
         try {
           const token = jwt.sign(
             {
-              idUser: userInRep.idUser,
+              userId: userInRep.userId,
               email: userInRep.email,
               role: userInRep.role,
             },
@@ -87,9 +87,9 @@ export class UserService {
     }
   }
 
-  async getById(idUser: string): Promise<User | null> {
+  async getById(userId: string): Promise<User | null> {
     try {
-      return await this._repository.getById(idUser);
+      return await this._repository.getById(userId);
     } catch (error) {
       throw error;
     }

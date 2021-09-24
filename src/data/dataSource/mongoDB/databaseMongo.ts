@@ -4,6 +4,7 @@ import AdditionalMode from './models/additionalMode';
 import Mode from './models/mode';
 import WashMachine from './models/washMachine';
 import User from './models/user';
+import Client from './models/client';
 
 export class DatabaseMongo {
   private static db: DatabaseMongo;
@@ -79,7 +80,7 @@ export class DatabaseMongo {
   }
 
   async createWashMachine(washMachine: any): Promise<void> {
-    const laundry = await this.getLaundry(washMachine.idLaundry);
+    const laundry = await this.getLaundry(washMachine.laundryId);
     if (laundry) {
       try {
         await new WashMachine({
@@ -89,7 +90,7 @@ export class DatabaseMongo {
           capacity: washMachine.capacity,
           powerUsage: washMachine.powerUsage,
           spinningSpeed: washMachine.spinningSpeed,
-          laundry: washMachine.idLaundry,
+          laundry: washMachine.laundryId,
         }).save();
       } catch (error) {
         throw new Error('WashMachine creating is failed');
@@ -99,25 +100,46 @@ export class DatabaseMongo {
     }
   }
 
-  async createUser(user: any): Promise<void> {
+  async createClient(client: any): Promise<void> {
+    const user = await this.getUserById(client.userId);
+    if (user) {
+      try {
+        await new Client({
+          _id: new mongoose.Types.ObjectId(),
+          name: client.name,
+          surname: client.surname,
+          phone: client.phone,
+          user: client.userId,
+        }).save();
+      } catch (error) {
+        throw new Error('Client creating is failed');
+      }
+    } else {
+      throw new Error('User is not exist');
+    }
+  }
+
+  async createUser(user: any): Promise<string> {
     try {
-      await new User({
+      const createdUser = await new User({
         _id: new mongoose.Types.ObjectId(),
         email: user.email,
         password: user.password,
         role: user.role,
       }).save();
+      return createdUser?._id.toString();
     } catch (error) {
       throw new Error('User creating is failed');
     }
   }
 
-  async deleteLaundry(idLaundry: string): Promise<void> {
-    const laundry = await this.getLaundry(idLaundry);
+  async deleteLaundry(laundryId: string): Promise<void> {
+    const laundry = await this.getLaundry(laundryId);
 
     if (laundry) {
       try {
-        await Laundry.deleteOne({ _id: idLaundry });
+        await Laundry.deleteOne({ _id: laundryId });
+        await WashMachine.deleteMany({ laundry: laundryId });
       } catch (error) {
         throw new Error('Laundry deleting is failed');
       }
@@ -126,12 +148,12 @@ export class DatabaseMongo {
     }
   }
 
-  async deleteAdditionalMode(idAdditionalMode: string): Promise<void> {
-    const additionalMode = await this.getAdditionalMode(idAdditionalMode);
+  async deleteAdditionalMode(additionalModeId: string): Promise<void> {
+    const additionalMode = await this.getAdditionalMode(additionalModeId);
 
     if (additionalMode) {
       try {
-        await AdditionalMode.deleteOne({ _id: idAdditionalMode });
+        await AdditionalMode.deleteOne({ _id: additionalModeId });
       } catch (error) {
         throw new Error('Additional Mode deleting is failed');
       }
@@ -140,12 +162,12 @@ export class DatabaseMongo {
     }
   }
 
-  async deleteMode(idMode: string): Promise<void> {
-    const mode = await this.getMode(idMode);
+  async deleteMode(modeId: string): Promise<void> {
+    const mode = await this.getMode(modeId);
 
     if (mode) {
       try {
-        await Mode.deleteOne({ _id: idMode });
+        await Mode.deleteOne({ _id: modeId });
       } catch (error) {
         throw new Error('Mode deleting is failed');
       }
@@ -154,12 +176,12 @@ export class DatabaseMongo {
     }
   }
 
-  async deleteWashMachine(idWashMachine: string): Promise<void> {
-    const washMachine = await this.getWashMachine(idWashMachine);
+  async deleteWashMachine(washMachineId: string): Promise<void> {
+    const washMachine = await this.getWashMachine(washMachineId);
 
     if (washMachine) {
       try {
-        await WashMachine.deleteOne({ _id: idWashMachine });
+        await WashMachine.deleteOne({ _id: washMachineId });
       } catch (error) {
         throw new Error('WashMachine deleting is failed');
       }
@@ -168,12 +190,27 @@ export class DatabaseMongo {
     }
   }
 
-  async deleteUser(idUser: string): Promise<void> {
-    const user = await this.getUserById(idUser);
+  async deleteClient(clientId: string): Promise<void> {
+    const client = await this.getClient(clientId);
+    if (client) {
+      await this.deleteUser(client.user);
+      try {
+        await Client.deleteOne({ _id: clientId });
+      } catch (error) {
+        throw new Error('Client deleting is failed');
+      }
+    } else {
+      throw new Error('Client has already been deleted!');
+    }
+  }
+
+  async deleteUser(userId: string): Promise<void> {
+    const user = await this.getUserById(userId);
 
     if (user) {
       try {
-        await User.deleteOne({ _id: idUser });
+        await User.deleteOne({ _id: userId });
+        await Client.deleteMany({ user: userId });
       } catch (error) {
         throw new Error('User deleting is failed');
       }
@@ -182,11 +219,11 @@ export class DatabaseMongo {
     }
   }
 
-  async updateLaundry(idLaundry: string, options: any): Promise<void> {
-    const laundry = await this.getLaundry(idLaundry);
+  async updateLaundry(laundryId: string, options: any): Promise<void> {
+    const laundry = await this.getLaundry(laundryId);
     if (laundry) {
       try {
-        await Laundry.updateOne({ _id: idLaundry }, { $set: options });
+        await Laundry.updateOne({ _id: laundryId }, { $set: options });
       } catch (error) {
         throw new Error('Laundry updating is failed');
       }
@@ -196,14 +233,14 @@ export class DatabaseMongo {
   }
 
   async updateAdditionalMode(
-    idAdditionalMode: string,
+    additionalModeId: string,
     options: any
   ): Promise<void> {
-    const additionalMode = await this.getAdditionalMode(idAdditionalMode);
+    const additionalMode = await this.getAdditionalMode(additionalModeId);
     if (additionalMode) {
       try {
         await AdditionalMode.updateOne(
-          { _id: idAdditionalMode },
+          { _id: additionalModeId },
           { $set: options }
         );
       } catch (error) {
@@ -214,11 +251,11 @@ export class DatabaseMongo {
     }
   }
 
-  async updateMode(idMode: string, options: any): Promise<void> {
-    const mode = await this.getMode(idMode);
+  async updateMode(modeId: string, options: any): Promise<void> {
+    const mode = await this.getMode(modeId);
     if (mode) {
       try {
-        await Mode.updateOne({ _id: idMode }, { $set: options });
+        await Mode.updateOne({ _id: modeId }, { $set: options });
       } catch (error) {
         throw new Error('Mode updating is failed');
       }
@@ -227,14 +264,19 @@ export class DatabaseMongo {
     }
   }
 
-  async updateWashMachine(idWashMachine: string, options: any): Promise<void> {
-    const washMachine = await this.getWashMachine(idWashMachine);
-    const laundry = await this.getLaundry(options.laundry);
+  async updateWashMachine(washMachineId: string, options: any): Promise<void> {
+    const washMachine = await this.getWashMachine(washMachineId);
+    let laundry;
+    if (options.laundry == undefined) {
+      laundry = true;
+    } else {
+      laundry = await this.getLaundry(options.laundry);
+    }
     if (laundry) {
       if (washMachine) {
         try {
           await WashMachine.updateOne(
-            { _id: idWashMachine },
+            { _id: washMachineId },
             { $set: options }
           );
         } catch (error) {
@@ -248,11 +290,35 @@ export class DatabaseMongo {
     }
   }
 
-  async updateUser(idUser: string, options: any): Promise<void> {
-    const user = await this.getUserById(idUser);
+  async updateClient(clientId: string, options: any): Promise<void> {
+    const client = await this.getClient(clientId);
+    let user;
+    if (options.user == undefined) {
+      user = true;
+    } else {
+      user = await this.getUserById(client.user);
+    }
+
+    if (user) {
+      if (client) {
+        try {
+          await Client.updateOne({ _id: clientId }, { $set: options });
+        } catch (error) {
+          throw new Error('WashMachine updating is failed');
+        }
+      } else {
+        throw new Error('Client is not exist');
+      }
+    } else {
+      throw new Error('User is not exist');
+    }
+  }
+
+  async updateUser(userId: string, options: any): Promise<void> {
+    const user = await this.getUserById(userId);
     if (user) {
       try {
-        await User.updateOne({ _id: idUser }, { $set: options });
+        await User.updateOne({ _id: userId }, { $set: options });
       } catch (error) {
         throw new Error('User updating is failed');
       }
@@ -261,52 +327,66 @@ export class DatabaseMongo {
     }
   }
 
-  async getLaundry(idLaundry: string): Promise<any> {
+  async getLaundry(laundryId: string): Promise<any> {
     try {
-      return await Laundry.findOne({ _id: idLaundry });
+      return await Laundry.findOne({ _id: laundryId });
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
 
-  async getAdditionalMode(idAdditionalMode: string): Promise<any> {
+  async getAdditionalMode(additionalModeId: string): Promise<any> {
     try {
-      return await AdditionalMode.findOne({ _id: idAdditionalMode });
+      return await AdditionalMode.findOne({ _id: additionalModeId });
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
 
-  async getMode(idMode: string): Promise<any> {
+  async getMode(modeId: string): Promise<any> {
     try {
-      return await Mode.findOne({ _id: idMode });
+      return await Mode.findOne({ _id: modeId });
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
 
-  async getWashMachine(idWashMachine: string): Promise<any> {
+  async getWashMachine(washMachineId: string): Promise<any> {
     try {
-      return await WashMachine.findOne({ _id: idWashMachine });
+      return await WashMachine.findOne({ _id: washMachineId });
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
-  async getWashMachineWithLaundry(idWashMachine: string): Promise<any> {
+  async getWashMachineWithLaundry(washMachineId: string): Promise<any> {
     try {
-      let l = await WashMachine.findOne({ _id: idWashMachine })
+      return await WashMachine.findOne({ _id: washMachineId })
         .populate('laundry')
         .exec();
-      console.log(l);
-      return l;
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
 
-  async getUserById(idUser: string): Promise<any> {
+  async getClient(clientId: string): Promise<any> {
     try {
-      return await User.findOne({ _id: idUser });
+      return await Client.findOne({ _id: clientId });
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getClientWithInfo(clientId: string): Promise<any> {
+    try {
+      return await Client.findOne({ _id: clientId }).populate('user').exec();
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getUserById(userId: string): Promise<any> {
+    try {
+      return await User.findOne({ _id: userId });
     } catch (error: any) {
       throw new Error(error.message);
     }
@@ -354,6 +434,21 @@ export class DatabaseMongo {
   async getAllWashMachinesWithLaundry(): Promise<any> {
     try {
       return await WashMachine.find().populate('laundry');
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getAllClients(): Promise<any> {
+    try {
+      return await Client.find();
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+  async getAllClientsWithInfo(): Promise<any> {
+    try {
+      return await Client.find().populate('user');
     } catch (error: any) {
       throw new Error(error.message);
     }

@@ -18,12 +18,12 @@ export class LaundryService {
   }
 
   async update(
-    idLaundry: string,
+    laundryId: string,
     options: [{ propName: string; value: any }]
   ): Promise<void> {
     try {
       return await this._repository.update(
-        idLaundry,
+        laundryId,
         Mappers.mapRequestParamsToMap(options)
       );
     } catch (error) {
@@ -31,17 +31,17 @@ export class LaundryService {
     }
   }
 
-  async delete(idLaundry: string): Promise<void> {
+  async delete(laundryId: string): Promise<void> {
     try {
-      return await this._repository.delete(idLaundry);
+      return await this._repository.delete(laundryId);
     } catch (error) {
       throw error;
     }
   }
 
-  async getById(idLaundry: string): Promise<Laundry | null> {
+  async getById(laundryId: string): Promise<Laundry | null> {
     try {
-      return await this._repository.get(idLaundry);
+      return await this._repository.get(laundryId);
     } catch (error) {
       throw error;
     }
