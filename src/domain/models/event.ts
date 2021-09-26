@@ -19,6 +19,7 @@ export class Event {
   timeBegin: Date | null;
   paidStatus: Boolean;
   paidBonuses: Number;
+  taken: Boolean;
 
   constructor(
     washMachineId: string,
@@ -34,7 +35,8 @@ export class Event {
     client: Client | null = null,
     timeBegin: Date | null = null,
     paidStatus: Boolean = false,
-    paidBonuses: Number = 0
+    paidBonuses: Number = 0,
+    taken: Boolean = false
   ) {
     this.eventId = eventId;
     this.washMachineId = washMachineId;
@@ -50,5 +52,6 @@ export class Event {
     this.timeBegin = timeBegin;
     this.paidStatus = paidStatus;
     this.paidBonuses = paidBonuses;
+    this.taken = taken;
   }
 }
