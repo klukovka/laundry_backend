@@ -170,12 +170,12 @@ export class DatabaseMongo {
   }
 
   async createEvent(event: any): Promise<string> {
-    const washMachine = this.getWashMachine(event.washMachineId);
-    const mode = this.getMode(event.modeId);
+    const washMachine = await this.getWashMachine(event.washMachineId);
+    const mode = await this.getMode(event.modeId);
     const additionalMode =
       event.additionalModeId == null
         ? true
-        : this.getAdditionalMode(event.additionalModeId);
+        : await this.getAdditionalMode(event.additionalModeId);
     try {
       if (washMachine && mode && additionalMode) {
         const createdEvent = new Event({
@@ -657,7 +657,7 @@ export class DatabaseMongo {
   async getEventWithInfo(eventId: string): Promise<any> {
     try {
       return await Event.findOne({ _id: eventId }).populate(
-        'washmachine mode additionalmode client'
+        'washMachine mode additionalMode client'
       );
     } catch (error: any) {
       throw new Error(error.message);
@@ -675,7 +675,7 @@ export class DatabaseMongo {
   async getAllEventsWithInfo(): Promise<any> {
     try {
       return await Event.find().populate(
-        'washmachine mode additionalmode client'
+        'washMachine mode additionalMode client'
       );
     } catch (error: any) {
       throw new Error(error.message);

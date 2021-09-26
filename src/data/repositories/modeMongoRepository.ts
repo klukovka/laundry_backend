@@ -1,5 +1,5 @@
-import { Mode } from '../../domain/models/Mode';
-import { ModeRepository } from '../../domain/repositories/ModeRepository';
+import { Mode } from '../../domain/models/mode';
+import { ModeRepository } from '../../domain/repositories/modeRepository';
 import { DatabaseMongo } from '../dataSource/mongoDB/databaseMongo';
 
 export class ModeMongoRepository implements ModeRepository {

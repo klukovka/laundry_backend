@@ -95,7 +95,7 @@ export class EventMongoRepository implements EventRepository {
       throw new Error(error.message);
     }
   }
-  async getWithInfo(eventId: string): Promise<Event> {
+  async getWithInfo(eventId: string): Promise<Event | null> {
     try {
       const event = await DatabaseMongo.getDB.getEventWithInfo(eventId);
       if (event) {
@@ -147,7 +147,7 @@ export class EventMongoRepository implements EventRepository {
   }
   async getAllWithInfo(): Promise<Event[]> {
     try {
-      const documents = await DatabaseMongo.getDB.getAllEvents();
+      const documents = await DatabaseMongo.getDB.getAllEventsWithInfo();
       let events = new Array<Event>();
       if (documents) {
         for (let i = 0; i < documents.length; i++) {

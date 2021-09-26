@@ -1,6 +1,6 @@
 import { Mappers } from '../../features/utils/mappers';
-import { Mode } from '../models/Mode';
-import { ModeRepository } from '../repositories/ModeRepository';
+import { Mode } from '../models/mode';
+import { ModeRepository } from '../repositories/modeRepository';
 
 export class ModeService {
   private _repository: ModeRepository;

@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
-import { ModeMongoRepository } from '../../data/repositories/ModeMongoRepository';
-import { Mode } from '../../domain/models/Mode';
+import { ModeMongoRepository } from '../../data/repositories/modeMongoRepository';
+import { Mode } from '../../domain/models/mode';
 import { ModeService } from '../../domain/services/modeService';
 import StatusCodes from '../utils/statusCodes';
 
