@@ -9,6 +9,7 @@ import washMachineRoutes from './routes/washMachines';
 import userRoutes from './routes/users';
 import clientRoutes from './routes/clients';
 import employeeRoutes from './routes/employees';
+import eventRoutes from './routes/events';
 
 const app: Application = express();
 
@@ -36,6 +37,7 @@ app.use('/washMachines', washMachineRoutes);
 app.use('/users', userRoutes);
 app.use('/clients', clientRoutes);
 app.use('/employees', employeeRoutes);
+app.use('/events', eventRoutes);
 
 //endpoint doesn't exist
 app.use((req: Request, res: Response, next: any) => {
