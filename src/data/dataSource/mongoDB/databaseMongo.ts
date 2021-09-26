@@ -664,7 +664,7 @@ export class DatabaseMongo {
     }
   }
 
-  async getAllEvents(eventId: string): Promise<any> {
+  async getAllEvents(): Promise<any> {
     try {
       return await Event.find();
     } catch (error: any) {
@@ -672,7 +672,7 @@ export class DatabaseMongo {
     }
   }
 
-  async getAllEventsWithInfo(eventId: string): Promise<any> {
+  async getAllEventsWithInfo(): Promise<any> {
     try {
       return await Event.find().populate(
         'washmachine mode additionalmode client'

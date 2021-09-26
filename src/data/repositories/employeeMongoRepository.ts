@@ -60,11 +60,11 @@ export class EmployeeMongoRepository implements EmployeeRepository {
   async getAll(): Promise<Employee[]> {
     try {
       const documents = await DatabaseMongo.getDB.getAllEmployees();
-      let clients = new Array<Employee>();
+      let employees = new Array<Employee>();
 
       if (documents) {
         for (let i = 0; i < documents.length; i++) {
-          clients.push(
+          employees.push(
             new Employee(
               documents[i].name,
               documents[i].surname,
@@ -77,7 +77,7 @@ export class EmployeeMongoRepository implements EmployeeRepository {
           );
         }
       }
-      return clients;
+      return employees;
     } catch (error: any) {
       throw new Error(error.message);
     }
@@ -120,11 +120,11 @@ export class EmployeeMongoRepository implements EmployeeRepository {
   async getAllWithInfo(): Promise<Employee[]> {
     try {
       const documents = await DatabaseMongo.getDB.getAllEmployeesWithInfo();
-      let clients = new Array<Employee>();
+      let employees = new Array<Employee>();
 
       if (documents) {
         for (let i = 0; i < documents.length; i++) {
-          clients.push(
+          employees.push(
             new Employee(
               documents[i].name,
               documents[i].surname,
@@ -151,7 +151,7 @@ export class EmployeeMongoRepository implements EmployeeRepository {
           );
         }
       }
-      return clients;
+      return employees;
     } catch (error: any) {
       throw new Error(error.message);
     }
