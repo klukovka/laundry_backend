@@ -6,6 +6,7 @@ import WashMachine from './models/washMachine';
 import User from './models/user';
 import Client from './models/client';
 import Employee from './models/employee';
+import Event from './models/event';
 
 export class DatabaseMongo {
   private static db: DatabaseMongo;
@@ -168,6 +169,35 @@ export class DatabaseMongo {
     }
   }
 
+  async createEvent(event: any): Promise<string> {
+    const washMachine = this.getWashMachine(event.washMachineId);
+    const mode = this.getMode(event.modeId);
+    const additionalMode =
+      event.additionalModeId == null
+        ? true
+        : this.getAdditionalMode(event.additionalModeId);
+    try {
+      if (washMachine && mode && additionalMode) {
+        const createdEvent = new Event({
+          _id: new mongoose.Types.ObjectId(),
+          washMachine: event.washMachineId,
+          temperature: event.temperature,
+          spinning: event.spinning,
+          mode: event.modeId,
+          additionalMode: event.additionalModeId,
+          client: event.clientId,
+        });
+
+        await createdEvent.save();
+        return createdEvent?._id.toString();
+      }
+
+      throw Error();
+    } catch (error) {
+      throw new Error('Event creating is failed');
+    }
+  }
+
   async deleteLaundry(laundryId: string): Promise<void> {
     const laundry = await this.getLaundry(laundryId);
 
@@ -252,10 +282,23 @@ export class DatabaseMongo {
       try {
         await Employee.deleteOne({ _id: employeeId });
       } catch (error) {
-        throw new Error('Client deleting is failed');
+        throw new Error('Employee deleting is failed');
       }
     } else {
       throw new Error('Employee has already been deleted!');
+    }
+  }
+
+  async deleteEvent(eventId: string): Promise<void> {
+    const event = await this.getEvent(eventId);
+    if (event) {
+      try {
+        await Event.deleteOne({ _id: event });
+      } catch (error) {
+        throw new Error('Event deleting is failed');
+      }
+    } else {
+      throw new Error('Event has already been deleted!');
     }
   }
 
@@ -393,8 +436,8 @@ export class DatabaseMongo {
       const laundry = await this.laundryProps(options.laundry);
 
       if (user && laundry) {
-        await Employee.updateOne({ _id: employee }, { $set: options });
         try {
+          await Employee.updateOne({ _id: employee }, { $set: options });
         } catch (error) {
           throw new Error('Employee updating is failed');
         }
@@ -403,6 +446,31 @@ export class DatabaseMongo {
       }
     } else {
       throw new Error('Employee is not exist');
+    }
+  }
+
+  async updateEvent(eventId: string, options: any): Promise<void> {
+    const event = await this.getEvent(eventId);
+    if (event) {
+      const client =
+        options.client == undefined
+          ? true
+          : await this.getClient(options.client);
+      if (client) {
+        try {
+          await Event.updateOne(
+            { _id: eventId },
+            { $set: options },
+            { upsert: true }
+          );
+        } catch (error) {
+          throw new Error('Event updating is failed');
+        }
+      } else {
+        throw new Error('Client is not exist');
+      }
+    } else {
+      throw new Error('Event is not exist');
     }
   }
 
@@ -573,6 +641,42 @@ export class DatabaseMongo {
   async getAllEmployeesWithInfo(): Promise<any> {
     try {
       return await Employee.find().populate('user laundry').exec();
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getEvent(eventId: string): Promise<any> {
+    try {
+      return await Event.findOne({ _id: eventId });
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getEventWithInfo(eventId: string): Promise<any> {
+    try {
+      return await Event.findOne({ _id: eventId }).populate(
+        'washmachine mode additionalmode client'
+      );
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getAllEvents(eventId: string): Promise<any> {
+    try {
+      return await Event.find();
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getAllEventsWithInfo(eventId: string): Promise<any> {
+    try {
+      return await Event.find().populate(
+        'washmachine mode additionalmode client'
+      );
     } catch (error: any) {
       throw new Error(error.message);
     }

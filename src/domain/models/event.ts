@@ -45,8 +45,8 @@ export class Event {
     this.spinning = spinning;
     this.modeId = modeId;
     this.mode = mode;
-    this.additionalMode = this.additionalMode;
-    this.additionalModeId = this.additionalModeId;
+    this.additionalMode = additionalMode;
+    this.additionalModeId = additionalModeId;
     this.clientId = clientId;
     this.client = client;
     this.timeBegin = timeBegin;

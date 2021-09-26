@@ -19,7 +19,7 @@ export class EventService {
   async paidForEvent(eventId: string, clientId: string, bonuses: Number = 0) {
     try {
       let options = new Map<string, any>();
-      options.set('clientId', clientId);
+      options.set('client', clientId);
       options.set('paidBonuses', bonuses);
       options.set('timeBegin', Date.now());
       options.set('paidStatus', true);
