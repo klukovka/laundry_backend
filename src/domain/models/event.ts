@@ -1,53 +1,54 @@
+import { WashMachine } from './washMachine';
+import { Mode } from './mode';
 import { AdditionalMode } from './additionalMode';
 import { Client } from './client';
-import { Mode } from './mode';
-import { WashMachine } from './washMachine';
 
 export class Event {
   eventId?: string | null;
   washMachineId: string;
-  washMachine?: WashMachine | null;
-  clientId: string;
-  client?: Client | null;
-  timeBegin: Date;
-  timeEnd: Date;
-  paidStatus: boolean;
-  paidSum: Number;
-  paidBonuses: Number;
+  washMachine: WashMachine | null;
+  temperature: Number;
+  spinning: Number;
   modeId: string;
-  mode?: Mode | null;
-  additionalModeId: string;
-  additionalMode?: AdditionalMode | null;
+  mode: Mode | null;
+  additionalModeId: string | null;
+  additionalMode: AdditionalMode | null;
+
+  clientId: string | null;
+  client: Client | null;
+  timeBegin: Date | null;
+  paidStatus: Boolean;
+  paidBonuses: Number;
 
   constructor(
     washMachineId: string,
-    clientId: string,
-    timeBegin: Date,
-    timeEnd: Date,
-    paidSum: Number,
+    temperature: Number,
+    spinning: Number,
     modeId: string,
-    additionalModeId: string,
-    paidStatus: boolean = false,
-    paidBonuses: Number = 0,
+    additionalModeId: string | null = null,
     eventId: string | null = null,
     washMachine: WashMachine | null = null,
-    client: Client | null = null,
     mode: Mode | null = null,
-    additionalMode: AdditionalMode | null = null
+    additionalMode: AdditionalMode | null = null,
+    clientId: string | null = null,
+    client: Client | null = null,
+    timeBegin: Date | null = null,
+    paidStatus: Boolean = false,
+    paidBonuses: Number = 0
   ) {
+    this.eventId = eventId;
     this.washMachineId = washMachineId;
-    this.clientId = clientId;
-    this.timeBegin = timeBegin;
-    this.timeEnd = timeEnd;
-    this.paidSum = paidSum;
+    this.washMachine = washMachine;
+    this.temperature = temperature;
+    this.spinning = spinning;
     this.modeId = modeId;
-    this.additionalModeId = additionalModeId;
+    this.mode = mode;
+    this.additionalMode = this.additionalMode;
+    this.additionalModeId = this.additionalModeId;
+    this.clientId = clientId;
+    this.client = client;
+    this.timeBegin = timeBegin;
     this.paidStatus = paidStatus;
     this.paidBonuses = paidBonuses;
-    this.eventId = eventId;
-    this.washMachine = washMachine;
-    this.client = client;
-    this.mode = mode;
-    this.additionalMode = additionalMode;
   }
 }
