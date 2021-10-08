@@ -71,6 +71,24 @@ router.patch(
   }
 );
 
+router.patch(
+  '/ratingEvent/:eventId',
+  (req: Request, res: Response, next: any) => {
+    eventService
+      .rateEvent(req.params.eventId, req.body.rating)
+      .then(() => {
+        res.status(StatusCodes.OK).json({
+          message: 'Event was rated!',
+        });
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
+      });
+  }
+);
+
 router.delete('/:eventId', (req: Request, res: Response, next: any) => {
   eventService
     .delete(req.params.eventId)
