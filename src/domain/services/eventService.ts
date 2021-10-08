@@ -40,6 +40,16 @@ export class EventService {
     }
   }
 
+  async rateEvent(eventId: string, rating: Number) {
+    try {
+      let options = new Map<string, any>();
+      options.set('rating', rating);
+      return await this._repository.update(eventId, options);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async delete(eventId: string): Promise<void> {
     try {
       return await this._repository.delete(eventId);

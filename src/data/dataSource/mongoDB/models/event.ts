@@ -43,6 +43,10 @@ const Event = new Schema({
     type: Boolean,
     default: false,
   },
+  rating: {
+    type: Number,
+    default: 0,
+  },
 });
 
 export default model('Event', Event);
