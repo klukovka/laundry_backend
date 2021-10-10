@@ -1,11 +1,13 @@
 import { Router, Request, Response } from 'express';
-import { DatabaseMongo } from '../../data/dataSource/mongoDB/databaseMongo';
+import { DataFlowMongoRepository } from '../../data/repositories/dataFlowMongoRepository';
+import { DataFlowService } from '../../domain/services/dataFlowService';
 import StatusCodes from '../utils/statusCodes';
 
 const router = Router();
+const dataFlowService = new DataFlowService(new DataFlowMongoRepository());
 
 router.get('/backup', (req: Request, res: Response, next: any) => {
-  const backupProcess = DatabaseMongo.getDB.backupMongo();
+  const backupProcess = dataFlowService.backup();
 
   backupProcess.on('error', (error) => {
     return res.status(StatusCodes.INTERNAL_ERROR).json({
