@@ -685,12 +685,21 @@ export class DatabaseMongo {
   }
 
   backupMongo(): ChildProcessWithoutNullStreams {
-    const date = Date.now();
-    const archivePath = `backup/${date}.gzip`;
+    const archivePath = `backup/${Date.now()}.gzip`;
     return spawn('mongodump', [
       `${process.env.URL}`,
       `--archive=./${archivePath}`,
       '--gzip',
+    ]);
+  }
+
+  restoreMongo(backup: string): ChildProcessWithoutNullStreams {
+    const archivePath = `backup/${backup}.gzip`;
+    return spawn('mongorestore', [
+      `${process.env.URL}`,
+      `--archive=./${archivePath}`,
+      '--gzip',
+      '--drop',
     ]);
   }
 }

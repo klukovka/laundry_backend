@@ -32,4 +32,30 @@ router.get('/backup', (req: Request, res: Response, next: any) => {
   });
 });
 
+router.post('/restore/:backupId', (req: Request, res: Response, next: any) => {
+  const restoreProcess = dataFlowService.restore(req.params.backupId);
+
+  restoreProcess.on('error', (error) => {
+    return res.status(StatusCodes.INTERNAL_ERROR).json({
+      message: error.message,
+    });
+  });
+
+  restoreProcess.on('exit', (code, signal) => {
+    if (code) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: `Restore process exited with code: ${code}`,
+      });
+    } else if (signal) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: `Restore process killed with signal: ${signal}`,
+      });
+    } else {
+      return res.status(StatusCodes.CREATED).json({
+        message: 'Successfully restore the database',
+      });
+    }
+  });
+});
+
 export default router;

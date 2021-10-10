@@ -11,4 +11,8 @@ export class DataFlowService {
   backup(): ChildProcessWithoutNullStreams {
     return this._repository.backup();
   }
+
+  restore(backup: string): ChildProcessWithoutNullStreams {
+    return this._repository.restore(backup);
+  }
 }
