@@ -15,4 +15,12 @@ export class DataFlowService {
   restore(backup: string): ChildProcessWithoutNullStreams {
     return this._repository.restore(backup);
   }
+
+  getAllBackups(): string[] {
+    try {
+      return this._repository.getAllBackups();
+    } catch (error) {
+      throw error;
+    }
+  }
 }

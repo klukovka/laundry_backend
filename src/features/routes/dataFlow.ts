@@ -6,6 +6,20 @@ import StatusCodes from '../utils/statusCodes';
 const router = Router();
 const dataFlowService = new DataFlowService(new DataFlowMongoRepository());
 
+router.get('/all', (req: Request, res: Response, next: any) => {
+  try {
+    const backups = dataFlowService.getAllBackups();
+    res.status(StatusCodes.OK).json({
+      message: 'Successfully get backups',
+      backups: backups,
+    });
+  } catch (error: any) {
+    return res.status(StatusCodes.INTERNAL_ERROR).json({
+      error: error,
+    });
+  }
+});
+
 router.get('/backup', (req: Request, res: Response, next: any) => {
   const backupProcess = dataFlowService.backup();
 
