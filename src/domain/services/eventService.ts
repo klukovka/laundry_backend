@@ -16,7 +16,7 @@ export class EventService {
     }
   }
 
-  async paidForEvent(eventId: string, clientId: string, bonuses: Number = 0) {
+  async paidForEvent(eventId: string, clientId: string, bonuses: number = 0) {
     try {
       let options = new Map<string, any>();
       options.set('client', clientId);
@@ -40,7 +40,7 @@ export class EventService {
     }
   }
 
-  async rateEvent(eventId: string, rating: Number) {
+  async rateEvent(eventId: string, rating: number) {
     try {
       let options = new Map<string, any>();
       options.set('rating', rating);

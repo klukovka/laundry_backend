@@ -1,13 +1,13 @@
 export class AdditionalMode {
   additionalModeId?: string | null;
   name: string;
-  time: Number;
-  costs: Number;
+  time: number;
+  costs: number;
 
   constructor(
     name: string,
-    time: Number,
-    costs: Number,
+    time: number,
+    costs: number,
     additionalModeId: string | null = null
   ) {
     this.costs = costs;

@@ -7,8 +7,8 @@ export class Event {
   eventId?: string | null;
   washMachineId: string;
   washMachine: WashMachine | null;
-  temperature: Number;
-  spinning: Number;
+  temperature: number;
+  spinning: number;
   modeId: string;
   mode: Mode | null;
   additionalModeId: string | null;
@@ -18,14 +18,14 @@ export class Event {
   client: Client | null;
   timeBegin: Date | null;
   paidStatus: Boolean;
-  paidBonuses: Number;
+  paidBonuses: number;
   taken: Boolean;
-  rating: Number;
+  rating: number;
 
   constructor(
     washMachineId: string,
-    temperature: Number,
-    spinning: Number,
+    temperature: number,
+    spinning: number,
     modeId: string,
     additionalModeId: string | null = null,
     eventId: string | null = null,
@@ -36,9 +36,9 @@ export class Event {
     client: Client | null = null,
     timeBegin: Date | null = null,
     paidStatus: Boolean = false,
-    paidBonuses: Number = 0,
+    paidBonuses: number = 0,
     taken: Boolean = false,
-    rating: Number = 0
+    rating: number = 0
   ) {
     this.eventId = eventId;
     this.washMachineId = washMachineId;
