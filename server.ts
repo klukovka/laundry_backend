@@ -2,18 +2,23 @@ import env from 'dotenv';
 import { Application } from 'express';
 import { DatabaseMongo } from './src/data/dataSource/mongoDB/databaseMongo';
 import App from './src/features/app';
+import https from 'https';
+import http from 'http';
+import fs from 'fs';
 
 env.config();
 
 const PORT = process.env.PORT;
+const HOST: string = process.env.HOST as string;
 
-const server = (app: Application) => {
-  DatabaseMongo.getDB;
-  app
-    .listen(PORT, () => {
-      console.log('Server is listening...');
-    })
-    .once('close', () => DatabaseMongo.getDB.close());
+const options = {
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem'),
 };
 
-server(App);
+https
+  .createServer(options, App)
+  .listen(Number(PORT), HOST, () => {
+    console.log('Server is listening...');
+  })
+  .once('close', () => DatabaseMongo.getDB.close());
