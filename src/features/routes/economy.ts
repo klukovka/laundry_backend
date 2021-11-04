@@ -25,4 +25,34 @@ router.get('/laundryEarnings', (req: Request, res: Response, next: any) => {
     });
 });
 
+router.get('/laundryGivedBonuses', (req: Request, res: Response, next: any) => {
+  const { laundryId, beginDate, endDate } = req.body;
+
+  service
+    .laundryGivedBonuses(laundryId, beginDate, endDate)
+    .then((earnings) => {
+      res.status(StatusCodes.OK).json(earnings);
+    })
+    .catch((error) => {
+      res.status(StatusCodes.INTERNAL_ERROR).json({
+        message: error.message,
+      });
+    });
+});
+
+router.get('/laundryTakenBonuses', (req: Request, res: Response, next: any) => {
+  const { laundryId, beginDate, endDate } = req.body;
+
+  service
+    .laundryTakenBonuses(laundryId, beginDate, endDate)
+    .then((earnings) => {
+      res.status(StatusCodes.OK).json(earnings);
+    })
+    .catch((error) => {
+      res.status(StatusCodes.INTERNAL_ERROR).json({
+        message: error.message,
+      });
+    });
+});
+
 export default router;
