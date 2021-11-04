@@ -1,3 +1,4 @@
+import { Client } from '../models/client';
 import { Event } from '../models/event';
 import { WashMachine } from '../models/washMachine';
 import { EventRepository } from '../repositories/eventRepository';
@@ -19,32 +20,99 @@ export class EconomyService {
     laundryId: String,
     beginDate: Date,
     endDate: Date
-  ): Promise<number> {
+  ): Promise<any> {
     const percent = 0.1;
-    let sum = await this.laundryEarnings(laundryId, beginDate, endDate);
-    return sum * percent;
+    let laundryMapEarnings = await this._laundryMapEarnings(
+      laundryId,
+      beginDate,
+      endDate
+    );
+    let clientsAndPayment = new Map<String, number>();
+    let washMachinesAndPayment = new Map<String, number>();
+
+    laundryMapEarnings.clientsAndPayment.forEach(
+      (value: number, key: String) => {
+        clientsAndPayment.set(key, value * percent);
+      }
+    );
+    laundryMapEarnings.washMachinesAndPayment.forEach(
+      (value: number, key: String) => {
+        washMachinesAndPayment.set(key, value * percent);
+      }
+    );
+
+    return {
+      clientsAndPayment: Object.fromEntries(clientsAndPayment),
+      washMachinesAndPayment: Object.fromEntries(washMachinesAndPayment),
+      sum: laundryMapEarnings.sum * percent,
+    };
   }
 
   async laundryEarnings(
     laundryId: String,
     beginDate: Date,
     endDate: Date
-  ): Promise<number> {
+  ): Promise<any> {
     try {
-      const events = await this._laundryEvents(laundryId, beginDate, endDate);
-      let sum: number = 0;
-      events.forEach((event) => {
-        sum += event.mode!.costs;
-        if (event.additionalMode != null) {
-          sum += event.additionalMode!.costs;
-        }
-      });
-      const takenBonuses = await this.laundryTakenBonuses(
+      const laundryMapEarnings = await this._laundryMapEarnings(
         laundryId,
         beginDate,
         endDate
       );
-      return sum - takenBonuses;
+      return {
+        clientsAndPayment: Object.fromEntries(
+          laundryMapEarnings.clientsAndPayment
+        ),
+        washMachinesAndPayment: Object.fromEntries(
+          laundryMapEarnings.washMachinesAndPayment
+        ),
+        sum: laundryMapEarnings.sum,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  private async _laundryMapEarnings(
+    laundryId: String,
+    beginDate: Date,
+    endDate: Date
+  ): Promise<any> {
+    try {
+      const events = await this._laundryEvents(laundryId, beginDate, endDate);
+      let clientsAndPayment = new Map<String, number>();
+      let washMachinesAndPayment = new Map<String, number>();
+      let sum: number = 0;
+
+      events.forEach((event) => {
+        const clientId = event.clientId ?? 'undefined';
+        const washMachineId = event.washMachineId ?? 'undefined';
+        let clientPayment = clientsAndPayment.get(clientId) ?? 0;
+        let washMachinePayment = washMachinesAndPayment.get(washMachineId) ?? 0;
+
+        sum += event.mode!.costs;
+        clientPayment += event.mode!.costs;
+        washMachinePayment += event.mode!.costs;
+
+        if (event.additionalMode != null) {
+          sum += event.additionalMode!.costs;
+          clientPayment += event.additionalMode!.costs;
+          washMachinePayment += event.additionalMode!.costs;
+        }
+
+        sum -= event.paidBonuses;
+        clientPayment -= event.paidBonuses;
+        washMachinePayment -= event.paidBonuses;
+
+        clientsAndPayment.set(clientId, clientPayment);
+        washMachinesAndPayment.set(washMachineId, washMachinePayment);
+      });
+
+      return {
+        clientsAndPayment: clientsAndPayment,
+        washMachinesAndPayment: washMachinesAndPayment,
+        sum: sum,
+      };
     } catch (error) {
       throw error;
     }
@@ -54,14 +122,22 @@ export class EconomyService {
     laundryId: String,
     beginDate: Date,
     endDate: Date
-  ): Promise<number> {
+  ): Promise<any> {
     try {
       const events = await this._laundryEvents(laundryId, beginDate, endDate);
+      let clientsAndPaidBonuses = new Map<String, number>();
       let sum: number = 0;
       events.forEach((event) => {
+        const clientId = event.clientId ?? 'undefined';
+        let clientPayment = clientsAndPaidBonuses.get(clientId) ?? 0;
         sum += event.paidBonuses;
+        clientPayment += event.paidBonuses;
+        clientsAndPaidBonuses.set(clientId, clientPayment);
       });
-      return sum;
+      return {
+        clientsAndPaidBonuses: Object.fromEntries(clientsAndPaidBonuses),
+        sum: sum,
+      };
     } catch (error) {
       throw error;
     }
