@@ -30,8 +30,8 @@ router.get('/laundryGivedBonuses', (req: Request, res: Response, next: any) => {
 
   service
     .laundryGivedBonuses(laundryId, beginDate, endDate)
-    .then((earnings) => {
-      res.status(StatusCodes.OK).json(earnings);
+    .then((bonuses) => {
+      res.status(StatusCodes.OK).json(bonuses);
     })
     .catch((error) => {
       res.status(StatusCodes.INTERNAL_ERROR).json({
@@ -45,8 +45,8 @@ router.get('/laundryTakenBonuses', (req: Request, res: Response, next: any) => {
 
   service
     .laundryTakenBonuses(laundryId, beginDate, endDate)
-    .then((earnings) => {
-      res.status(StatusCodes.OK).json(earnings);
+    .then((bonuses) => {
+      res.status(StatusCodes.OK).json(bonuses);
     })
     .catch((error) => {
       res.status(StatusCodes.INTERNAL_ERROR).json({
@@ -54,5 +54,23 @@ router.get('/laundryTakenBonuses', (req: Request, res: Response, next: any) => {
       });
     });
 });
+
+router.get(
+  '/laundryTheMostPopularMode',
+  (req: Request, res: Response, next: any) => {
+    const { laundryId, beginDate, endDate } = req.body;
+
+    service
+      .laundryTheMostPopularMode(laundryId, beginDate, endDate)
+      .then((mode) => {
+        res.status(StatusCodes.OK).json(mode);
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
+      });
+  }
+);
 
 export default router;

@@ -1,5 +1,6 @@
 import { Client } from '../models/client';
 import { Event } from '../models/event';
+import { Mode } from '../models/mode';
 import { WashMachine } from '../models/washMachine';
 import { EventRepository } from '../repositories/eventRepository';
 import { WashMachineRepository } from '../repositories/washMachineRepository';
@@ -138,6 +139,33 @@ export class EconomyService {
         clientsAndPaidBonuses: Object.fromEntries(clientsAndPaidBonuses),
         sum: sum,
       };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async laundryTheMostPopularMode(
+    laundryId: String,
+    beginDate: Date,
+    endDate: Date
+  ): Promise<any> {
+    try {
+      const events = await this._laundryEvents(laundryId, beginDate, endDate);
+      let modesCounter = new Map<String, number>();
+
+      let max = 0;
+      events.forEach((event) => {
+        const mode = event.modeId;
+        let modeCount = modesCounter.get(mode) ?? 0;
+        modesCounter.set(mode, ++modeCount);
+        if (modeCount > max) max = modeCount;
+      });
+
+      let maxModes = new Array<String>();
+      modesCounter.forEach((value: number, key: String) => {
+        if (value == max) maxModes.push(key);
+      });
+      return { modes: maxModes, count: max };
     } catch (error) {
       throw error;
     }
