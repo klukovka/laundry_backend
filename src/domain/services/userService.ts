@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import { UserRepository } from '../repositories/userRepository';
 import { Mappers } from '../../features/utils/mappers';
 import nodemailer from 'nodemailer';
+import crypto from 'crypto';
 
 export class UserService {
   private _repository: UserRepository;
@@ -108,7 +109,6 @@ export class UserService {
     const USER: string = process.env.USER as string;
     const PASSWORD: string = process.env.PASSWORD as string;
     const admin = { user: USER, pass: PASSWORD };
-    console.log(admin);
     try {
       let transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -119,12 +119,15 @@ export class UserService {
         },
       });
 
+      let tempPassword = crypto.randomBytes(20).toString('hex');
+
       let result = await transporter.sendMail({
         from: 'courseprojectbd@gmail.com',
         to: email,
-        subject: 'Message from Node js',
-        text: 'This message was sent from Node js server.',
-        html: 'This <i>message</i> was sent from <strong>Node js</strong> server.',
+        subject: 'Відновлення паролю (Restore password)',
+        html: `Не передавайте цей пароль нікому! Після відновлення доступу рекомендовано його змінити.\n
+        Do not give your password to anyone! An update to access is recommended for the first time.\n
+        <i>Пароль (Password): </i> <strong>${tempPassword}</strong>`,
       });
       return result;
     } catch (error) {
