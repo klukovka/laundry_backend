@@ -99,7 +99,14 @@ router.post('/forgot', (req: Request, res: Response, next: any) => {
 
   userService
     .forgotPassword(email)
-    .then((result) => res.status(StatusCodes.OK).json(result))
+    .then((result) => {
+      if (result == null) {
+        return res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ message: 'User is not exist' });
+      }
+      return res.status(StatusCodes.OK).json(result);
+    })
     .catch((error) => {
       res.status(StatusCodes.INTERNAL_ERROR).json({
         message: error.message,

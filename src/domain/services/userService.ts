@@ -29,22 +29,6 @@ export class UserService {
     }
   }
 
-  async update(
-    userId: string,
-    options: [{ propName: string; value: any }]
-  ): Promise<void> {
-    try {
-      let mappedOptions = Mappers.mapRequestParamsToMap(options);
-      if (mappedOptions.get('password')) {
-        const hashedPassword = await hash(mappedOptions.get('password'), 10);
-        mappedOptions.set('password', hashedPassword);
-      }
-      return await this._repository.update(userId, mappedOptions);
-    } catch (error) {
-      throw error;
-    }
-  }
-
   async delete(userId: string): Promise<void> {
     try {
       return await this._repository.delete(userId);
@@ -97,19 +81,15 @@ export class UserService {
     }
   }
 
-  async getByEmail(email: string): Promise<User | null> {
-    try {
-      return await this._repository.getByEmail(email);
-    } catch (error) {
-      throw error;
-    }
-  }
-
   async forgotPassword(email: string): Promise<any> {
-    const USER: string = process.env.USER as string;
-    const PASSWORD: string = process.env.PASSWORD as string;
-    const admin = { user: USER, pass: PASSWORD };
     try {
+      let user = await this.getByEmail(email);
+      if (user == null) return null;
+
+      const USER: string = process.env.USER as string;
+      const PASSWORD: string = process.env.PASSWORD as string;
+      const admin = { user: USER, pass: PASSWORD };
+
       let transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 465,
@@ -120,6 +100,9 @@ export class UserService {
       });
 
       let tempPassword = crypto.randomBytes(20).toString('hex');
+      await this.update(user.userId!, [
+        { propName: 'password', value: tempPassword },
+      ]);
 
       let result = await transporter.sendMail({
         from: 'courseprojectbd@gmail.com',
@@ -130,6 +113,30 @@ export class UserService {
         <i>Пароль (Password): </i> <strong>${tempPassword}</strong>`,
       });
       return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getByEmail(email: string): Promise<User | null> {
+    try {
+      return await this._repository.getByEmail(email);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async update(
+    userId: string,
+    options: [{ propName: string; value: any }]
+  ): Promise<void> {
+    try {
+      let mappedOptions = Mappers.mapRequestParamsToMap(options);
+      if (mappedOptions.get('password')) {
+        const hashedPassword = await hash(mappedOptions.get('password'), 10);
+        mappedOptions.set('password', hashedPassword);
+      }
+      return await this._repository.update(userId, mappedOptions);
     } catch (error) {
       throw error;
     }
