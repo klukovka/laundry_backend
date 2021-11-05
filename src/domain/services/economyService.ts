@@ -1,19 +1,10 @@
-import { Client } from '../models/client';
 import { Event } from '../models/event';
-import { Mode } from '../models/mode';
-import { WashMachine } from '../models/washMachine';
 import { EventRepository } from '../repositories/eventRepository';
-import { WashMachineRepository } from '../repositories/washMachineRepository';
 
 export class EconomyService {
-  private _wachMachineRepository: WashMachineRepository;
   private _eventRepository: EventRepository;
 
-  constructor(
-    wachMachineRepository: WashMachineRepository,
-    eventRepository: EventRepository
-  ) {
-    this._wachMachineRepository = wachMachineRepository;
+  constructor(eventRepository: EventRepository) {
     this._eventRepository = eventRepository;
   }
 
@@ -28,23 +19,23 @@ export class EconomyService {
       beginDate,
       endDate
     );
-    let clientsAndPayment = new Map<String, number>();
-    let washMachinesAndPayment = new Map<String, number>();
+    let clientsAndBonuses = new Map<String, number>();
+    let washMachinesAndBonuses = new Map<String, number>();
 
     laundryMapEarnings.clientsAndPayment.forEach(
       (value: number, key: String) => {
-        clientsAndPayment.set(key, value * percent);
+        clientsAndBonuses.set(key, value * percent);
       }
     );
     laundryMapEarnings.washMachinesAndPayment.forEach(
       (value: number, key: String) => {
-        washMachinesAndPayment.set(key, value * percent);
+        washMachinesAndBonuses.set(key, value * percent);
       }
     );
 
     return {
-      clientsAndPayment: Object.fromEntries(clientsAndPayment),
-      washMachinesAndPayment: Object.fromEntries(washMachinesAndPayment),
+      clientsAndBonuses: Object.fromEntries(clientsAndBonuses),
+      washMachinesAndBonuses: Object.fromEntries(washMachinesAndBonuses),
       sum: laundryMapEarnings.sum * percent,
     };
   }
@@ -166,6 +157,45 @@ export class EconomyService {
         if (value == max) maxModes.push(key);
       });
       return { modes: maxModes, count: max };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async laundryWashMachinesTimeAndEnergy(
+    laundryId: String,
+    beginDate: Date,
+    endDate: Date
+  ): Promise<any> {
+    const events = await this._laundryEvents(laundryId, beginDate, endDate);
+    let washMachinesTime = new Map<String, number>();
+    let washMachinesEnergy = new Map<String, number>();
+    let allTime = 0;
+    let allEnergy = 0;
+    events.forEach((event) => {
+      let washMachine = event.washMachineId;
+      let washMachineTime = washMachinesTime.get(washMachine) ?? 0;
+      let modeTime = event.mode?.time ?? 0;
+      let addModeTime = event.additionalMode?.time ?? 0;
+      allTime += modeTime + addModeTime;
+      let powerUsage = (event.washMachine?.powerUsage ?? 1) / 60;
+      allEnergy += powerUsage * (modeTime + addModeTime);
+      washMachinesTime.set(
+        washMachine,
+        washMachineTime + modeTime + addModeTime
+      );
+      washMachinesEnergy.set(
+        washMachine,
+        (washMachineTime + modeTime + addModeTime) * powerUsage
+      );
+    });
+    return {
+      time: allTime,
+      energy: allEnergy,
+      washMachinesTime: Object.fromEntries(washMachinesTime),
+      washMachinesEnergy: Object.fromEntries(washMachinesEnergy),
+    };
+    try {
     } catch (error) {
       throw error;
     }
