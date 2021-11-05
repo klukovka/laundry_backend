@@ -87,4 +87,17 @@ router.get(
   }
 );
 
+router.get('/laundryRating/:id', (req: Request, res: Response, next: any) => {
+  service
+    .laundryRating(req.params.id)
+    .then((mode) => {
+      res.status(StatusCodes.OK).json(mode);
+    })
+    .catch((error) => {
+      res.status(StatusCodes.INTERNAL_ERROR).json({
+        message: error.message,
+      });
+    });
+});
+
 export default router;

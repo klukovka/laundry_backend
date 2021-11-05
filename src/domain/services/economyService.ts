@@ -1,3 +1,4 @@
+import event from '../../data/dataSource/mongoDB/models/event';
 import { Event } from '../models/event';
 import { EventRepository } from '../repositories/eventRepository';
 
@@ -167,35 +168,35 @@ export class EconomyService {
     beginDate: Date,
     endDate: Date
   ): Promise<any> {
-    const events = await this._laundryEvents(laundryId, beginDate, endDate);
-    let washMachinesTime = new Map<String, number>();
-    let washMachinesEnergy = new Map<String, number>();
-    let allTime = 0;
-    let allEnergy = 0;
-    events.forEach((event) => {
-      let washMachine = event.washMachineId;
-      let washMachineTime = washMachinesTime.get(washMachine) ?? 0;
-      let modeTime = event.mode?.time ?? 0;
-      let addModeTime = event.additionalMode?.time ?? 0;
-      allTime += modeTime + addModeTime;
-      let powerUsage = (event.washMachine?.powerUsage ?? 1) / 60;
-      allEnergy += powerUsage * (modeTime + addModeTime);
-      washMachinesTime.set(
-        washMachine,
-        washMachineTime + modeTime + addModeTime
-      );
-      washMachinesEnergy.set(
-        washMachine,
-        (washMachineTime + modeTime + addModeTime) * powerUsage
-      );
-    });
-    return {
-      time: allTime,
-      energy: allEnergy,
-      washMachinesTime: Object.fromEntries(washMachinesTime),
-      washMachinesEnergy: Object.fromEntries(washMachinesEnergy),
-    };
     try {
+      const events = await this._laundryEvents(laundryId, beginDate, endDate);
+      let washMachinesTime = new Map<String, number>();
+      let washMachinesEnergy = new Map<String, number>();
+      let allTime = 0;
+      let allEnergy = 0;
+      events.forEach((event) => {
+        let washMachine = event.washMachineId;
+        let washMachineTime = washMachinesTime.get(washMachine) ?? 0;
+        let modeTime = event.mode?.time ?? 0;
+        let addModeTime = event.additionalMode?.time ?? 0;
+        allTime += modeTime + addModeTime;
+        let powerUsage = (event.washMachine?.powerUsage ?? 1) / 60;
+        allEnergy += powerUsage * (modeTime + addModeTime);
+        washMachinesTime.set(
+          washMachine,
+          washMachineTime + modeTime + addModeTime
+        );
+        washMachinesEnergy.set(
+          washMachine,
+          (washMachineTime + modeTime + addModeTime) * powerUsage
+        );
+      });
+      return {
+        time: allTime,
+        energy: allEnergy,
+        washMachinesTime: Object.fromEntries(washMachinesTime),
+        washMachinesEnergy: Object.fromEntries(washMachinesEnergy),
+      };
     } catch (error) {
       throw error;
     }
@@ -215,5 +216,46 @@ export class EconomyService {
         new Date(endDate) >= event.timeBegin!
       );
     });
+  }
+
+  async laundryRating(laundryId: String): Promise<any> {
+    try {
+      let events = (await this._eventRepository.getAllWithInfo()).filter(
+        (event) =>
+          event.timeBegin != null &&
+          event.rating != null &&
+          event.washMachine?.laundryId == laundryId
+      );
+      let washMachinesSumRating = new Map<String, any>();
+      events.forEach((event) => {
+        let washMachine = event.washMachineId;
+        let washMachineRating = washMachinesSumRating.get(washMachine) ?? {
+          count: 0,
+          sum: 0,
+        };
+        washMachinesSumRating.set(washMachine, {
+          count: ++washMachineRating.count,
+          sum: washMachineRating.sum + (event.rating ?? 0),
+        });
+      });
+
+      let countMachines = 0;
+      let countRating = 0;
+      let washMachinesRating = new Map<String, any>();
+
+      washMachinesSumRating.forEach((value, key) => {
+        const rating = value.sum / value.count;
+        washMachinesRating.set(key, rating);
+        ++countMachines;
+        countRating += rating;
+      });
+
+      return {
+        rating: countRating / countMachines,
+        washMachinesRating: Object.fromEntries(washMachinesRating),
+      };
+    } catch (error) {
+      throw error;
+    }
   }
 }
