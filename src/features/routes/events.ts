@@ -1,11 +1,15 @@
 import { Router, Request, Response } from 'express';
 import { EventMongoRepository } from '../../data/repositories/eventMongoRepository';
+import { ClientMongoRepository } from '../../data/repositories/clientMongoRepository';
 import { Event } from '../../domain/models/event';
 import { EventService } from '../../domain/services/eventService';
 import StatusCodes from '../utils/statusCodes';
 
 const router = Router();
-const eventService = new EventService(new EventMongoRepository());
+const eventService = new EventService(
+  new EventMongoRepository(),
+  new ClientMongoRepository()
+);
 
 router.post('/', (req: Request, res: Response, next: any) => {
   const { washMachineId, temperature, spinning, modeId, additionalModeId } =

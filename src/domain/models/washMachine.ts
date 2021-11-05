@@ -4,18 +4,18 @@ export class WashMachine {
   washMachineId?: string | null;
   model: string;
   manufacturer: string;
-  capacity: Number;
-  powerUsage: Number;
-  spinningSpeed: Number;
+  capacity: number;
+  powerUsage: number;
+  spinningSpeed: number;
   laundry?: Laundry | null;
   laundryId: string;
 
   constructor(
     model: string,
     manufacturer: string,
-    capacity: Number,
-    powerUsage: Number,
-    spinningSpeed: Number,
+    capacity: number,
+    powerUsage: number,
+    spinningSpeed: number,
     laundryId: string,
     washMachineId: string | null = null,
     laundry: Laundry | null = null
