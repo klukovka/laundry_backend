@@ -38,7 +38,7 @@ export class Event {
     paidStatus: Boolean = false,
     paidBonuses: number = 0,
     taken: Boolean = false,
-    rating: number = 0
+    rating: number = 5
   ) {
     this.eventId = eventId;
     this.washMachineId = washMachineId;
