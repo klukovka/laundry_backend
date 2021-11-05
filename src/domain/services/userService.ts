@@ -3,6 +3,7 @@ import { hash, compare } from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { UserRepository } from '../repositories/userRepository';
 import { Mappers } from '../../features/utils/mappers';
+import nodemailer from 'nodemailer';
 
 export class UserService {
   private _repository: UserRepository;
@@ -98,6 +99,34 @@ export class UserService {
   async getByEmail(email: string): Promise<User | null> {
     try {
       return await this._repository.getByEmail(email);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async forgotPassword(email: string): Promise<any> {
+    const USER: string = process.env.USER as string;
+    const PASSWORD: string = process.env.PASSWORD as string;
+    const admin = { user: USER, pass: PASSWORD };
+    console.log(admin);
+    try {
+      let transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        auth: {
+          user: admin.user,
+          pass: admin.pass,
+        },
+      });
+
+      let result = await transporter.sendMail({
+        from: 'courseprojectbd@gmail.com',
+        to: email,
+        subject: 'Message from Node js',
+        text: 'This message was sent from Node js server.',
+        html: 'This <i>message</i> was sent from <strong>Node js</strong> server.',
+      });
+      return result;
     } catch (error) {
       throw error;
     }

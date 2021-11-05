@@ -94,4 +94,17 @@ router.patch('/:userId', (req: Request, res: Response, next: any) => {
     });
 });
 
+router.post('/forgot', (req: Request, res: Response, next: any) => {
+  const { email } = req.body;
+
+  userService
+    .forgotPassword(email)
+    .then((result) => res.status(StatusCodes.OK).json(result))
+    .catch((error) => {
+      res.status(StatusCodes.INTERNAL_ERROR).json({
+        message: error.message,
+      });
+    });
+});
+
 export default router;
