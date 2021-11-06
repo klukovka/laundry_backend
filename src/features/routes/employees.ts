@@ -3,127 +3,165 @@ import { EmployeeMongoRepository } from '../../data/repositories/employeeMongoRe
 import { Employee } from '../../domain/models/employee';
 import { EmployeeService } from '../../domain/services/employeeService';
 import StatusCodes from '../utils/statusCodes';
+import checkAuth from '../middleware/checkAuth';
+import checkAdmin from '../middleware/checkAdmin';
+import checkAdminEmployee from '../middleware/checkAdminEmployee';
 
 const router = Router();
 const employeeService = new EmployeeService(new EmployeeMongoRepository());
 
-router.post('/', (req: Request, res: Response, next: any) => {
-  const { name, surname, phone, userId, day, month, year, laundryId } =
-    req.body;
-  const newEmployee = new Employee(
-    name,
-    surname,
-    phone,
-    new Date(year, month, day),
-    laundryId,
-    userId
-  );
+router.post(
+  '/',
+  checkAuth,
+  checkAdmin,
+  (req: Request, res: Response, next: any) => {
+    const { name, surname, phone, userId, day, month, year, laundryId } =
+      req.body;
+    const newEmployee = new Employee(
+      name,
+      surname,
+      phone,
+      new Date(year, month, day),
+      laundryId,
+      userId
+    );
 
-  employeeService
-    .create(newEmployee)
-    .then(() => {
-      res.status(StatusCodes.OK).json({
-        message: 'Employee was created!',
+    employeeService
+      .create(newEmployee)
+      .then(() => {
+        res.status(StatusCodes.OK).json({
+          message: 'Employee was created!',
+        });
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
-      });
-    });
-});
+  }
+);
 
-router.delete('/:employeeId', (req: Request, res: Response, next: any) => {
-  employeeService
-    .delete(req.params.employeeId)
-    .then(() => {
-      res.status(StatusCodes.OK).json({
-        message: 'Employee was deleted!',
+router.delete(
+  '/:employeeId',
+  checkAuth,
+  checkAdmin,
+  (req: Request, res: Response, next: any) => {
+    employeeService
+      .delete(req.params.employeeId)
+      .then(() => {
+        res.status(StatusCodes.OK).json({
+          message: 'Employee was deleted!',
+        });
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
-      });
-    });
-});
+  }
+);
 
-router.patch('/:employeeId', (req: Request, res: Response, next: any) => {
-  employeeService
-    .update(req.params.employeeId, req.body)
-    .then(() => {
-      res.status(StatusCodes.OK).json({
-        message: 'Employee was updated!',
+router.patch(
+  '/:employeeId',
+  checkAuth,
+  checkAdminEmployee,
+  (req: Request, res: Response, next: any) => {
+    employeeService
+      .update(req.params.employeeId, req.body)
+      .then(() => {
+        res.status(StatusCodes.OK).json({
+          message: 'Employee was updated!',
+        });
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
-      });
-    });
-});
+  }
+);
 
-router.get('/byId/:employeeId', (req: Request, res: Response, next: any) => {
-  employeeService
-    .get(req.params.employeeId)
-    .then((employee) => {
-      if (employee) {
-        res.status(StatusCodes.OK).json(employee);
-      } else {
-        res
-          .status(StatusCodes.NOT_FOUND)
-          .json({ message: 'Employee is not exist' });
-      }
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
+router.get(
+  '/byId/:employeeId',
+  checkAuth,
+  checkAdminEmployee,
+  (req: Request, res: Response, next: any) => {
+    employeeService
+      .get(req.params.employeeId)
+      .then((employee) => {
+        if (employee) {
+          res.status(StatusCodes.OK).json(employee);
+        } else {
+          res
+            .status(StatusCodes.NOT_FOUND)
+            .json({ message: 'Employee is not exist' });
+        }
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    });
-});
+  }
+);
 
-router.get('/allInfo/:employeeId', (req: Request, res: Response, next: any) => {
-  employeeService
-    .getWithInfo(req.params.employeeId)
-    .then((employee) => {
-      if (employee) {
-        res.status(StatusCodes.OK).json(employee);
-      } else {
-        res
-          .status(StatusCodes.NOT_FOUND)
-          .json({ message: 'Employee is not exist' });
-      }
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
+router.get(
+  '/allInfo/:employeeId',
+  checkAuth,
+  checkAdminEmployee,
+  (req: Request, res: Response, next: any) => {
+    employeeService
+      .getWithInfo(req.params.employeeId)
+      .then((employee) => {
+        if (employee) {
+          res.status(StatusCodes.OK).json(employee);
+        } else {
+          res
+            .status(StatusCodes.NOT_FOUND)
+            .json({ message: 'Employee is not exist' });
+        }
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    });
-});
+  }
+);
 
-router.get('/', (req: Request, res: Response, next: any) => {
-  employeeService
-    .getAll()
-    .then((employees) => {
-      res.status(StatusCodes.OK).json(employees);
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
+router.get(
+  '/',
+  checkAuth,
+  checkAdminEmployee,
+  (req: Request, res: Response, next: any) => {
+    employeeService
+      .getAll()
+      .then((employees) => {
+        res.status(StatusCodes.OK).json(employees);
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    });
-});
+  }
+);
 
-router.get('/allInfo/', (req: Request, res: Response, next: any) => {
-  employeeService
-    .getAllWithInfo()
-    .then((employees) => {
-      res.status(StatusCodes.OK).json(employees);
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
+router.get(
+  '/allInfo/',
+  checkAuth,
+  checkAdminEmployee,
+  (req: Request, res: Response, next: any) => {
+    employeeService
+      .getAllWithInfo()
+      .then((employees) => {
+        res.status(StatusCodes.OK).json(employees);
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    });
-});
+  }
+);
 export default router;

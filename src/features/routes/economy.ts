@@ -2,57 +2,76 @@ import { Router, Request, Response } from 'express';
 import StatusCodes from '../utils/statusCodes';
 import { EconomyService } from '../../domain/services/economyService';
 import { EventMongoRepository } from '../../data/repositories/eventMongoRepository';
+import checkAuth from '../middleware/checkAuth';
+import checkAdminEmployee from '../middleware/checkAdminEmployee';
 
 const router = Router();
 const service = new EconomyService(new EventMongoRepository());
 
-router.get('/laundryEarnings', (req: Request, res: Response, next: any) => {
-  const { laundryId, beginDate, endDate } = req.body;
+router.get(
+  '/laundryEarnings',
+  checkAuth,
+  checkAdminEmployee,
+  (req: Request, res: Response, next: any) => {
+    const { laundryId, beginDate, endDate } = req.body;
 
-  service
-    .laundryEarnings(laundryId, beginDate, endDate)
-    .then((earnings) => {
-      res.status(StatusCodes.OK).json(earnings);
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
+    service
+      .laundryEarnings(laundryId, beginDate, endDate)
+      .then((earnings) => {
+        res.status(StatusCodes.OK).json(earnings);
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    });
-});
+  }
+);
 
-router.get('/laundryGivedBonuses', (req: Request, res: Response, next: any) => {
-  const { laundryId, beginDate, endDate } = req.body;
+router.get(
+  '/laundryGivedBonuses',
+  checkAuth,
+  checkAdminEmployee,
+  (req: Request, res: Response, next: any) => {
+    const { laundryId, beginDate, endDate } = req.body;
 
-  service
-    .laundryGivedBonuses(laundryId, beginDate, endDate)
-    .then((bonuses) => {
-      res.status(StatusCodes.OK).json(bonuses);
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
+    service
+      .laundryGivedBonuses(laundryId, beginDate, endDate)
+      .then((bonuses) => {
+        res.status(StatusCodes.OK).json(bonuses);
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    });
-});
+  }
+);
 
-router.get('/laundryTakenBonuses', (req: Request, res: Response, next: any) => {
-  const { laundryId, beginDate, endDate } = req.body;
+router.get(
+  '/laundryTakenBonuses',
+  checkAuth,
+  checkAdminEmployee,
+  (req: Request, res: Response, next: any) => {
+    const { laundryId, beginDate, endDate } = req.body;
 
-  service
-    .laundryTakenBonuses(laundryId, beginDate, endDate)
-    .then((bonuses) => {
-      res.status(StatusCodes.OK).json(bonuses);
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
+    service
+      .laundryTakenBonuses(laundryId, beginDate, endDate)
+      .then((bonuses) => {
+        res.status(StatusCodes.OK).json(bonuses);
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    });
-});
+  }
+);
 
 router.get(
   '/laundryTheMostPopularMode',
+  checkAuth,
+  checkAdminEmployee,
   (req: Request, res: Response, next: any) => {
     const { laundryId, beginDate, endDate } = req.body;
 
@@ -71,6 +90,8 @@ router.get(
 
 router.get(
   '/laundryWashMachinesTimeAndEnergy',
+  checkAuth,
+  checkAdminEmployee,
   (req: Request, res: Response, next: any) => {
     const { laundryId, beginDate, endDate } = req.body;
 
@@ -87,17 +108,22 @@ router.get(
   }
 );
 
-router.get('/laundryRating/:id', (req: Request, res: Response, next: any) => {
-  service
-    .laundryRating(req.params.id)
-    .then((mode) => {
-      res.status(StatusCodes.OK).json(mode);
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
+router.get(
+  '/laundryRating/:id',
+  checkAuth,
+  checkAdminEmployee,
+  (req: Request, res: Response, next: any) => {
+    service
+      .laundryRating(req.params.id)
+      .then((mode) => {
+        res.status(StatusCodes.OK).json(mode);
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    });
-});
+  }
+);
 
 export default router;
