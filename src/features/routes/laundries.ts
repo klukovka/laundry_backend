@@ -8,7 +8,7 @@ import checkAuth from '../middleware/checkAuth';
 const router = Router();
 const laundryService = new LaundryService(new LaundryMongoRepository());
 
-router.post('/', (req: Request, res: Response, next: any) => {
+router.post('/', checkAuth, (req: Request, res: Response, next: any) => {
   const { name, city, street, house, phone } = req.body;
   const newLaundry = new Laundry(name, city, street, house, phone);
 
@@ -26,54 +26,66 @@ router.post('/', (req: Request, res: Response, next: any) => {
     });
 });
 
-router.delete('/:laundryId', (req: Request, res: Response, next: any) => {
-  laundryService
-    .delete(req.params.laundryId)
-    .then(() => {
-      res.status(StatusCodes.OK).json({
-        message: 'Laundry was deleted!',
+router.delete(
+  '/:laundryId',
+  checkAuth,
+  (req: Request, res: Response, next: any) => {
+    laundryService
+      .delete(req.params.laundryId)
+      .then(() => {
+        res.status(StatusCodes.OK).json({
+          message: 'Laundry was deleted!',
+        });
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
-      });
-    });
-});
+  }
+);
 
-router.patch('/:laundryId', (req: Request, res: Response, next: any) => {
-  laundryService
-    .update(req.params.laundryId, req.body)
-    .then(() => {
-      res.status(StatusCodes.OK).json({
-        message: 'Laundry was updated!',
+router.patch(
+  '/:laundryId',
+  checkAuth,
+  (req: Request, res: Response, next: any) => {
+    laundryService
+      .update(req.params.laundryId, req.body)
+      .then(() => {
+        res.status(StatusCodes.OK).json({
+          message: 'Laundry was updated!',
+        });
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
-      });
-    });
-});
+  }
+);
 
-router.get('/:laundryId', (req: Request, res: Response, next: any) => {
-  laundryService
-    .getById(req.params.laundryId)
-    .then((laundry) => {
-      if (laundry) {
-        res.status(StatusCodes.OK).json(laundry);
-      } else {
-        res
-          .status(StatusCodes.NOT_FOUND)
-          .json({ message: 'Laundry is not exist' });
-      }
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
+router.get(
+  '/:laundryId',
+  checkAuth,
+  (req: Request, res: Response, next: any) => {
+    laundryService
+      .getById(req.params.laundryId)
+      .then((laundry) => {
+        if (laundry) {
+          res.status(StatusCodes.OK).json(laundry);
+        } else {
+          res
+            .status(StatusCodes.NOT_FOUND)
+            .json({ message: 'Laundry is not exist' });
+        }
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    });
-});
+  }
+);
 
 router.get('/', checkAuth, (req: Request, res: Response, next: any) => {
   laundryService

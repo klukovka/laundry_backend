@@ -3,13 +3,14 @@ import { AdditionalModeMongoRepository } from '../../data/repositories/additiona
 import { AdditionalMode } from '../../domain/models/additionalMode';
 import { AdditionalModeService } from '../../domain/services/additionalModeService';
 import StatusCodes from '../utils/statusCodes';
+import checkAuth from '../middleware/checkAuth';
 
 const router = Router();
 const additionalModeService = new AdditionalModeService(
   new AdditionalModeMongoRepository()
 );
 
-router.post('/', (req: Request, res: Response, next: any) => {
+router.post('/', checkAuth, (req: Request, res: Response, next: any) => {
   const { name, time, costs } = req.body;
   const newAdditionalMode = new AdditionalMode(name, time, costs);
 
@@ -29,6 +30,7 @@ router.post('/', (req: Request, res: Response, next: any) => {
 
 router.delete(
   '/:additionalModeId',
+  checkAuth,
   (req: Request, res: Response, next: any) => {
     additionalModeService
       .delete(req.params.additionalModeId)
@@ -45,41 +47,49 @@ router.delete(
   }
 );
 
-router.patch('/:additionalModeId', (req: Request, res: Response, next: any) => {
-  additionalModeService
-    .update(req.params.additionalModeId, req.body)
-    .then(() => {
-      res.status(StatusCodes.OK).json({
-        message: 'Additional Mode was updated!',
+router.patch(
+  '/:additionalModeId',
+  checkAuth,
+  (req: Request, res: Response, next: any) => {
+    additionalModeService
+      .update(req.params.additionalModeId, req.body)
+      .then(() => {
+        res.status(StatusCodes.OK).json({
+          message: 'Additional Mode was updated!',
+        });
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
-      });
-    });
-});
+  }
+);
 
-router.get('/:additionalModeId', (req: Request, res: Response, next: any) => {
-  additionalModeService
-    .getById(req.params.additionalModeId)
-    .then((additionalMode) => {
-      if (additionalMode) {
-        res.status(StatusCodes.OK).json(additionalMode);
-      } else {
-        res
-          .status(StatusCodes.NOT_FOUND)
-          .json({ message: 'Additional Mode is not exist' });
-      }
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
+router.get(
+  '/:additionalModeId',
+  checkAuth,
+  (req: Request, res: Response, next: any) => {
+    additionalModeService
+      .getById(req.params.additionalModeId)
+      .then((additionalMode) => {
+        if (additionalMode) {
+          res.status(StatusCodes.OK).json(additionalMode);
+        } else {
+          res
+            .status(StatusCodes.NOT_FOUND)
+            .json({ message: 'Additional Mode is not exist' });
+        }
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    });
-});
+  }
+);
 
-router.get('/', (req: Request, res: Response, next: any) => {
+router.get('/', checkAuth, (req: Request, res: Response, next: any) => {
   additionalModeService
     .getAll()
     .then((additionalModes) => {

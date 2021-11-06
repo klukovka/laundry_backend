@@ -3,13 +3,14 @@ import StatusCodes from '../utils/statusCodes';
 import { WashMachineService } from '../../domain/services/washMachineService';
 import { WashMachineMongoRepository } from '../../data/repositories/washMachineMongoRepository';
 import { WashMachine } from '../../domain/models/washMachine';
+import checkAuth from '../middleware/checkAuth';
 
 const router = Router();
 const washMachineService = new WashMachineService(
   new WashMachineMongoRepository()
 );
 
-router.post('/', (req: Request, res: Response, next: any) => {
+router.post('/', checkAuth, (req: Request, res: Response, next: any) => {
   const {
     model,
     manufacturer,
@@ -42,57 +43,70 @@ router.post('/', (req: Request, res: Response, next: any) => {
     });
 });
 
-router.delete('/:washMachineId', (req: Request, res: Response, next: any) => {
-  washMachineService
-    .delete(req.params.washMachineId)
-    .then(() => {
-      res.status(StatusCodes.OK).json({
-        message: 'WashMachine was deleted!',
+router.delete(
+  '/:washMachineId',
+  checkAuth,
+  (req: Request, res: Response, next: any) => {
+    washMachineService
+      .delete(req.params.washMachineId)
+      .then(() => {
+        res.status(StatusCodes.OK).json({
+          message: 'WashMachine was deleted!',
+        });
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
-      });
-    });
-});
+  }
+);
 
-router.patch('/:washMachineId', (req: Request, res: Response, next: any) => {
-  washMachineService
-    .update(req.params.washMachineId, req.body)
-    .then(() => {
-      res.status(StatusCodes.OK).json({
-        message: 'WashMachine was updated!',
+router.patch(
+  '/:washMachineId',
+  checkAuth,
+  (req: Request, res: Response, next: any) => {
+    washMachineService
+      .update(req.params.washMachineId, req.body)
+      .then(() => {
+        res.status(StatusCodes.OK).json({
+          message: 'WashMachine was updated!',
+        });
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
-      });
-    });
-});
+  }
+);
 
-router.get('/byId/:washMachineId', (req: Request, res: Response, next: any) => {
-  washMachineService
-    .get(req.params.washMachineId)
-    .then((washMachine) => {
-      if (washMachine) {
-        res.status(StatusCodes.OK).json(washMachine);
-      } else {
-        res
-          .status(StatusCodes.NOT_FOUND)
-          .json({ message: 'WashMachine is not exist' });
-      }
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
+router.get(
+  '/byId/:washMachineId',
+  checkAuth,
+  (req: Request, res: Response, next: any) => {
+    washMachineService
+      .get(req.params.washMachineId)
+      .then((washMachine) => {
+        if (washMachine) {
+          res.status(StatusCodes.OK).json(washMachine);
+        } else {
+          res
+            .status(StatusCodes.NOT_FOUND)
+            .json({ message: 'WashMachine is not exist' });
+        }
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    });
-});
+  }
+);
 
 router.get(
   '/allInfo/:washMachineId',
+  checkAuth,
   (req: Request, res: Response, next: any) => {
     washMachineService
       .getWithLaundry(req.params.washMachineId)
@@ -113,7 +127,7 @@ router.get(
   }
 );
 
-router.get('/', (req: Request, res: Response, next: any) => {
+router.get('/', checkAuth, (req: Request, res: Response, next: any) => {
   washMachineService
     .getAll()
     .then((washMachines) => {
@@ -126,7 +140,7 @@ router.get('/', (req: Request, res: Response, next: any) => {
     });
 });
 
-router.get('/allInfo/', (req: Request, res: Response, next: any) => {
+router.get('/allInfo/', checkAuth, (req: Request, res: Response, next: any) => {
   washMachineService
     .getAllWithLaundry()
     .then((washMachines) => {
