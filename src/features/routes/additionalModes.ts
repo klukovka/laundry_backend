@@ -4,33 +4,40 @@ import { AdditionalMode } from '../../domain/models/additionalMode';
 import { AdditionalModeService } from '../../domain/services/additionalModeService';
 import StatusCodes from '../utils/statusCodes';
 import checkAuth from '../middleware/checkAuth';
+import checkAdmin from '../middleware/checkAdmin';
 
 const router = Router();
 const additionalModeService = new AdditionalModeService(
   new AdditionalModeMongoRepository()
 );
 
-router.post('/', checkAuth, (req: Request, res: Response, next: any) => {
-  const { name, time, costs } = req.body;
-  const newAdditionalMode = new AdditionalMode(name, time, costs);
+router.post(
+  '/',
+  checkAuth,
+  checkAdmin,
+  (req: Request, res: Response, next: any) => {
+    const { name, time, costs } = req.body;
+    const newAdditionalMode = new AdditionalMode(name, time, costs);
 
-  additionalModeService
-    .create(newAdditionalMode)
-    .then(() => {
-      res.status(StatusCodes.OK).json({
-        message: 'Additional Mode was created!',
+    additionalModeService
+      .create(newAdditionalMode)
+      .then(() => {
+        res.status(StatusCodes.OK).json({
+          message: 'Additional Mode was created!',
+        });
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
-      });
-    });
-});
+  }
+);
 
 router.delete(
   '/:additionalModeId',
   checkAuth,
+  checkAdmin,
   (req: Request, res: Response, next: any) => {
     additionalModeService
       .delete(req.params.additionalModeId)
@@ -50,6 +57,7 @@ router.delete(
 router.patch(
   '/:additionalModeId',
   checkAuth,
+  checkAdmin,
   (req: Request, res: Response, next: any) => {
     additionalModeService
       .update(req.params.additionalModeId, req.body)
@@ -68,7 +76,7 @@ router.patch(
 
 router.get(
   '/:additionalModeId',
-  checkAuth,
+
   (req: Request, res: Response, next: any) => {
     additionalModeService
       .getById(req.params.additionalModeId)
@@ -89,7 +97,7 @@ router.get(
   }
 );
 
-router.get('/', checkAuth, (req: Request, res: Response, next: any) => {
+router.get('/', (req: Request, res: Response, next: any) => {
   additionalModeService
     .getAll()
     .then((additionalModes) => {

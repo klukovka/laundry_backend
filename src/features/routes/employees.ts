@@ -4,39 +4,47 @@ import { Employee } from '../../domain/models/employee';
 import { EmployeeService } from '../../domain/services/employeeService';
 import StatusCodes from '../utils/statusCodes';
 import checkAuth from '../middleware/checkAuth';
+import checkAdmin from '../middleware/checkAdmin';
+import checkAdminEmployee from '../middleware/checkAdminEmployee';
 
 const router = Router();
 const employeeService = new EmployeeService(new EmployeeMongoRepository());
 
-router.post('/', checkAuth, (req: Request, res: Response, next: any) => {
-  const { name, surname, phone, userId, day, month, year, laundryId } =
-    req.body;
-  const newEmployee = new Employee(
-    name,
-    surname,
-    phone,
-    new Date(year, month, day),
-    laundryId,
-    userId
-  );
+router.post(
+  '/',
+  checkAuth,
+  checkAdmin,
+  (req: Request, res: Response, next: any) => {
+    const { name, surname, phone, userId, day, month, year, laundryId } =
+      req.body;
+    const newEmployee = new Employee(
+      name,
+      surname,
+      phone,
+      new Date(year, month, day),
+      laundryId,
+      userId
+    );
 
-  employeeService
-    .create(newEmployee)
-    .then(() => {
-      res.status(StatusCodes.OK).json({
-        message: 'Employee was created!',
+    employeeService
+      .create(newEmployee)
+      .then(() => {
+        res.status(StatusCodes.OK).json({
+          message: 'Employee was created!',
+        });
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
-      });
-    });
-});
+  }
+);
 
 router.delete(
   '/:employeeId',
   checkAuth,
+  checkAdmin,
   (req: Request, res: Response, next: any) => {
     employeeService
       .delete(req.params.employeeId)
@@ -56,6 +64,7 @@ router.delete(
 router.patch(
   '/:employeeId',
   checkAuth,
+  checkAdminEmployee,
   (req: Request, res: Response, next: any) => {
     employeeService
       .update(req.params.employeeId, req.body)
@@ -75,6 +84,7 @@ router.patch(
 router.get(
   '/byId/:employeeId',
   checkAuth,
+  checkAdminEmployee,
   (req: Request, res: Response, next: any) => {
     employeeService
       .get(req.params.employeeId)
@@ -98,6 +108,7 @@ router.get(
 router.get(
   '/allInfo/:employeeId',
   checkAuth,
+  checkAdminEmployee,
   (req: Request, res: Response, next: any) => {
     employeeService
       .getWithInfo(req.params.employeeId)
@@ -118,29 +129,39 @@ router.get(
   }
 );
 
-router.get('/', checkAuth, (req: Request, res: Response, next: any) => {
-  employeeService
-    .getAll()
-    .then((employees) => {
-      res.status(StatusCodes.OK).json(employees);
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
+router.get(
+  '/',
+  checkAuth,
+  checkAdminEmployee,
+  (req: Request, res: Response, next: any) => {
+    employeeService
+      .getAll()
+      .then((employees) => {
+        res.status(StatusCodes.OK).json(employees);
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    });
-});
+  }
+);
 
-router.get('/allInfo/', checkAuth, (req: Request, res: Response, next: any) => {
-  employeeService
-    .getAllWithInfo()
-    .then((employees) => {
-      res.status(StatusCodes.OK).json(employees);
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
+router.get(
+  '/allInfo/',
+  checkAuth,
+  checkAdminEmployee,
+  (req: Request, res: Response, next: any) => {
+    employeeService
+      .getAllWithInfo()
+      .then((employees) => {
+        res.status(StatusCodes.OK).json(employees);
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    });
-});
+  }
+);
 export default router;

@@ -4,31 +4,40 @@ import { Client } from '../../domain/models/client';
 import { ClientService } from '../../domain/services/clientService';
 import StatusCodes from '../utils/statusCodes';
 import checkAuth from '../middleware/checkAuth';
+import checkAdminClient from '../middleware/checkAdminClient';
+import checkClient from '../middleware/checkClient';
+import checkAdminEmployee from '../middleware/checkAdminEmployee';
 
 const router = Router();
 const clientService = new ClientService(new ClientMongoRepository());
 
-router.post('/', checkAuth, (req: Request, res: Response, next: any) => {
-  const { name, surname, phone, userId } = req.body;
-  const newClient = new Client(name, surname, phone, userId);
+router.post(
+  '/',
+  checkAuth,
+  checkClient,
+  (req: Request, res: Response, next: any) => {
+    const { name, surname, phone, userId } = req.body;
+    const newClient = new Client(name, surname, phone, userId);
 
-  clientService
-    .create(newClient)
-    .then(() => {
-      res.status(StatusCodes.OK).json({
-        message: 'Client was created!',
+    clientService
+      .create(newClient)
+      .then(() => {
+        res.status(StatusCodes.OK).json({
+          message: 'Client was created!',
+        });
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
-      });
-    });
-});
+  }
+);
 
 router.delete(
   '/:clientId',
   checkAuth,
+  checkAdminClient,
   (req: Request, res: Response, next: any) => {
     clientService
       .delete(req.params.clientId)
@@ -48,6 +57,7 @@ router.delete(
 router.patch(
   '/:clientId',
   checkAuth,
+  checkClient,
   (req: Request, res: Response, next: any) => {
     clientService
       .update(req.params.clientId, req.body)
@@ -110,29 +120,39 @@ router.get(
   }
 );
 
-router.get('/', checkAuth, (req: Request, res: Response, next: any) => {
-  clientService
-    .getAll()
-    .then((clients) => {
-      res.status(StatusCodes.OK).json(clients);
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
+router.get(
+  '/',
+  checkAuth,
+  checkAdminEmployee,
+  (req: Request, res: Response, next: any) => {
+    clientService
+      .getAll()
+      .then((clients) => {
+        res.status(StatusCodes.OK).json(clients);
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    });
-});
+  }
+);
 
-router.get('/allInfo/', checkAuth, (req: Request, res: Response, next: any) => {
-  clientService
-    .getAllWithInfo()
-    .then((clients) => {
-      res.status(StatusCodes.OK).json(clients);
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
+router.get(
+  '/allInfo/',
+  checkAuth,
+  checkAdminEmployee,
+  (req: Request, res: Response, next: any) => {
+    clientService
+      .getAllWithInfo()
+      .then((clients) => {
+        res.status(StatusCodes.OK).json(clients);
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    });
-});
+  }
+);
 export default router;

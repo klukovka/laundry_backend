@@ -4,48 +4,55 @@ import { WashMachineService } from '../../domain/services/washMachineService';
 import { WashMachineMongoRepository } from '../../data/repositories/washMachineMongoRepository';
 import { WashMachine } from '../../domain/models/washMachine';
 import checkAuth from '../middleware/checkAuth';
+import checkAdminEmployee from '../middleware/checkAdminEmployee';
 
 const router = Router();
 const washMachineService = new WashMachineService(
   new WashMachineMongoRepository()
 );
 
-router.post('/', checkAuth, (req: Request, res: Response, next: any) => {
-  const {
-    model,
-    manufacturer,
-    capacity,
-    powerUsage,
-    spinningSpeed,
-    laundryId,
-  } = req.body;
+router.post(
+  '/',
+  checkAuth,
+  checkAdminEmployee,
+  (req: Request, res: Response, next: any) => {
+    const {
+      model,
+      manufacturer,
+      capacity,
+      powerUsage,
+      spinningSpeed,
+      laundryId,
+    } = req.body;
 
-  const newWashMachine = new WashMachine(
-    model,
-    manufacturer,
-    capacity,
-    powerUsage,
-    spinningSpeed,
-    laundryId
-  );
+    const newWashMachine = new WashMachine(
+      model,
+      manufacturer,
+      capacity,
+      powerUsage,
+      spinningSpeed,
+      laundryId
+    );
 
-  washMachineService
-    .create(newWashMachine)
-    .then(() => {
-      res.status(StatusCodes.OK).json({
-        message: 'WashMachine was created!',
+    washMachineService
+      .create(newWashMachine)
+      .then(() => {
+        res.status(StatusCodes.OK).json({
+          message: 'WashMachine was created!',
+        });
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    })
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
-      });
-    });
-});
+  }
+);
 
 router.delete(
   '/:washMachineId',
   checkAuth,
+  checkAdminEmployee,
   (req: Request, res: Response, next: any) => {
     washMachineService
       .delete(req.params.washMachineId)
@@ -65,6 +72,7 @@ router.delete(
 router.patch(
   '/:washMachineId',
   checkAuth,
+  checkAdminEmployee,
   (req: Request, res: Response, next: any) => {
     washMachineService
       .update(req.params.washMachineId, req.body)
