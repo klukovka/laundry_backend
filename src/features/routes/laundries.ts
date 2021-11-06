@@ -3,6 +3,7 @@ import { LaundryMongoRepository } from '../../data/repositories/laundryMongoRepo
 import { Laundry } from '../../domain/models/laundry';
 import { LaundryService } from '../../domain/services/laundryService';
 import StatusCodes from '../utils/statusCodes';
+import checkAuth from '../middleware/checkAuth';
 
 const router = Router();
 const laundryService = new LaundryService(new LaundryMongoRepository());
@@ -74,7 +75,7 @@ router.get('/:laundryId', (req: Request, res: Response, next: any) => {
     });
 });
 
-router.get('/', (req: Request, res: Response, next: any) => {
+router.get('/', checkAuth, (req: Request, res: Response, next: any) => {
   laundryService
     .getAll()
     .then((laundries) => {

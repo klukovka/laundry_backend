@@ -1,14 +1,16 @@
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 import StatusCodes from '../utils/statusCodes';
 
 export default (req: Request, res: Response, next: any) => {
   try {
-    const token = req.headers.authorization!.split(' ')[1];
-    const secret = process.env.SECRET || 'SECRET';
-    const decoded = jwt.verify(token!, secret);
-    req.body.userData = decoded;
-    next();
+    const role = req.body.userData.role;
+    if (role == 'admin') {
+      next();
+    } else {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        message: 'There are no admin',
+      });
+    }
   } catch (error) {
     return res.status(StatusCodes.UNAUTHORIZED).json({
       message: 'Auth failed',
