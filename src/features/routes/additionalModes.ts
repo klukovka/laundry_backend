@@ -76,7 +76,7 @@ router.patch(
 
 router.get(
   '/:additionalModeId',
-
+  checkAuth,
   (req: Request, res: Response, next: any) => {
     additionalModeService
       .getById(req.params.additionalModeId)
@@ -97,7 +97,7 @@ router.get(
   }
 );
 
-router.get('/', (req: Request, res: Response, next: any) => {
+router.get('/', checkAuth, (req: Request, res: Response, next: any) => {
   additionalModeService
     .getAll()
     .then((additionalModes) => {

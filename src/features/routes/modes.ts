@@ -72,7 +72,7 @@ router.patch(
   }
 );
 
-router.get('/:modeId', (req: Request, res: Response, next: any) => {
+router.get('/:modeId', checkAuth, (req: Request, res: Response, next: any) => {
   modeService
     .getById(req.params.modeId)
     .then((mode) => {
@@ -91,7 +91,7 @@ router.get('/:modeId', (req: Request, res: Response, next: any) => {
     });
 });
 
-router.get('/', (req: Request, res: Response, next: any) => {
+router.get('/', checkAuth, (req: Request, res: Response, next: any) => {
   modeService
     .getAll()
     .then((modes) => {

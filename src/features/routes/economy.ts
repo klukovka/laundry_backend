@@ -29,7 +29,7 @@ router.get(
 );
 
 router.get(
-  '/laundryGivedBonuses',
+  '/laundryGivenBonuses',
   checkAuth,
   checkAdminEmployee,
   (req: Request, res: Response, next: any) => {
