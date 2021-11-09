@@ -10,6 +10,8 @@ import userRoutes from './routes/users';
 import clientRoutes from './routes/clients';
 import employeeRoutes from './routes/employees';
 import eventRoutes from './routes/events';
+import dataFlowRoutes from './routes/dataFlow';
+import economyRoutes from './routes/economy';
 
 const app: Application = express();
 
@@ -38,6 +40,8 @@ app.use('/users', userRoutes);
 app.use('/clients', clientRoutes);
 app.use('/employees', employeeRoutes);
 app.use('/events', eventRoutes);
+app.use('/dataFlow', dataFlowRoutes);
+app.use('/economy', economyRoutes);
 
 //endpoint doesn't exist
 app.use((req: Request, res: Response, next: any) => {

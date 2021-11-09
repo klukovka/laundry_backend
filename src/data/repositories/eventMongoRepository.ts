@@ -22,6 +22,7 @@ export class EventMongoRepository implements EventRepository {
         timeBegin: options.get('timeBegin'),
         paidStatus: options.get('paidStatus'),
         taken: options.get('taken'),
+        rating: options.get('rating'),
       };
       return await DatabaseMongo.getDB.updateEvent(eventId, objectOptions);
     } catch (error: any) {
@@ -54,7 +55,8 @@ export class EventMongoRepository implements EventRepository {
           event.timeBegin,
           event.paidStatus,
           event.paidBonuses,
-          event.taken
+          event.taken,
+          event.rating
         );
       }
       return null;
@@ -84,7 +86,8 @@ export class EventMongoRepository implements EventRepository {
               documents[i].timeBegin,
               documents[i].paidStatus,
               documents[i].paidBonuses,
-              documents[i].taken
+              documents[i].taken,
+              documents[i].rating
             )
           );
         }
@@ -137,7 +140,8 @@ export class EventMongoRepository implements EventRepository {
           event.timeBegin,
           event.paidStatus,
           event.paidBonuses,
-          event.taken
+          event.taken,
+          event.rating
         );
       }
       return null;
@@ -190,7 +194,8 @@ export class EventMongoRepository implements EventRepository {
               documents[i].timeBegin,
               documents[i].paidStatus,
               documents[i].paidBonuses,
-              documents[i].taken
+              documents[i].taken,
+              documents[i].rating
             )
           );
         }

@@ -5,7 +5,7 @@ export class Client {
   name: string;
   surname: string;
   phone: string;
-  bonuses: Number;
+  bonuses: number;
   user?: User | null;
   userId: string;
 
@@ -14,7 +14,7 @@ export class Client {
     surname: string,
     phone: string,
     userId: string,
-    bonuses: Number = 0,
+    bonuses: number = 0,
     clientId: string | null = null,
     user: User | null = null
   ) {

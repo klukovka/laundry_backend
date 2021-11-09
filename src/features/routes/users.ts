@@ -3,6 +3,7 @@ import { UserMongoRepository } from '../../data/repositories/userMongoRepository
 import { User } from '../../domain/models/user';
 import { UserService } from '../../domain/services/userService';
 import StatusCodes from '../utils/statusCodes';
+import checkAuth from '../middleware/checkAuth';
 
 const router = Router();
 const userService = new UserService(new UserMongoRepository());
@@ -64,29 +65,57 @@ router.post('/login', (req: Request, res: Response, next: any) => {
     });
 });
 
-router.delete('/:userId', (req: Request, res: Response, next: any) => {
-  userService
-    .delete(req.params.userId)
-    .then(() =>
-      res.status(StatusCodes.OK).json({
-        message: 'User was deleted!',
-      })
-    )
-    .catch((error) => {
-      res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
+router.delete(
+  '/:userId',
+  checkAuth,
+  (req: Request, res: Response, next: any) => {
+    userService
+      .delete(req.params.userId)
+      .then(() =>
+        res.status(StatusCodes.OK).json({
+          message: 'User was deleted!',
+        })
+      )
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
       });
-    });
-});
+  }
+);
 
-router.patch('/:userId', (req: Request, res: Response, next: any) => {
+router.patch(
+  '/:userId',
+  checkAuth,
+  (req: Request, res: Response, next: any) => {
+    userService
+      .update(req.params.userId, req.body)
+      .then(() =>
+        res.status(StatusCodes.OK).json({
+          message: 'User was updated!',
+        })
+      )
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
+      });
+  }
+);
+
+router.post('/forgot', (req: Request, res: Response, next: any) => {
+  const { email } = req.body;
+
   userService
-    .update(req.params.userId, req.body)
-    .then(() =>
-      res.status(StatusCodes.OK).json({
-        message: 'User was updated!',
-      })
-    )
+    .forgotPassword(email)
+    .then((result) => {
+      if (result == null) {
+        return res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ message: 'User is not exist' });
+      }
+      return res.status(StatusCodes.OK).json(result);
+    })
     .catch((error) => {
       res.status(StatusCodes.INTERNAL_ERROR).json({
         message: error.message,

@@ -7,6 +7,8 @@ import User from './models/user';
 import Client from './models/client';
 import Employee from './models/employee';
 import Event from './models/event';
+import path from 'path';
+import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
 
 export class DatabaseMongo {
   private static db: DatabaseMongo;
@@ -680,5 +682,24 @@ export class DatabaseMongo {
     } catch (error: any) {
       throw new Error(error.message);
     }
+  }
+
+  backupMongo(): ChildProcessWithoutNullStreams {
+    const archivePath = `backup/${Date.now()}.gzip`;
+    return spawn('mongodump', [
+      `${process.env.URL}`,
+      `--archive=./${archivePath}`,
+      '--gzip',
+    ]);
+  }
+
+  restoreMongo(backup: string): ChildProcessWithoutNullStreams {
+    const archivePath = `backup/${backup}.gzip`;
+    return spawn('mongorestore', [
+      `${process.env.URL}`,
+      `--archive=./${archivePath}`,
+      '--gzip',
+      '--drop',
+    ]);
   }
 }
