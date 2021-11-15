@@ -12,23 +12,41 @@ import employeeRoutes from './routes/employees';
 import eventRoutes from './routes/events';
 import dataFlowRoutes from './routes/dataFlow';
 import economyRoutes from './routes/economy';
+//import cors from 'cors';
 
+/*const options: cors.CorsOptions = {
+  allowedHeaders: [
+    'Origin',
+    'X-Requested-With',
+    'Content-Type',
+    'Accept',
+    'X-Access-Token',
+  ],
+  credentials: true,
+  methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
+  origin: '*',
+  preflightContinue: false,
+};
+*/
 const app: Application = express();
-
+//app.use(cors(options));
 app.use(morgan('dev'));
 app.use(urlencoded({ extended: false }));
 app.use(json());
 
 app.use((req: Request, res: Response, next: any) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header(
+  res.setDefaultEncoding('utf8');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept, Authorization'
   );
-  if (req.method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
-    return res.status(200).json({});
-  }
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'PUT, POST, PATCH, DELETE, GET'
+  );
+
   next();
 });
 
