@@ -16,8 +16,8 @@ const options = {
   cert: fs.readFileSync('cert.pem'),
 };
 
-https
-  .createServer(options, App)
+http
+  .createServer(App)
   .listen(Number(PORT), HOST, () => {
     console.log('Server is listening...');
   })

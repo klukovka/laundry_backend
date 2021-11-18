@@ -12,9 +12,10 @@ import employeeRoutes from './routes/employees';
 import eventRoutes from './routes/events';
 import dataFlowRoutes from './routes/dataFlow';
 import economyRoutes from './routes/economy';
-//import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
-/*const options: cors.CorsOptions = {
+const options: cors.CorsOptions = {
   allowedHeaders: [
     'Origin',
     'X-Requested-With',
@@ -25,18 +26,13 @@ import economyRoutes from './routes/economy';
   credentials: true,
   methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
   origin: '*',
-  preflightContinue: false,
+  preflightContinue: true,
 };
-*/
+
 const app: Application = express();
-//app.use(cors(options));
-app.use(morgan('dev'));
-app.use(urlencoded({ extended: false }));
-app.use(json());
+app.use(cors(options));
 
 app.use((req: Request, res: Response, next: any) => {
-  res.setDefaultEncoding('utf8');
-  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Content-Type', 'application/json');
   res.setHeader(
     'Access-Control-Allow-Headers',
@@ -46,9 +42,16 @@ app.use((req: Request, res: Response, next: any) => {
     'Access-Control-Allow-Methods',
     'PUT, POST, PATCH, DELETE, GET'
   );
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
 
   next();
 });
+
+app.use(morgan('dev'));
+app.use(urlencoded({ extended: false }));
+app.use(json());
+app.use(cookieParser());
 
 app.use('/laundries', laundryRoutes);
 app.use('/additionalModes', additionalModeRoutes);
