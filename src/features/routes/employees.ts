@@ -15,13 +15,13 @@ router.post(
   checkAuth,
   checkAdmin,
   (req: Request, res: Response, next: any) => {
-    const { name, surname, phone, userId, day, month, year, laundryId } =
-      req.body;
+    const { name, surname, phone, userId, birthday, laundryId } = req.body;
+    console.log(birthday);
     const newEmployee = new Employee(
       name,
       surname,
       phone,
-      new Date(year, month, day),
+      new Date(birthday),
       laundryId,
       userId
     );

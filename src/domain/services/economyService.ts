@@ -35,6 +35,7 @@ export class EconomyService {
     );
 
     return {
+      laundryId: laundryId,
       clientsAndBonuses: Object.fromEntries(clientsAndBonuses),
       washMachinesAndBonuses: Object.fromEntries(washMachinesAndBonuses),
       sum: laundryMapEarnings.sum * percent,
@@ -53,6 +54,7 @@ export class EconomyService {
         endDate
       );
       return {
+        laundryId: laundryId,
         clientsAndPayment: Object.fromEntries(
           laundryMapEarnings.clientsAndPayment
         ),
@@ -102,6 +104,7 @@ export class EconomyService {
       });
 
       return {
+        laundryId: laundryId,
         clientsAndPayment: clientsAndPayment,
         washMachinesAndPayment: washMachinesAndPayment,
         sum: sum,
@@ -128,6 +131,7 @@ export class EconomyService {
         clientsAndPaidBonuses.set(clientId, clientPayment);
       });
       return {
+        laundryId: laundryId,
         clientsAndPaidBonuses: Object.fromEntries(clientsAndPaidBonuses),
         sum: sum,
       };
@@ -157,7 +161,7 @@ export class EconomyService {
       modesCounter.forEach((value: number, key: String) => {
         if (value == max) maxModes.push(key);
       });
-      return { modes: maxModes, count: max };
+      return { modes: maxModes, count: max, laundryId: laundryId };
     } catch (error) {
       throw error;
     }
@@ -192,6 +196,8 @@ export class EconomyService {
         );
       });
       return {
+        laundryId: laundryId,
+
         time: allTime,
         energy: allEnergy,
         washMachinesTime: Object.fromEntries(washMachinesTime),
@@ -251,7 +257,9 @@ export class EconomyService {
       });
 
       return {
-        rating: countRating / countMachines,
+        laundryId: laundryId,
+
+        rating: countMachines == 0 ? 0 : countRating / countMachines,
         washMachinesRating: Object.fromEntries(washMachinesRating),
       };
     } catch (error) {

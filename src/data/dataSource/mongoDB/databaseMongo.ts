@@ -128,6 +128,9 @@ export class DatabaseMongo {
     const laundry = await this.getLaundry(employee.laundryId);
     if (user && laundry) {
       try {
+        console.log(new Date('2000-02-14T00:00:00.000Z').toString());
+        console.log(new Date(employee.birthday).toString());
+        console.log(employee.birthday.toString());
         await new Employee({
           _id: new mongoose.Types.ObjectId(),
           name: employee.name,
@@ -138,6 +141,7 @@ export class DatabaseMongo {
           user: employee.userId,
         }).save();
       } catch (error) {
+        console.log(error);
         throw new Error('Employee creating is failed');
       }
     } else {
@@ -567,7 +571,7 @@ export class DatabaseMongo {
     try {
       return await User.findOne({ _id: userId });
     } catch (error: any) {
-      throw new Error(error.message);
+      throw new Error('User is not exists');
     }
   }
 
@@ -575,7 +579,7 @@ export class DatabaseMongo {
     try {
       return await User.findOne({ email });
     } catch (error: any) {
-      throw new Error(error.message);
+      throw new Error('User is not exists');
     }
   }
 
