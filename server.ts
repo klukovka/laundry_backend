@@ -29,7 +29,6 @@ http
   .createServer(App)
   .listen(Number(PORT), HOST, () => {
     console.log(`Server is listening on ${HOST}:${PORT}...`);
-    console.log(firestore);
   })
   .once('close', () => DatabaseMongo.getDB.close());
 

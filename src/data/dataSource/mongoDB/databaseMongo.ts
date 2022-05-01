@@ -56,6 +56,7 @@ export class DatabaseMongo {
       }).save();
       return createdUser?._id.toString();
     } catch (error) {
+      console.log(error);
       throw new Error('User creating is failed');
     }
   }

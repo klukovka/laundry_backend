@@ -24,7 +24,7 @@ router.post('/signup-admin', (req: Request, res: Response, next: any) => {
   const user = new User(email, Roles.ADMIN, password);
 
   authService
-    .createClient(user)
+    .createUser(user)
     .then((userId) => {
       return res.status(StatusCodes.CREATED).json({
         userId: userId,
