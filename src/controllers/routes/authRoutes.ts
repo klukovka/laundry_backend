@@ -11,6 +11,7 @@ import StatusCodes from '../utils/statusCodes';
 import { ErrorMessage } from '../../domain/models/errorMessage';
 import checkAuth from '../middleware/checkAuth';
 import checkAdmin from '../middleware/checkAdmin';
+import checkLaundry from '../middleware/checkLaundry';
 
 const router = Router();
 const authService = new AuthService(
@@ -46,6 +47,82 @@ router.post(
 
     authService
       .createUser(user)
+      .then((userId) => {
+        return res.status(StatusCodes.CREATED).json({
+          userId: userId,
+        });
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.post(
+  '/signup-laundry',
+  checkAuth,
+  checkAdmin,
+  (req: Request, res: Response, next: any) => {
+    authService
+      .createLaundry(req.body)
+      .then((userId) => {
+        return res.status(StatusCodes.CREATED).json({
+          userId: userId,
+        });
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.post('/signup-client', (req: Request, res: Response, next: any) => {
+  authService
+    .createClient(req.body)
+    .then((userId) => {
+      return res.status(StatusCodes.CREATED).json({
+        userId: userId,
+      });
+    })
+    .catch((error) => {
+      return res
+        .status(StatusCodes.INTERNAL_ERROR)
+        .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+    });
+});
+
+router.post(
+  '/signup-repair-company',
+  checkAuth,
+  checkAdmin,
+  (req: Request, res: Response, next: any) => {
+    authService
+      .createRepairCompany(req.body)
+      .then((userId) => {
+        return res.status(StatusCodes.CREATED).json({
+          userId: userId,
+        });
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.post(
+  '/signup-employee',
+  checkAuth,
+  checkLaundry,
+  (req: Request, res: Response, next: any) => {
+    req.body.laundryId = req.body.userData.id;
+    authService
+      .createEmployee(req.body)
       .then((userId) => {
         return res.status(StatusCodes.CREATED).json({
           userId: userId,
