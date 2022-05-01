@@ -5,6 +5,15 @@ import App from './src/features/app';
 import https from 'https';
 import http from 'http';
 import fs from 'fs';
+import admin from 'firebase-admin';
+
+var serviceAccount = require('./clean-digital-firebase-adminsdk-x8arz-7f32fea765.json');
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
+
+const firestore = admin.firestore();
 
 env.config();
 
@@ -19,6 +28,9 @@ const options = {
 http
   .createServer(App)
   .listen(Number(PORT), HOST, () => {
-    console.log('Server is listening...');
+    console.log(`Server is listening on ${HOST}:${PORT}...`);
+    console.log(firestore);
   })
   .once('close', () => DatabaseMongo.getDB.close());
+
+export default firestore;

@@ -7,9 +7,13 @@ import checkAuth from '../middleware/checkAuth';
 import checkAdmin from '../middleware/checkAdmin';
 import checkAdminClient from '../middleware/checkAdminClient';
 import checkAdminEmployee from '../middleware/checkAdminEmployee';
+import { EconomyService } from '../../domain/services/economyService';
+import { EventMongoRepository } from '../../data/repositories/eventMongoRepository';
 
 const router = Router();
 const laundryService = new LaundryService(new LaundryMongoRepository());
+
+const service = new EconomyService(new EventMongoRepository());
 
 router.post(
   '/',
@@ -59,6 +63,7 @@ router.patch(
   checkAuth,
   checkAdminEmployee,
   (req: Request, res: Response, next: any) => {
+    console.log(req.body);
     laundryService
       .update(req.params.laundryId, req.body)
       .then(() => {

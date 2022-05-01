@@ -7,7 +7,6 @@ import { DatabaseMongo } from '../dataSource/mongoDB/databaseMongo';
 export class EmployeeMongoRepository implements EmployeeRepository {
   async create(employee: Employee): Promise<void> {
     try {
-      console.log(employee.birthday);
       await DatabaseMongo.getDB.createEmployee(employee);
     } catch (error: any) {
       throw new Error(error.message);
@@ -19,7 +18,7 @@ export class EmployeeMongoRepository implements EmployeeRepository {
         name: options.get('name'),
         surname: options.get('surname'),
         phone: options.get('phone'),
-        birthday: options.get('birthday'),
+        birthday: new Date(options.get('birthday')),
         laundry: options.get('laundry'),
         user: options.get('user'),
       };

@@ -16,7 +16,7 @@ router.post(
   checkAdmin,
   (req: Request, res: Response, next: any) => {
     const { name, surname, phone, userId, birthday, laundryId } = req.body;
-    console.log(birthday);
+
     const newEmployee = new Employee(
       name,
       surname,

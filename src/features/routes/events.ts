@@ -15,36 +15,31 @@ const eventService = new EventService(
   new ClientMongoRepository()
 );
 
-router.post(
-  '/',
-  checkAuth,
-  checkClient,
-  (req: Request, res: Response, next: any) => {
-    const { washMachineId, temperature, spinning, modeId, additionalModeId } =
-      req.body;
-    const newEvent = new Event(
-      washMachineId,
-      temperature,
-      spinning,
-      modeId,
-      additionalModeId
-    );
+router.post('/', checkAuth, (req: Request, res: Response, next: any) => {
+  const { washMachineId, temperature, spinning, modeId, additionalModeId } =
+    req.body;
+  const newEvent = new Event(
+    washMachineId,
+    temperature,
+    spinning,
+    modeId,
+    additionalModeId
+  );
 
-    eventService
-      .create(newEvent)
-      .then((id) => {
-        res.status(StatusCodes.OK).json({
-          message: 'Event was created!',
-          id: id,
-        });
-      })
-      .catch((error) => {
-        res.status(StatusCodes.INTERNAL_ERROR).json({
-          message: error.message,
-        });
+  eventService
+    .create(newEvent)
+    .then((id) => {
+      res.status(StatusCodes.OK).json({
+        message: 'Event was created!',
+        id: id,
       });
-  }
-);
+    })
+    .catch((error) => {
+      res.status(StatusCodes.INTERNAL_ERROR).json({
+        message: error.message,
+      });
+    });
+});
 
 router.patch(
   '/paidForEvent/:eventId',
@@ -61,6 +56,7 @@ router.patch(
         });
       })
       .catch((error) => {
+        console.log(error);
         res.status(StatusCodes.INTERNAL_ERROR).json({
           message: error.message,
         });

@@ -11,7 +11,6 @@ export class EmployeeService {
 
   async create(employee: Employee): Promise<void> {
     try {
-      console.log(employee.birthday);
       return await this._repository.create(employee);
     } catch (error) {
       throw error;

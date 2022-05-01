@@ -8,16 +8,18 @@ import checkAdminEmployee from '../middleware/checkAdminEmployee';
 const router = Router();
 const service = new EconomyService(new EventMongoRepository());
 
-router.get(
-  '/laundryEarnings',
+router.post(
+  '/laundryEarnings/',
   checkAuth,
   checkAdminEmployee,
   (req: Request, res: Response, next: any) => {
     const { laundryId, beginDate, endDate } = req.body;
+    console.log(req.body);
 
     service
       .laundryEarnings(laundryId, beginDate, endDate)
       .then((earnings) => {
+        console.log(earnings);
         res.status(StatusCodes.OK).json(earnings);
       })
       .catch((error) => {
@@ -28,8 +30,8 @@ router.get(
   }
 );
 
-router.get(
-  '/laundryGivenBonuses',
+router.post(
+  '/laundryGivenBonuses/',
   checkAuth,
   checkAdminEmployee,
   (req: Request, res: Response, next: any) => {
@@ -48,8 +50,8 @@ router.get(
   }
 );
 
-router.get(
-  '/laundryTakenBonuses',
+router.post(
+  '/laundryTakenBonuses/',
   checkAuth,
   checkAdminEmployee,
   (req: Request, res: Response, next: any) => {
@@ -68,8 +70,8 @@ router.get(
   }
 );
 
-router.get(
-  '/laundryTheMostPopularMode',
+router.post(
+  '/laundryTheMostPopularMode/',
   checkAuth,
   checkAdminEmployee,
   (req: Request, res: Response, next: any) => {
@@ -88,8 +90,8 @@ router.get(
   }
 );
 
-router.get(
-  '/laundryWashMachinesTimeAndEnergy',
+router.post(
+  '/laundryWashMachinesTimeAndEnergy/',
   checkAuth,
   checkAdminEmployee,
   (req: Request, res: Response, next: any) => {
@@ -113,6 +115,7 @@ router.get(
   checkAuth,
   checkAdminEmployee,
   (req: Request, res: Response, next: any) => {
+    console.log(req.body);
     service
       .laundryRating(req.params.id)
       .then((mode) => {

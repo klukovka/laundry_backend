@@ -4,9 +4,9 @@ import { ClientRepository } from '../../domain/repositories/clientRepository';
 import { DatabaseMongo } from '../dataSource/mongoDB/databaseMongo';
 
 export class ClientMongoRepository implements ClientRepository {
-  async create(client: Client): Promise<void> {
+  async create(client: Client): Promise<String> {
     try {
-      await DatabaseMongo.getDB.createClient(client);
+      return await DatabaseMongo.getDB.createClient(client);
     } catch (error: any) {
       throw new Error(error.message);
     }
@@ -33,6 +33,27 @@ export class ClientMongoRepository implements ClientRepository {
       throw new Error(error.message);
     }
   }
+
+  async getByUser(userId: string): Promise<Client | null> {
+    try {
+      const client = await DatabaseMongo.getDB.getClientByUserId(userId);
+      console.log(client);
+      if (client) {
+        return new Client(
+          client.name,
+          client.surname,
+          client.phone,
+          client.user?._id.toString(),
+          client.bonuses,
+          client?._id.toString()
+        );
+      }
+      return null;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
   async get(clientId: string): Promise<Client | null> {
     try {
       const client = await DatabaseMongo.getDB.getClient(clientId);

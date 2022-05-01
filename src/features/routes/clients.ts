@@ -21,9 +21,10 @@ router.post(
 
     clientService
       .create(newClient)
-      .then(() => {
+      .then((clientId) => {
         res.status(StatusCodes.OK).json({
           message: 'Client was created!',
+          clientId: clientId,
         });
       })
       .catch((error) => {
@@ -80,6 +81,29 @@ router.get(
   (req: Request, res: Response, next: any) => {
     clientService
       .get(req.params.clientId)
+      .then((client) => {
+        if (client) {
+          res.status(StatusCodes.OK).json(client);
+        } else {
+          res
+            .status(StatusCodes.NOT_FOUND)
+            .json({ message: 'Client is not exist' });
+        }
+      })
+      .catch((error) => {
+        res.status(StatusCodes.INTERNAL_ERROR).json({
+          message: error.message,
+        });
+      });
+  }
+);
+
+router.get(
+  '/byUserId/:userId',
+  checkAuth,
+  (req: Request, res: Response, next: any) => {
+    clientService
+      .getByUser(req.params.userId)
       .then((client) => {
         if (client) {
           res.status(StatusCodes.OK).json(client);

@@ -37,7 +37,7 @@ export class UserService {
     }
   }
 
-  async login(user: User): Promise<string | null> {
+  async login(user: User): Promise<any | null> {
     const { email, password } = user;
     const userInRep = await this.getByEmail(email);
 
@@ -62,7 +62,10 @@ export class UserService {
               expiresIn: '1h',
             }
           );
-          return token;
+          return {
+            token: token,
+            userId: userInRep.userId,
+          };
         } catch (error) {
           throw error;
         }

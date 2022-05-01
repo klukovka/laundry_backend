@@ -48,11 +48,12 @@ router.post('/login', (req: Request, res: Response, next: any) => {
 
   userService
     .login(user)
-    .then((token) => {
-      if (token) {
+    .then((authMeta) => {
+      if (authMeta) {
         return res.status(StatusCodes.OK).json({
           message: 'Auth successful',
-          token: token,
+          token: authMeta.token,
+          userId: authMeta.userId,
         });
       } else {
         res

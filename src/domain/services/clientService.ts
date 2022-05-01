@@ -9,7 +9,7 @@ export class ClientService {
     this._repository = repository;
   }
 
-  async create(client: Client): Promise<void> {
+  async create(client: Client): Promise<String> {
     try {
       return await this._repository.create(client);
     } catch (error) {
@@ -42,6 +42,14 @@ export class ClientService {
   async get(clientId: string): Promise<Client | null> {
     try {
       return await this._repository.get(clientId);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getByUser(userId: string): Promise<Client | null> {
+    try {
+      return await this._repository.getByUser(userId);
     } catch (error) {
       throw error;
     }

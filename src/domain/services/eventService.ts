@@ -1,6 +1,7 @@
 import { Event } from '../models/event';
 import { EventRepository } from '../repositories/eventRepository';
 import { ClientRepository } from '../repositories/clientRepository';
+import firestore from '../../../server';
 
 export class EventService {
   private _eventRepository: EventRepository;
@@ -35,15 +36,24 @@ export class EventService {
         (event?.mode?.costs ?? 0) + (event?.additionalMode?.costs ?? 0);
       let clientBonuses =
         (await this._clientRepository.get(clientId))?.bonuses ?? 0;
-      console.log(clientBonuses);
       clientBonuses -= bonuses;
-      console.log(clientBonuses);
       clientBonuses += (payment - bonuses) * persent;
-      console.log(clientBonuses);
+
+      const time =
+        (event?.additionalMode?.time ?? 0) + (event?.mode?.time ?? 0);
+      console.log(time);
+
+      setTimeout(function () {
+        const notifications = firestore.collection('Notifications');
+        notifications.doc(eventId).set({
+          title: 'Wathing is over!',
+          body: "Don't forget to take your clothes",
+        });
+      }, 60000 * time);
 
       await this._clientRepository.update(
         clientId,
-        new Map([['bonuses', clientBonuses]])
+        new Map([['bonuses', Math.round(clientBonuses)]])
       );
       return await this._eventRepository.update(eventId, options);
     } catch (error) {

@@ -104,17 +104,18 @@ export class DatabaseMongo {
     }
   }
 
-  async createClient(client: any): Promise<void> {
+  async createClient(client: any): Promise<String> {
     const user = await this.getUserById(client.userId);
     if (user) {
       try {
-        await new Client({
+        const createdClient = await new Client({
           _id: new mongoose.Types.ObjectId(),
           name: client.name,
           surname: client.surname,
           phone: client.phone,
           user: client.userId,
         }).save();
+        return createdClient?._id.toString();
       } catch (error) {
         throw new Error('Client creating is failed');
       }
@@ -128,9 +129,6 @@ export class DatabaseMongo {
     const laundry = await this.getLaundry(employee.laundryId);
     if (user && laundry) {
       try {
-        console.log(new Date('2000-02-14T00:00:00.000Z').toString());
-        console.log(new Date(employee.birthday).toString());
-        console.log(employee.birthday.toString());
         await new Employee({
           _id: new mongoose.Types.ObjectId(),
           name: employee.name,
@@ -537,6 +535,16 @@ export class DatabaseMongo {
   async getClient(clientId: string): Promise<any> {
     try {
       return await Client.findOne({ _id: clientId });
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getClientByUserId(userId: string): Promise<any> {
+    try {
+      const client = await Client.findOne({ user: userId });
+      console.log(client);
+      return client;
     } catch (error: any) {
       throw new Error(error.message);
     }
