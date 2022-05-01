@@ -2,16 +2,7 @@ import morgan from 'morgan';
 import { urlencoded, json } from 'body-parser';
 import express, { Application, Request, Response } from 'express';
 import StatusCodes from './utils/statusCodes';
-import laundryRoutes from './routes/laundries';
-import additionalModeRoutes from './routes/additionalModes';
-import modeRoutes from './routes/modes';
-import washMachineRoutes from './routes/washMachines';
-import userRoutes from './routes/users';
-import clientRoutes from './routes/clients';
-import employeeRoutes from './routes/employees';
-import eventRoutes from './routes/events';
 import dataFlowRoutes from './routes/dataFlow';
-import economyRoutes from './routes/economy';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
@@ -56,16 +47,7 @@ app.use(urlencoded({ extended: false }));
 app.use(json());
 app.use(cookieParser());
 
-app.use('/laundries', laundryRoutes);
-app.use('/additionalModes', additionalModeRoutes);
-app.use('/modes', modeRoutes);
-app.use('/washMachines', washMachineRoutes);
-app.use('/users', userRoutes);
-app.use('/clients', clientRoutes);
-app.use('/employees', employeeRoutes);
-app.use('/events', eventRoutes);
 app.use('/dataFlow', dataFlowRoutes);
-app.use('/economy', economyRoutes);
 
 //endpoint doesn't exist
 app.use((req: Request, res: Response, next: any) => {

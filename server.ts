@@ -1,7 +1,7 @@
 import env from 'dotenv';
 import { Application } from 'express';
 import { DatabaseMongo } from './src/data/dataSource/mongoDB/databaseMongo';
-import App from './src/features/app';
+import App from './src/controllers/app';
 import https from 'https';
 import http from 'http';
 import fs from 'fs';
