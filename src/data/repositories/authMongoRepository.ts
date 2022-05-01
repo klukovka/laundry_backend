@@ -70,7 +70,7 @@ export class AuthMongoRepository implements AuthRepository {
   async getByEmail(email: string, showPassword: boolean): Promise<User | null> {
     try {
       const user = await DatabaseMongo.getDB.getUserByEmail(email);
-      return this.toUser(user, showPassword);
+      return this._getUser(user, showPassword);
     } catch (error) {
       throw error;
     }
@@ -79,13 +79,13 @@ export class AuthMongoRepository implements AuthRepository {
   async getById(userId: string, showPassword: boolean): Promise<User | null> {
     try {
       const user = await DatabaseMongo.getDB.getUserById(userId);
-      return this.toUser(user, showPassword);
+      return this._getUser(user, showPassword);
     } catch (error) {
       throw error;
     }
   }
 
-  toUser(user: any, showPassword: boolean): User | null {
+  private _getUser(user: any, showPassword: boolean): User | null {
     if (!user) {
       return null;
     }

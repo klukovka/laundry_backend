@@ -218,13 +218,15 @@ export class AuthService {
       case Roles.ADMIN:
         return userId;
       case Roles.CLIENT:
-        return await this._clientRepository.getClientId(userId);
+        return (await this._clientRepository.getClientId(userId)).clientId;
       case Roles.LAUNDRY:
-        return await this._laundryRepository.getLaundryId(userId);
+        return (await this._laundryRepository.getLaundryId(userId)).laundryId;
       case Roles.EMPLOYEE:
-        return await this._employeeRepository.getEmployeeId(userId);
+        return (await this._employeeRepository.getEmployeeId(userId))
+          .employeeId;
       case Roles.REPAIR_COMPANY:
-        return await this._repairCompanyRepository.getRepairCompanyId(userId);
+        return (await this._repairCompanyRepository.getRepairCompanyId(userId))
+          .repairCompanyId;
       default:
         return null;
     }
