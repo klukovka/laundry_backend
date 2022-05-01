@@ -1,29 +1,26 @@
 import { User } from './user';
 
-export class Laundry {
-  laundryId?: string | null;
+export class RepairCompany {
+  repairCompanyId?: string | null;
   name: string;
-  address: string;
   phone: string;
-  maxAmount: number;
+  address: string;
   user?: User | null;
   userId: string;
 
   constructor(
     name: string,
-    address: string,
     phone: string,
-    maxAmount: number,
     userId: string,
-    laundryId: string | null = null,
+    address: string,
+    repairCompanyId: string | null = null,
     user: User | null = null
   ) {
     this.name = name;
-    this.address = address;
     this.phone = phone;
-    this.laundryId = laundryId;
-    this.maxAmount = maxAmount;
+    this.repairCompanyId = repairCompanyId;
     this.user = user;
     this.userId = userId;
+    this.address = address;
   }
 }

@@ -9,6 +9,10 @@ export class WashMachine {
   spinningSpeed: number;
   laundry?: Laundry | null;
   laundryId: string;
+  isWorking: boolean;
+  isWashing: boolean;
+  maxTime: number;
+  currentTime: number;
 
   constructor(
     model: string,
@@ -17,6 +21,10 @@ export class WashMachine {
     powerUsage: number,
     spinningSpeed: number,
     laundryId: string,
+    maxTime: number,
+    currentTime: number = 0,
+    isWorking: boolean = true,
+    isWashing: boolean = false,
     washMachineId: string | null = null,
     laundry: Laundry | null = null
   ) {
@@ -28,5 +36,9 @@ export class WashMachine {
     this.laundry = laundry;
     this.washMachineId = washMachineId;
     this.laundryId = laundryId;
+    this.maxTime = maxTime;
+    this.currentTime = currentTime;
+    this.isWashing = isWashing;
+    this.isWorking = isWorking;
   }
 }

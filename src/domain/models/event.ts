@@ -19,6 +19,7 @@ export class Event {
   timeBegin: Date | null;
   paidStatus: Boolean;
   paidBonuses: number;
+  paidMoney: number;
   taken: Boolean;
   rating: number;
 
@@ -37,6 +38,7 @@ export class Event {
     timeBegin: Date | null = null,
     paidStatus: Boolean = false,
     paidBonuses: number = 0,
+    paidMoney: number = 0,
     taken: Boolean = false,
     rating: number = 5
   ) {
@@ -54,6 +56,7 @@ export class Event {
     this.timeBegin = timeBegin;
     this.paidStatus = paidStatus;
     this.paidBonuses = paidBonuses;
+    this.paidMoney = paidMoney;
     this.taken = taken;
     this.rating = rating;
   }

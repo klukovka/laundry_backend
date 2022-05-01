@@ -3,7 +3,6 @@ import { User } from './user';
 export class Client {
   clientId?: string | null;
   name: string;
-  surname: string;
   phone: string;
   bonuses: number;
   user?: User | null;
@@ -11,7 +10,6 @@ export class Client {
 
   constructor(
     name: string,
-    surname: string,
     phone: string,
     userId: string,
     bonuses: number = 0,
@@ -19,7 +17,6 @@ export class Client {
     user: User | null = null
   ) {
     this.name = name;
-    this.surname = surname;
     this.phone = phone;
     this.bonuses = bonuses;
     this.clientId = clientId;

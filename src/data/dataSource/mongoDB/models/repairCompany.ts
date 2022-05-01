@@ -1,16 +1,17 @@
 import { Schema, model } from 'mongoose';
 
-const Laundry = new Schema({
+const RepairCompany = new Schema({
   _id: Schema.Types.ObjectId,
   name: {
     type: String,
     required: true,
   },
-  address: {
+
+  phone: {
     type: String,
     required: true,
   },
-  phone: {
+  address: {
     type: String,
     required: true,
   },
@@ -20,10 +21,6 @@ const Laundry = new Schema({
     required: true,
     unique: true,
   },
-  maxAmount: {
-    type: Number,
-    required: true,
-  },
 });
 
-export default model('Laundry', Laundry);
+export default model('RepairCompany', RepairCompany);

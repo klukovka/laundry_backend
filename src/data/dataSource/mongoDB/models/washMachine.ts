@@ -22,6 +22,22 @@ const WashMachine = new Schema({
     type: Number,
     required: true,
   },
+  isWorking: {
+    type: Boolean,
+    required: true,
+  },
+  isWashing: {
+    type: Boolean,
+    required: true,
+  },
+  maxTime: {
+    type: Number,
+    required: true,
+  },
+  currentTime: {
+    type: Number,
+    required: true,
+  },
   laundry: {
     type: Schema.Types.ObjectId,
     ref: 'Laundry',

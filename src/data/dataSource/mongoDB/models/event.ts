@@ -39,6 +39,10 @@ const Event = new Schema({
     type: Number,
     default: 0,
   },
+  paidMoney: {
+    type: Number,
+    default: 0,
+  },
   taken: {
     type: Boolean,
     default: false,
