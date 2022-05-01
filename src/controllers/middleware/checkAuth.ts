@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import { ErrorMessage } from '../../domain/models/errorMessage';
 import StatusCodes from '../utils/statusCodes';
 
 export default (req: Request, res: Response, next: any) => {
@@ -10,8 +11,8 @@ export default (req: Request, res: Response, next: any) => {
     req.body.userData = decoded;
     next();
   } catch (error) {
-    return res.status(StatusCodes.UNAUTHORIZED).json({
-      message: 'Auth failed',
-    });
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .json(new ErrorMessage(StatusCodes.UNAUTHORIZED, 'Auth failed'));
   }
 };
