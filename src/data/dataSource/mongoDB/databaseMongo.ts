@@ -139,7 +139,7 @@ export class DatabaseMongo {
 
   async getLaundryByUserId(userId: string): Promise<any> {
     try {
-      return await Laundry.findOne({ user: userId });
+      return await Laundry.findOne({ user: userId }).populate('user');
     } catch (error: any) {
       throw new Error('Laundry is not exists');
     }
@@ -164,7 +164,7 @@ export class DatabaseMongo {
 
   async getClientByUserId(userId: string): Promise<any> {
     try {
-      return await Client.findOne({ user: userId });
+      return await Client.findOne({ user: userId }).populate('user');
     } catch (error: any) {
       throw new Error('Client is not exists');
     }
@@ -190,7 +190,7 @@ export class DatabaseMongo {
 
   async getEmployeeByUserId(userId: string): Promise<any> {
     try {
-      return await Employee.findOne({ user: userId });
+      return await Employee.findOne({ user: userId }).populate('user laundry');
     } catch (error: any) {
       throw new Error('Client is not exists');
     }
@@ -215,7 +215,7 @@ export class DatabaseMongo {
 
   async getRepairCompanyByUserId(userId: string): Promise<any> {
     try {
-      return await RepairCompany.findOne({ user: userId });
+      return await RepairCompany.findOne({ user: userId }).populate('user');
     } catch (error: any) {
       throw new Error('Repair company is not exists');
     }
