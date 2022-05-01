@@ -6,9 +6,11 @@ import WashMachine from './models/washMachine';
 import User from './models/user';
 import Client from './models/client';
 import Employee from './models/employee';
+import RepairCompany from './models/repairCompany';
 import Event from './models/event';
 import path from 'path';
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
+import Roles from '../../../controllers/utils/roles';
 
 export class DatabaseMongo {
   private static db: DatabaseMongo;
@@ -42,20 +44,182 @@ export class DatabaseMongo {
       .then(() => console.log('MongoDB connection closed!'));
   }
 
-  // async createLaundry(laundry: any): Promise<void> {
-  //   try {
-  //     await new Laundry({
-  //       _id: new mongoose.Types.ObjectId(),
-  //       name: laundry.name,
-  //       city: laundry.city,
-  //       street: laundry.street,
-  //       house: laundry.house,
-  //       phone: laundry.phone,
-  //     }).save();
-  //   } catch (error) {
-  //     throw new Error('Laundry creating is failed');
-  //   }
-  // }
+  /// Users
+
+  async createUser(user: any): Promise<string> {
+    try {
+      const createdUser = await new User({
+        _id: new mongoose.Types.ObjectId(),
+        email: user.email,
+        password: user.password,
+        role: user.role,
+      }).save();
+      return createdUser?._id.toString();
+    } catch (error) {
+      throw new Error('User creating is failed');
+    }
+  }
+
+  async deleteUser(userId: string): Promise<void> {
+    const user = await this.getUserById(userId);
+
+    if (user) {
+      try {
+        switch (user.role) {
+          case Roles.ADMIN:
+            await User.deleteOne({ _id: userId });
+          case Roles.CLIENT:
+            await Client.deleteMany({ user: userId });
+          case Roles.LAUNDRY:
+            const laundryId = (
+              await this.getLaundryByUserId(userId)
+            )?._id.toString();
+            await Laundry.deleteMany({ user: userId });
+            await Employee.deleteMany({ laundry: laundryId });
+            await WashMachine.deleteMany({ laundry: laundryId });
+          case Roles.EMPLOYEE:
+            await Employee.deleteMany({ user: userId });
+          case Roles.REPAIR_COMPANY:
+            await RepairCompany.deleteMany({ user: userId });
+        }
+      } catch (error) {
+        throw new Error('User deleting is failed');
+      }
+    } else {
+      throw new Error('User has already been deleted!');
+    }
+  }
+
+  async updateUser(userId: string, options: any): Promise<void> {
+    const user = await this.getUserById(userId);
+    if (user) {
+      try {
+        await User.updateOne({ _id: userId }, { $set: options });
+      } catch (error) {
+        throw new Error('User updating is failed');
+      }
+    } else {
+      throw new Error('User is not exist');
+    }
+  }
+
+  async getUserById(userId: string): Promise<any> {
+    try {
+      return await User.findOne({ _id: userId });
+    } catch (error: any) {
+      throw new Error('User is not exists');
+    }
+  }
+
+  async getUserByEmail(email: string): Promise<any> {
+    try {
+      return await User.findOne({ email });
+    } catch (error: any) {
+      throw new Error('User is not exists');
+    }
+  }
+
+  /// Laundries
+
+  async createLaundry(laundry: any): Promise<string> {
+    try {
+      const createdLaundry = await new Laundry({
+        _id: new mongoose.Types.ObjectId(),
+        name: laundry.name,
+        address: laundry.address,
+        maxAmount: laundry.maxAmount,
+        phone: laundry.phone,
+        user: laundry.userId,
+      }).save();
+      return createdLaundry?._id.toString();
+    } catch (error) {
+      throw new Error('Laundry creating is failed');
+    }
+  }
+
+  async getLaundryByUserId(userId: string): Promise<any> {
+    try {
+      return await Laundry.findOne({ user: userId });
+    } catch (error: any) {
+      throw new Error('Laundry is not exists');
+    }
+  }
+
+  /// Clients
+
+  async createClient(client: any): Promise<string> {
+    try {
+      const createdClient = await new Client({
+        _id: new mongoose.Types.ObjectId(),
+        name: client.name,
+        phone: client.phone,
+        bonuses: client.bonuses,
+        user: client.userId,
+      }).save();
+      return createdClient?._id.toString();
+    } catch (error) {
+      throw new Error('Client creating is failed');
+    }
+  }
+
+  async getClientByUserId(userId: string): Promise<any> {
+    try {
+      return await Client.findOne({ user: userId });
+    } catch (error: any) {
+      throw new Error('Client is not exists');
+    }
+  }
+
+  /// Employees
+
+  async createEmployee(employee: any): Promise<string> {
+    try {
+      const createdEmployee = await new Employee({
+        _id: new mongoose.Types.ObjectId(),
+        name: employee.name,
+        phone: employee.phone,
+        birthday: employee.birthday,
+        laundry: employee.laundryId,
+        user: employee.userId,
+      }).save();
+      return createdEmployee?._id.toString();
+    } catch (error) {
+      throw new Error('Employee creating is failed');
+    }
+  }
+
+  async getEmployeeByUserId(userId: string): Promise<any> {
+    try {
+      return await Employee.findOne({ user: userId });
+    } catch (error: any) {
+      throw new Error('Client is not exists');
+    }
+  }
+
+  /// Repair Companies
+
+  async createRepairCompany(repairCompany: any): Promise<string> {
+    try {
+      const createdRepairCompany = await new RepairCompany({
+        _id: new mongoose.Types.ObjectId(),
+        name: repairCompany.name,
+        phone: repairCompany.phone,
+        address: repairCompany.address,
+        user: repairCompany.userId,
+      }).save();
+      return createdRepairCompany?._id.toString();
+    } catch (error) {
+      throw new Error('Repair Company creating is failed');
+    }
+  }
+
+  async getRepairCompanyByUserId(userId: string): Promise<any> {
+    try {
+      return await RepairCompany.findOne({ user: userId });
+    } catch (error: any) {
+      throw new Error('Repair company is not exists');
+    }
+  }
 
   // async createAdditionalMode(additionalMode: any): Promise<void> {
   //   try {
@@ -104,49 +268,6 @@ export class DatabaseMongo {
   //   }
   // }
 
-  // async createClient(client: any): Promise<String> {
-  //   const user = await this.getUserById(client.userId);
-  //   if (user) {
-  //     try {
-  //       const createdClient = await new Client({
-  //         _id: new mongoose.Types.ObjectId(),
-  //         name: client.name,
-  //         surname: client.surname,
-  //         phone: client.phone,
-  //         user: client.userId,
-  //       }).save();
-  //       return createdClient?._id.toString();
-  //     } catch (error) {
-  //       throw new Error('Client creating is failed');
-  //     }
-  //   } else {
-  //     throw new Error('User is not exist');
-  //   }
-  // }
-
-  // async createEmployee(employee: any): Promise<void> {
-  //   const user = await this.getUserById(employee.userId);
-  //   const laundry = await this.getLaundry(employee.laundryId);
-  //   if (user && laundry) {
-  //     try {
-  //       await new Employee({
-  //         _id: new mongoose.Types.ObjectId(),
-  //         name: employee.name,
-  //         surname: employee.surname,
-  //         phone: employee.phone,
-  //         birthday: employee.birthday,
-  //         laundry: employee.laundryId,
-  //         user: employee.userId,
-  //       }).save();
-  //     } catch (error) {
-  //       console.log(error);
-  //       throw new Error('Employee creating is failed');
-  //     }
-  //   } else {
-  //     throw new Error(this.parseEmployeeError(user, laundry));
-  //   }
-  // }
-
   // private parseEmployeeError(user: any, laundry: any): string {
   //   let entity = '';
   //   if (user == null && laundry == null) {
@@ -157,20 +278,6 @@ export class DatabaseMongo {
   //     entity = 'Laundry is';
   //   }
   //   return entity + ' not exist';
-  // }
-
-  // async createUser(user: any): Promise<string> {
-  //   try {
-  //     const createdUser = await new User({
-  //       _id: new mongoose.Types.ObjectId(),
-  //       email: user.email,
-  //       password: user.password,
-  //       role: user.role,
-  //     }).save();
-  //     return createdUser?._id.toString();
-  //   } catch (error) {
-  //     throw new Error('User creating is failed');
-  //   }
   // }
 
   // async createEvent(event: any): Promise<string> {
@@ -303,26 +410,6 @@ export class DatabaseMongo {
   //     }
   //   } else {
   //     throw new Error('Event has already been deleted!');
-  //   }
-  // }
-
-  // async deleteUser(userId: string): Promise<void> {
-  //   const user = await this.getUserById(userId);
-
-  //   if (user) {
-  //     try {
-  //       if (user.role == 'client') {
-  //         await Client.deleteMany({ user: userId });
-  //       }
-  //       if (user.role == 'employee') {
-  //         await Employee.deleteMany({ user: userId });
-  //       }
-  //       await User.deleteOne({ _id: userId });
-  //     } catch (error) {
-  //       throw new Error('User deleting is failed');
-  //     }
-  //   } else {
-  //     throw new Error('User has already been deleted!');
   //   }
   // }
 
@@ -478,19 +565,6 @@ export class DatabaseMongo {
   //   }
   // }
 
-  // async updateUser(userId: string, options: any): Promise<void> {
-  //   const user = await this.getUserById(userId);
-  //   if (user) {
-  //     try {
-  //       await User.updateOne({ _id: userId }, { $set: options });
-  //     } catch (error) {
-  //       throw new Error('User updating is failed');
-  //     }
-  //   } else {
-  //     throw new Error('User is not exist');
-  //   }
-  // }
-
   // async getLaundry(laundryId: string): Promise<any> {
   //   try {
   //     return await Laundry.findOne({ _id: laundryId });
@@ -572,22 +646,6 @@ export class DatabaseMongo {
   //       .exec();
   //   } catch (error: any) {
   //     throw new Error(error.message);
-  //   }
-  // }
-
-  // async getUserById(userId: string): Promise<any> {
-  //   try {
-  //     return await User.findOne({ _id: userId });
-  //   } catch (error: any) {
-  //     throw new Error('User is not exists');
-  //   }
-  // }
-
-  // async getUserByEmail(email: string): Promise<any> {
-  //   try {
-  //     return await User.findOne({ email });
-  //   } catch (error: any) {
-  //     throw new Error('User is not exists');
   //   }
   // }
 

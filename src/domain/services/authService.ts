@@ -35,10 +35,10 @@ export class AuthService {
     this._laundryRepository = laundryRepository;
   }
 
-  async createAdmin(user: any): Promise<string> {
+  async createUser(user: any): Promise<string> {
     try {
       const hashedUser = await this._hashUser(user);
-      return await this._authRepository.createAdmin(hashedUser);
+      return await this._authRepository.createUser(hashedUser);
     } catch (error) {
       throw error;
     }
@@ -46,8 +46,8 @@ export class AuthService {
 
   async createLaundry(laundry: any): Promise<string> {
     try {
-      const hashedUser = await this._hashUser(
-        new User(laundry.email, laundry.role, laundry.password)
+      const userId = await this.createUser(
+        new User(laundry.email, Roles.LAUNDRY, laundry.password)
       );
       return await this._authRepository.createLaundry(
         new Laundry(
@@ -55,9 +55,7 @@ export class AuthService {
           laundry.address,
           laundry.phone,
           laundry.maxAmount,
-          '',
-          null,
-          hashedUser
+          userId
         )
       );
     } catch (error) {
@@ -67,11 +65,11 @@ export class AuthService {
 
   async createClient(client: any): Promise<string> {
     try {
-      const hashedUser = await this._hashUser(
-        new User(client.email, client.role, client.password)
+      const userId = await this.createUser(
+        new User(client.email, Roles.CLIENT, client.password)
       );
       return await this._authRepository.createClient(
-        new Client(client.name, client.phone, '', 0, null, hashedUser)
+        new Client(client.name, client.phone, userId)
       );
     } catch (error) {
       throw error;
@@ -80,8 +78,8 @@ export class AuthService {
 
   async createEmployee(employee: any): Promise<string> {
     try {
-      const hashedUser = await this._hashUser(
-        new User(employee.email, employee.role, employee.password)
+      const userId = await this.createUser(
+        new User(employee.email, Roles.EMPLOYEE, employee.password)
       );
       return await this._authRepository.createEmployee(
         new Employee(
@@ -89,10 +87,7 @@ export class AuthService {
           employee.phone,
           employee.birthday,
           employee.laundryId,
-          '',
-          null,
-          null,
-          hashedUser
+          userId
         )
       );
     } catch (error) {
@@ -102,21 +97,20 @@ export class AuthService {
 
   async createRepairCompany(repairCompany: any): Promise<string> {
     try {
-      const hashedUser = await this._hashUser(
+      const userId = await this.createUser(
         new User(
           repairCompany.email,
-          repairCompany.role,
+          Roles.REPAIR_COMPANY,
           repairCompany.password
         )
       );
+
       return await this._authRepository.createRepairCompany(
         new RepairCompany(
           repairCompany.name,
           repairCompany.phone,
-          '',
-          repairCompany.address,
-          null,
-          hashedUser
+          userId,
+          repairCompany.address
         )
       );
     } catch (error) {
