@@ -2,12 +2,12 @@ export class User {
   userId?: string | null;
   email: string;
   password?: string;
-  role: string | null;
+  role: string;
 
   constructor(
     email: string,
-    password: string,
-    role: string | null = null,
+    role: string,
+    password: string | null = null,
     userId: string | null = null
   ) {
     this.userId = userId;
