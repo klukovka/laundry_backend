@@ -133,6 +133,8 @@ export class AuthService {
         const secret = process.env.SECRET || 'SECRET';
         const id = await this._getId(user?.userId!, user?.role!);
 
+        console.log(id);
+
         try {
           const token = jwt.sign(
             {
@@ -213,30 +215,26 @@ export class AuthService {
     }
   }
 
-  private async _getId(userId: string, role: string): Promise<string | null> {
-    let result;
+  private async _getId(
+    userId: string,
+    role: string
+  ): Promise<string | null | undefined> {
     switch (role) {
       case Roles.ADMIN:
-        result = userId;
+        return userId;
       case Roles.CLIENT:
-        result = (await this._clientRepository.getClientId(userId))?.clientId;
+        return (await this._clientRepository.getClientId(userId))?.clientId;
       case Roles.LAUNDRY:
-        result = (await this._laundryRepository.getLaundryId(userId))
-          ?.laundryId;
+        return (await this._laundryRepository.getLaundryId(userId))?.laundryId;
       case Roles.EMPLOYEE:
-        result = (await this._employeeRepository.getEmployeeId(userId))
+        return (await this._employeeRepository.getEmployeeId(userId))
           ?.employeeId;
       case Roles.REPAIR_COMPANY:
-        result = (
-          await this._repairCompanyRepository.getRepairCompanyId(userId)
-        )?.repairCompanyId;
+        return (await this._repairCompanyRepository.getRepairCompanyId(userId))
+          ?.repairCompanyId;
       default:
-        result = null;
+        return null;
     }
-    if (result == undefined) {
-      result = null;
-    }
-    return result;
   }
 
   async getByEmail(
