@@ -1,7 +1,7 @@
 export class User {
   userId?: string | null;
   email: string;
-  password?: string;
+  password?: string | null;
   role: string;
 
   constructor(
@@ -12,7 +12,7 @@ export class User {
   ) {
     this.userId = userId;
     this.email = email;
-    this.password = password;
+    this.password = password ?? null;
     this.role = role;
   }
 }

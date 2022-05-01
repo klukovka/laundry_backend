@@ -214,22 +214,29 @@ export class AuthService {
   }
 
   private async _getId(userId: string, role: string): Promise<string | null> {
+    let result;
     switch (role) {
       case Roles.ADMIN:
-        return userId;
+        result = userId;
       case Roles.CLIENT:
-        return (await this._clientRepository.getClientId(userId)).clientId;
+        result = (await this._clientRepository.getClientId(userId))?.clientId;
       case Roles.LAUNDRY:
-        return (await this._laundryRepository.getLaundryId(userId)).laundryId;
+        result = (await this._laundryRepository.getLaundryId(userId))
+          ?.laundryId;
       case Roles.EMPLOYEE:
-        return (await this._employeeRepository.getEmployeeId(userId))
-          .employeeId;
+        result = (await this._employeeRepository.getEmployeeId(userId))
+          ?.employeeId;
       case Roles.REPAIR_COMPANY:
-        return (await this._repairCompanyRepository.getRepairCompanyId(userId))
-          .repairCompanyId;
+        result = (
+          await this._repairCompanyRepository.getRepairCompanyId(userId)
+        )?.repairCompanyId;
       default:
-        return null;
+        result = null;
     }
+    if (result == undefined) {
+      result = null;
+    }
+    return result;
   }
 
   async getByEmail(

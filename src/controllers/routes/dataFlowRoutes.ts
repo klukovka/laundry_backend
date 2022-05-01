@@ -4,6 +4,7 @@ import { DataFlowService } from '../../domain/services/dataFlowService';
 import StatusCodes from '../utils/statusCodes';
 import checkAuth from '../middleware/checkAuth';
 import checkAdmin from '../middleware/checkAdmin';
+import { ErrorMessage } from '../../domain/models/errorMessage';
 
 const router = Router();
 const dataFlowService = new DataFlowService(new DataFlowMongoRepository());
@@ -20,9 +21,9 @@ router.get(
         backups: backups,
       });
     } catch (error: any) {
-      return res.status(StatusCodes.INTERNAL_ERROR).json({
-        error: error,
-      });
+      return res
+        .status(StatusCodes.INTERNAL_ERROR)
+        .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error));
     }
   }
 );
@@ -35,9 +36,9 @@ router.get(
     const backupProcess = dataFlowService.backup();
 
     backupProcess.on('error', (error) => {
-      return res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
-      });
+      return res
+        .status(StatusCodes.INTERNAL_ERROR)
+        .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error));
     });
 
     backupProcess.on('exit', (code, signal) => {
@@ -66,9 +67,9 @@ router.post(
     const restoreProcess = dataFlowService.restore(req.params.backupId);
 
     restoreProcess.on('error', (error) => {
-      return res.status(StatusCodes.INTERNAL_ERROR).json({
-        message: error.message,
-      });
+      return res
+        .status(StatusCodes.INTERNAL_ERROR)
+        .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error));
     });
 
     restoreProcess.on('exit', (code, signal) => {
