@@ -10,7 +10,7 @@ export interface AuthRepository {
   createClient(client: Client): Promise<string>;
   createEmployee(employee: Employee): Promise<string>;
   createRepairCompany(repairCompany: RepairCompany): Promise<string>;
-  deleteUser(id: string, role: string): Promise<void>;
+  deleteUser(id: string): Promise<void>;
   updateUser(user: User): Promise<void>;
   getByEmail(email: string, showPassword: boolean): Promise<User | null>;
   getById(email: string, showPassword: boolean): Promise<User | null>;

@@ -211,6 +211,14 @@ export class AuthService {
     }
   }
 
+  async deleteUser(userId: string): Promise<void> {
+    try {
+      await this._authRepository.deleteUser(userId);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   private async _getId(userId: string, role: string): Promise<string | null> {
     switch (role) {
       case Roles.ADMIN:
