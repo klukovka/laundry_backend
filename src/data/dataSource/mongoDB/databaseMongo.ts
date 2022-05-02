@@ -80,6 +80,8 @@ export class DatabaseMongo {
             await Laundry.deleteMany({ user: userId });
             await Employee.deleteMany({ laundry: laundryId });
             await WashMachine.deleteMany({ laundry: laundryId });
+            await AdditionalMode.deleteMany({ laundry: laundryId });
+            await Mode.deleteMany({ laundry: laundryId });
           case Roles.EMPLOYEE:
             await User.deleteOne({ _id: userId });
             await Employee.deleteMany({ user: userId });
@@ -150,6 +152,41 @@ export class DatabaseMongo {
     }
   }
 
+  async updateLaundry(laundryId: string, options: any): Promise<void> {
+    const laundry = await this.getLaundry(laundryId);
+    if (laundry) {
+      try {
+        await User.updateOne(
+          { _id: options.userId },
+          { $set: { email: options.email } }
+        );
+        await Laundry.updateOne(
+          { _id: laundryId },
+          {
+            $set: {
+              name: options.name,
+              address: options.address,
+              phone: options.phone,
+              maxAmount: options.maxAmount,
+            },
+          }
+        );
+      } catch (error) {
+        throw new Error('Laundry updating is failed');
+      }
+    } else {
+      throw new Error('Laundry is not exist');
+    }
+  }
+
+  async getLaundry(laundryId: string): Promise<any> {
+    try {
+      return await Laundry.findOne({ _id: laundryId });
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
   /// Clients
 
   async createClient(client: any): Promise<string> {
@@ -201,6 +238,58 @@ export class DatabaseMongo {
     }
   }
 
+  async updateEmployee(employeeId: string, options: any): Promise<void> {
+    try {
+      await User.updateOne(
+        { _id: options.userId },
+        { $set: { email: options.email } }
+      );
+      await Employee.updateOne(
+        { _id: employeeId },
+        {
+          $set: {
+            name: options.name,
+            phone: options.phone,
+            birthday: options.birthday,
+          },
+        }
+      );
+    } catch (error) {
+      throw new Error('Employee updating is failed');
+    }
+  }
+
+  async getEmployee(employeeId: string): Promise<any> {
+    try {
+      return await Employee.findOne({ _id: employeeId });
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getEmployees(
+    laundryId: string,
+    page: number,
+    size: number
+  ): Promise<any> {
+    try {
+      return await Employee.find({ laundry: laundryId })
+        .populate('user')
+        .skip(page * size)
+        .limit(size);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getEmployeesAmount(laundryId: string): Promise<number> {
+    try {
+      return await Employee.find({ laundry: laundryId }).count();
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
   /// Repair Companies
 
   async createRepairCompany(repairCompany: any): Promise<string> {
@@ -226,18 +315,232 @@ export class DatabaseMongo {
     }
   }
 
-  // async createAdditionalMode(additionalMode: any): Promise<void> {
-  //   try {
-  //     await new AdditionalMode({
-  //       _id: new mongoose.Types.ObjectId(),
-  //       name: additionalMode.name,
-  //       time: additionalMode.time,
-  //       costs: additionalMode.costs,
-  //     }).save();
-  //   } catch (error) {
-  //     throw new Error('Additional Mode creating is failed');
-  //   }
-  // }
+  /// Wash machines
+
+  async createWashMachine(washMachine: any): Promise<string> {
+    try {
+      const createdWashMachine = await new WashMachine({
+        _id: new mongoose.Types.ObjectId(),
+        model: washMachine.model,
+        manufacturer: washMachine.manufacturer,
+        capacity: washMachine.capacity,
+        powerUsage: washMachine.powerUsage,
+        spinningSpeed: washMachine.spinningSpeed,
+        laundry: washMachine.laundryId,
+        isWorking: washMachine.isWorking,
+        isWashing: washMachine.isWashing,
+        maxTime: washMachine.maxTime,
+        currentTime: washMachine.currentTime,
+      }).save();
+      return createdWashMachine?._id.toString();
+    } catch (error) {
+      throw new Error('WashMachine creating is failed');
+    }
+  }
+
+  async updateWashMachine(washMachine: any): Promise<void> {
+    try {
+      await WashMachine.updateMany(
+        { _id: washMachine.washMachineId },
+        {
+          $set: {
+            model: washMachine.model,
+            manufacturer: washMachine.manufacturer,
+            capacity: washMachine.capacity,
+            powerUsage: washMachine.powerUsage,
+            spinningSpeed: washMachine.spinningSpeed,
+            laundry: washMachine.laundryId,
+            isWorking: washMachine.isWorking,
+            isWashing: washMachine.isWashing,
+            maxTime: washMachine.maxTime,
+            currentTime: washMachine.currentTime,
+          },
+        }
+      );
+    } catch (error) {
+      throw new Error('WashMachine updating is failed');
+    }
+  }
+
+  async deleteWashMachine(washMachineId: string): Promise<void> {
+    try {
+      await WashMachine.deleteOne({ _id: washMachineId });
+    } catch (error) {
+      throw new Error('WashMachine deleting is failed');
+    }
+  }
+
+  async getWashMachineById(washMachineId: string): Promise<any> {
+    try {
+      return await WashMachine.findOne({ _id: washMachineId });
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getWashMachines(
+    laundryId: string,
+    page: number,
+    size: number
+  ): Promise<any> {
+    try {
+      return await WashMachine.find({ laundry: laundryId })
+        .skip(page * size)
+        .limit(size);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getWashMachinesAmount(laundryId: string): Promise<number> {
+    try {
+      return await WashMachine.find({ laundry: laundryId }).count();
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  /// Additional Modes
+
+  async createAdditionalMode(additionalMode: any): Promise<string> {
+    try {
+      const createdAdditionalMode = await new AdditionalMode({
+        _id: new mongoose.Types.ObjectId(),
+        name: additionalMode.name,
+        time: additionalMode.time,
+        costs: additionalMode.costs,
+        laundry: additionalMode.laundryId,
+      }).save();
+      return createdAdditionalMode?._id.toString();
+    } catch (error) {
+      throw new Error('Additional Mode creating is failed');
+    }
+  }
+
+  async updateAdditionalMode(additionalMode: any): Promise<void> {
+    try {
+      await AdditionalMode.updateOne(
+        { _id: additionalMode.additionalModeId },
+        {
+          $set: {
+            name: additionalMode.name,
+            time: additionalMode.time,
+            costs: additionalMode.costs,
+            laundry: additionalMode.laundryId,
+          },
+        }
+      );
+    } catch (error) {
+      throw new Error('Additional Mode updating is failed');
+    }
+  }
+
+  async deleteAdditionalMode(additionalModeId: string): Promise<void> {
+    try {
+      await AdditionalMode.deleteOne({ _id: additionalModeId });
+    } catch (error) {
+      throw new Error('Additional Mode deleting is failed');
+    }
+  }
+
+  async getAdditionalMode(additionalModeId: string): Promise<any> {
+    try {
+      return await AdditionalMode.findOne({ _id: additionalModeId });
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getAdditionalModes(
+    laundryId: string,
+    page: number,
+    size: number
+  ): Promise<any> {
+    try {
+      return await AdditionalMode.find({ laundry: laundryId })
+        .skip(page * size)
+        .limit(size);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getAdditionalModesAmount(laundryId: string): Promise<number> {
+    try {
+      return await AdditionalMode.find({ laundry: laundryId }).count();
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  /// Modes
+
+  async createMode(mode: any): Promise<string> {
+    try {
+      const createdMode = await new Mode({
+        _id: new mongoose.Types.ObjectId(),
+        name: mode.name,
+        time: mode.time,
+        costs: mode.costs,
+        laundry: mode.laundryId,
+      }).save();
+      return createdMode?._id.toString();
+    } catch (error) {
+      throw new Error('Mode creating is failed');
+    }
+  }
+
+  async updateMode(mode: any): Promise<void> {
+    try {
+      await Mode.updateOne(
+        { _id: mode.modeId },
+        {
+          $set: {
+            name: mode.name,
+            time: mode.time,
+            costs: mode.costs,
+            laundry: mode.laundryId,
+          },
+        }
+      );
+    } catch (error) {
+      throw new Error('Mode updating is failed');
+    }
+  }
+
+  async deleteMode(modeId: string): Promise<void> {
+    try {
+      await Mode.deleteOne({ _id: modeId });
+    } catch (error) {
+      throw new Error('Mode deleting is failed');
+    }
+  }
+
+  async getMode(modeId: string): Promise<any> {
+    try {
+      return await Mode.findOne({ _id: modeId });
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getModes(laundryId: string, page: number, size: number): Promise<any> {
+    try {
+      return await Mode.find({ laundry: laundryId })
+        .skip(page * size)
+        .limit(size);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getModesAmount(laundryId: string): Promise<number> {
+    try {
+      return await Mode.find({ laundry: laundryId }).count();
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
 
   // async createMode(mode: any): Promise<void> {
   //   try {
@@ -249,27 +552,6 @@ export class DatabaseMongo {
   //     }).save();
   //   } catch (error) {
   //     throw new Error('Mode creating is failed');
-  //   }
-  // }
-
-  // async createWashMachine(washMachine: any): Promise<void> {
-  //   const laundry = await this.getLaundry(washMachine.laundryId);
-  //   if (laundry) {
-  //     try {
-  //       await new WashMachine({
-  //         _id: new mongoose.Types.ObjectId(),
-  //         model: washMachine.model,
-  //         manufacturer: washMachine.manufacturer,
-  //         capacity: washMachine.capacity,
-  //         powerUsage: washMachine.powerUsage,
-  //         spinningSpeed: washMachine.spinningSpeed,
-  //         laundry: washMachine.laundryId,
-  //       }).save();
-  //     } catch (error) {
-  //       throw new Error('WashMachine creating is failed');
-  //     }
-  //   } else {
-  //     throw new Error('Laundry is not exist');
   //   }
   // }
 
@@ -332,20 +614,6 @@ export class DatabaseMongo {
   //     }
   //   } else {
   //     throw new Error('Laundry has already been deleted!');
-  //   }
-  // }
-
-  // async deleteAdditionalMode(additionalModeId: string): Promise<void> {
-  //   const additionalMode = await this.getAdditionalMode(additionalModeId);
-
-  //   if (additionalMode) {
-  //     try {
-  //       await AdditionalMode.deleteOne({ _id: additionalModeId });
-  //     } catch (error) {
-  //       throw new Error('Additional Mode deleting is failed');
-  //     }
-  //   } else {
-  //     throw new Error('Additional Mode has already been deleted!');
   //   }
   // }
 
@@ -415,38 +683,6 @@ export class DatabaseMongo {
   //     }
   //   } else {
   //     throw new Error('Event has already been deleted!');
-  //   }
-  // }
-
-  // async updateLaundry(laundryId: string, options: any): Promise<void> {
-  //   const laundry = await this.getLaundry(laundryId);
-  //   if (laundry) {
-  //     try {
-  //       await Laundry.updateOne({ _id: laundryId }, { $set: options });
-  //     } catch (error) {
-  //       throw new Error('Laundry updating is failed');
-  //     }
-  //   } else {
-  //     throw new Error('Laundry is not exist');
-  //   }
-  // }
-
-  // async updateAdditionalMode(
-  //   additionalModeId: string,
-  //   options: any
-  // ): Promise<void> {
-  //   const additionalMode = await this.getAdditionalMode(additionalModeId);
-  //   if (additionalMode) {
-  //     try {
-  //       await AdditionalMode.updateOne(
-  //         { _id: additionalModeId },
-  //         { $set: options }
-  //       );
-  //     } catch (error) {
-  //       throw new Error('Additional Mode updating is failed');
-  //     }
-  //   } else {
-  //     throw new Error('Additional Mode is not exist');
   //   }
   // }
 
@@ -570,22 +806,6 @@ export class DatabaseMongo {
   //   }
   // }
 
-  // async getLaundry(laundryId: string): Promise<any> {
-  //   try {
-  //     return await Laundry.findOne({ _id: laundryId });
-  //   } catch (error: any) {
-  //     throw new Error(error.message);
-  //   }
-  // }
-
-  // async getAdditionalMode(additionalModeId: string): Promise<any> {
-  //   try {
-  //     return await AdditionalMode.findOne({ _id: additionalModeId });
-  //   } catch (error: any) {
-  //     throw new Error(error.message);
-  //   }
-  // }
-
   // async getMode(modeId: string): Promise<any> {
   //   try {
   //     return await Mode.findOne({ _id: modeId });
@@ -637,13 +857,6 @@ export class DatabaseMongo {
   //   }
   // }
 
-  // async getEmployee(employeeId: string): Promise<any> {
-  //   try {
-  //     return await Employee.findOne({ _id: employeeId });
-  //   } catch (error: any) {
-  //     throw new Error(error.message);
-  //   }
-  // }
   // async getEmployeeWithInfo(employeeId: string): Promise<any> {
   //   try {
   //     return await Employee.findOne({ _id: employeeId })

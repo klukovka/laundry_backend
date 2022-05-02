@@ -14,6 +14,11 @@ const AdditionalMode = new Schema({
     type: Number,
     required: true,
   },
+  laundry: {
+    type: Schema.Types.ObjectId,
+    ref: 'Laundry',
+    required: true,
+  },
 });
 
 export default model('AdditionalMode', AdditionalMode);

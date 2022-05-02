@@ -24,10 +24,10 @@ export class Employee {
     this.name = name;
     this.phone = phone;
     this.birthday = birthday;
-    this.laundry = laundry;
     this.employeeId = employeeId;
     this.user = user;
     this.laundryId = laundryId;
+    this.laundry = laundry;
     this.userId = userId;
   }
 }
