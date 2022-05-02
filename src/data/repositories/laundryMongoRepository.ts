@@ -5,7 +5,7 @@ import { LaundryRepository } from '../../domain/repositories/laundryRepository';
 import { DatabaseMongo } from '../dataSource/mongoDB/databaseMongo';
 
 export class LaundryMongoRepository implements LaundryRepository {
-  async getLaundryId(userId: string): Promise<Laundry | null> {
+  async getLaundryByUserId(userId: string): Promise<Laundry | null> {
     try {
       const user = await DatabaseMongo.getDB.getLaundryByUserId(userId);
       return this._getLaundry(user);
@@ -14,7 +14,7 @@ export class LaundryMongoRepository implements LaundryRepository {
     }
   }
 
-  async getEmployeeId(userId: string): Promise<Employee | null> {
+  async getEmployeeByUserId(userId: string): Promise<Employee | null> {
     try {
       const user = await DatabaseMongo.getDB.getEmployeeByUserId(userId);
       return this._getEmployee(user);
