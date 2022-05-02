@@ -136,4 +136,34 @@ router.post(
   }
 );
 
+router.post('/forget', (req: Request, res: Response, next: any) => {
+  authService
+    .forgotPassword(req.body.email)
+    .then((_) => {
+      return res.status(StatusCodes.OK).json();
+    })
+    .catch((error) => {
+      return res
+        .status(StatusCodes.INTERNAL_ERROR)
+        .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+    });
+});
+
+router.delete(
+  '/delete-account',
+  checkAuth,
+  (req: Request, res: Response, next: any) => {
+    authService
+      .deleteUser(req.body.userData.userId)
+      .then((userId) => {
+        return res.status(StatusCodes.OK).json();
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
 export default router;

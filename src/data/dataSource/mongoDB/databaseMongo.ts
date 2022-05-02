@@ -70,17 +70,21 @@ export class DatabaseMongo {
           case Roles.ADMIN:
             await User.deleteOne({ _id: userId });
           case Roles.CLIENT:
+            await User.deleteOne({ _id: userId });
             await Client.deleteMany({ user: userId });
           case Roles.LAUNDRY:
             const laundryId = (
               await this.getLaundryByUserId(userId)
             )?._id.toString();
+            await User.deleteOne({ _id: userId });
             await Laundry.deleteMany({ user: userId });
             await Employee.deleteMany({ laundry: laundryId });
             await WashMachine.deleteMany({ laundry: laundryId });
           case Roles.EMPLOYEE:
+            await User.deleteOne({ _id: userId });
             await Employee.deleteMany({ user: userId });
           case Roles.REPAIR_COMPANY:
+            await User.deleteOne({ _id: userId });
             await RepairCompany.deleteMany({ user: userId });
         }
       } catch (error) {

@@ -125,6 +125,7 @@ export class AuthService {
       let result;
       try {
         result = await compare(password, user?.password!);
+        console.log(result);
       } catch (error) {
         throw new Error('Auth failed');
       }
@@ -133,6 +134,7 @@ export class AuthService {
         const secret = process.env.SECRET || 'SECRET';
         const id = await this._getId(user?.userId!, user?.role!);
 
+        console.log(user);
         console.log(id);
 
         try {
@@ -149,6 +151,8 @@ export class AuthService {
             }
           );
 
+          console.log(token);
+
           return {
             token: token,
             userId: user.userId,
@@ -161,7 +165,7 @@ export class AuthService {
         }
       }
 
-      return null;
+      throw new Error('Wrong password');
     } else {
       throw new Error('No such user');
     }
