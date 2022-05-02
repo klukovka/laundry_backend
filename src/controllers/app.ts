@@ -4,6 +4,7 @@ import express, { Application, Request, Response } from 'express';
 import StatusCodes from './utils/statusCodes';
 import dataFlowRoutes from './routes/dataFlowRoutes';
 import authRoutes from './routes/authRoutes';
+import laundryRoutes from './routes/laundryRoutes';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
@@ -50,6 +51,7 @@ app.use(cookieParser());
 
 app.use('/dataFlow', dataFlowRoutes);
 app.use('/auth', authRoutes);
+app.use('/laundry', laundryRoutes);
 
 //endpoint doesn't exist
 app.use((req: Request, res: Response, next: any) => {

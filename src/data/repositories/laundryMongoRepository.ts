@@ -12,9 +12,10 @@ export class LaundryMongoRepository implements LaundryRepository {
     try {
       const laundries = await DatabaseMongo.getDB.getLaundries(page, size);
       const parsedLaundries = new Array<Laundry>();
+
       if (laundries) {
-        for (const laundry in laundries) {
-          parsedLaundries.push(this._getLaundry(laundry));
+        for (let i = 0; i < laundries.length; i++) {
+          parsedLaundries.push(this._getLaundry(laundries[i])!);
         }
       }
       return parsedLaundries;
@@ -42,8 +43,8 @@ export class LaundryMongoRepository implements LaundryRepository {
       );
       const parsedEmployees = new Array<Employee>();
       if (employees) {
-        for (const employee in employees) {
-          parsedEmployees.push(this._getEmployee(employee));
+        for (let i = 0; i < employees.length; i++) {
+          parsedEmployees.push(this._getEmployee(employees[i])!);
         }
       }
       return parsedEmployees;
@@ -105,8 +106,8 @@ export class LaundryMongoRepository implements LaundryRepository {
       );
       const parsedWashMachines = new Array<WashMachine>();
       if (washMachines) {
-        for (const washMachine in washMachines) {
-          parsedWashMachines.push(this._getWashMachine(washMachine));
+        for (let i = 0; i < washMachines.length; i++) {
+          parsedWashMachines.push(this._getWashMachine(washMachines[i])!);
         }
       }
       return parsedWashMachines;
@@ -173,8 +174,10 @@ export class LaundryMongoRepository implements LaundryRepository {
       );
       const parsedAdditionalModes = new Array<AdditionalMode>();
       if (additionalModes) {
-        for (const additionalMode in additionalModes) {
-          parsedAdditionalModes.push(this._getAdditionalMode(additionalMode));
+        for (let i = 0; i < additionalModes.length; i++) {
+          parsedAdditionalModes.push(
+            this._getAdditionalMode(additionalModes[i])!
+          );
         }
       }
       return parsedAdditionalModes;
@@ -233,8 +236,8 @@ export class LaundryMongoRepository implements LaundryRepository {
       const modes = await DatabaseMongo.getDB.getModes(laundryId, page, size);
       const parsedModes = new Array<Mode>();
       if (modes) {
-        for (const mode in modes) {
-          parsedModes.push(this._getMode(mode));
+        for (let i = 0; i < modes.length; i++) {
+          parsedModes.push(this._getMode(modes[i])!);
         }
       }
       return parsedModes;

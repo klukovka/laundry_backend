@@ -11,11 +11,10 @@ export class LaundryService {
     this._laundryRepository = laundryRepository;
   }
 
-  async getLaundries(
-    page: number = 0,
-    size: number = 15
-  ): Promise<PagedModel<Laundry>> {
+  async getLaundries(query: any): Promise<PagedModel<Laundry>> {
     try {
+      const page = Number(query.page ?? 0);
+      const size = Number(query.size ?? 15);
       const totalElements = await this._laundryRepository.getLaundriesAmount();
       const content = await this._laundryRepository.getLaundries(page, size);
       return new PagedModel<Laundry>(
@@ -32,17 +31,27 @@ export class LaundryService {
 
   async updateLaundry(laundry: any): Promise<void> {
     try {
-      await this._laundryRepository.updateLaundry(
-        new Laundry(
-          laundry.name,
-          laundry.address,
-          laundry.phone,
-          laundry.maxAmount,
-          laundry.userData.userId,
-          null,
-          new User(laundry.email, Roles.LAUNDRY)
-        )
-      );
+      const totalWashMachines =
+        await this._laundryRepository.getWashMachinesAmount(
+          laundry.userData.id
+        );
+      if (totalWashMachines < laundry.maxAmount) {
+        await this._laundryRepository.updateLaundry(
+          new Laundry(
+            laundry.name,
+            laundry.address,
+            laundry.phone,
+            laundry.maxAmount,
+            laundry.userData.userId,
+            laundry.userData.id,
+            new User(laundry.email, Roles.LAUNDRY)
+          )
+        );
+      } else {
+        throw new Error(
+          'Max amount of washing machines should be bigger than current amount'
+        );
+      }
     } catch (error) {
       throw error;
     }

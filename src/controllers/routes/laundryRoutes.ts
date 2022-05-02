@@ -16,7 +16,7 @@ router.get(
   checkAdminClient,
   (req: Request, res: Response, next: any) => {
     laundryService
-      .getLaundries(Number(req.query.page), Number(req.query.size))
+      .getLaundries(req.query)
       .then((data) => {
         return res.status(StatusCodes.OK).json(data);
       })
