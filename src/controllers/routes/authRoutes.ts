@@ -2,7 +2,6 @@ import { Router, Request, Response } from 'express';
 import { AuthService } from '../../domain/services/authService';
 import { AuthMongoRepository } from '../../data/repositories/authMongoRepository';
 import { ClientMongoRepository } from '../../data/repositories/clientMongoRepository';
-import { EmployeeMongoRepository } from '../../data/repositories/employeeMongoRepository';
 import { RepairCompanyMongoRepository } from '../../data/repositories/repairCompanyMongoRepository';
 import { LaundryMongoRepository } from '../../data/repositories/laundryMongoRepository';
 import { User } from '../../domain/models/user';
@@ -17,7 +16,6 @@ const router = Router();
 const authService = new AuthService(
   new AuthMongoRepository(),
   new ClientMongoRepository(),
-  new EmployeeMongoRepository(),
   new RepairCompanyMongoRepository(),
   new LaundryMongoRepository()
 );
@@ -155,7 +153,28 @@ router.delete(
   (req: Request, res: Response, next: any) => {
     authService
       .deleteUser(req.body.userData.userId)
-      .then((userId) => {
+      .then((_) => {
+        return res.status(StatusCodes.OK).json();
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.patch(
+  '/update-password',
+  checkAuth,
+  (req: Request, res: Response, next: any) => {
+    authService
+      .updatePassword(
+        req.body.userData.email,
+        req.body.password,
+        req.body.newPassword
+      )
+      .then((_) => {
         return res.status(StatusCodes.OK).json();
       })
       .catch((error) => {

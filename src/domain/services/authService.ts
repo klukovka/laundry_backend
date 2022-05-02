@@ -121,7 +121,6 @@ export class AuthService {
       let result;
       try {
         result = await compare(password, user?.password!);
-        console.log(result);
       } catch (error) {
         throw new Error('Auth failed');
       }
@@ -129,9 +128,6 @@ export class AuthService {
       if (result) {
         const secret = process.env.SECRET || 'SECRET';
         const id = await this._getId(user?.userId!, user?.role!);
-
-        console.log(user);
-        console.log(id);
 
         try {
           const token = jwt.sign(
@@ -147,8 +143,6 @@ export class AuthService {
             }
           );
 
-          console.log(token);
-
           return {
             token: token,
             userId: user.userId,
@@ -159,6 +153,34 @@ export class AuthService {
         } catch (error) {
           throw error;
         }
+      }
+
+      throw new Error('Wrong password');
+    } else {
+      throw new Error('No such user');
+    }
+  }
+
+  async updatePassword(
+    email: string,
+    password: string,
+    newPassword: string
+  ): Promise<any> {
+    const user = await this.getByEmail(email, true);
+    if (user) {
+      let result;
+      try {
+        result = await compare(password, user?.password!);
+      } catch (error) {
+        throw new Error('Auth failed');
+      }
+
+      if (result) {
+        const hashedPassword = await hash(newPassword, 10);
+        await this._authRepository.updateUser(
+          new User(user.email, user.role, hashedPassword, user.userId)
+        );
+        return;
       }
 
       throw new Error('Wrong password');
