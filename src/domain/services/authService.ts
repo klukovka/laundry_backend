@@ -10,27 +10,23 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import Roles from '../../controllers/utils/roles';
 import { ClientRepository } from '../repositories/clientRepository';
-import { EmployeeRepository } from '../repositories/employeeRepository';
 import { RepairCompanyRepository } from '../repositories/repairCompanyRepository';
 import { LaundryRepository } from '../repositories/laundryRepository';
 
 export class AuthService {
   private _authRepository: AuthRepository;
   private _clientRepository: ClientRepository;
-  private _employeeRepository: EmployeeRepository;
   private _repairCompanyRepository: RepairCompanyRepository;
   private _laundryRepository: LaundryRepository;
 
   constructor(
     authRepository: AuthRepository,
     clientRepository: ClientRepository,
-    employeeRepository: EmployeeRepository,
     repairCompanyRepository: RepairCompanyRepository,
     laundryRepository: LaundryRepository
   ) {
     this._authRepository = authRepository;
     this._clientRepository = clientRepository;
-    this._employeeRepository = employeeRepository;
     this._repairCompanyRepository = repairCompanyRepository;
     this._laundryRepository = laundryRepository;
   }
@@ -231,7 +227,7 @@ export class AuthService {
       case Roles.LAUNDRY:
         return (await this._laundryRepository.getLaundryId(userId))?.laundryId;
       case Roles.EMPLOYEE:
-        return (await this._employeeRepository.getEmployeeId(userId))
+        return (await this._laundryRepository.getEmployeeId(userId))
           ?.employeeId;
       case Roles.REPAIR_COMPANY:
         return (await this._repairCompanyRepository.getRepairCompanyId(userId))
