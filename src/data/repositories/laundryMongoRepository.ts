@@ -8,6 +8,27 @@ import { LaundryRepository } from '../../domain/repositories/laundryRepository';
 import { DatabaseMongo } from '../dataSource/mongoDB/databaseMongo';
 
 export class LaundryMongoRepository implements LaundryRepository {
+  async getLaundries(page: number, size: number): Promise<Laundry[]> {
+    try {
+      const laundries = await DatabaseMongo.getDB.getLaundries(page, size);
+      const parsedLaundries = new Array<Laundry>();
+      if (laundries) {
+        for (const laundry in laundries) {
+          parsedLaundries.push(this._getLaundry(laundry));
+        }
+      }
+      return parsedLaundries;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async getLaundriesAmount(): Promise<number> {
+    try {
+      return await DatabaseMongo.getDB.getLaundriesAmount();
+    } catch (error) {
+      throw error;
+    }
+  }
   async getEmployees(
     laundryId: string,
     page: number,

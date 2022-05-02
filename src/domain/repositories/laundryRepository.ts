@@ -7,6 +7,8 @@ import { Mode } from '../models/mode';
 export interface LaundryRepository {
   getLaundryByUserId(userId: string): Promise<Laundry | null>;
   updateLaundry(laundry: Laundry): Promise<void>;
+  getLaundries(page: number, size: number): Promise<Laundry[]>;
+  getLaundriesAmount(): Promise<number>;
 
   getEmployeeByUserId(userId: string): Promise<Employee | null>;
   updateEmployee(employee: Employee): Promise<void>;

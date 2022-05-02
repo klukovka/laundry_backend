@@ -187,6 +187,25 @@ export class DatabaseMongo {
     }
   }
 
+  async getLaundries(page: number, size: number): Promise<any> {
+    try {
+      return await Laundry.find()
+        .populate('user')
+        .skip(page * size)
+        .limit(size);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getLaundriesAmount(): Promise<number> {
+    try {
+      return await Laundry.find().count();
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
   /// Clients
 
   async createClient(client: any): Promise<string> {
