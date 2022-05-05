@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import { LaundryMongoRepository } from '../../data/repositories/laundryMongoRepository';
 import { LaundryService } from '../../domain/services/laundryService';
 import checkAuth from '../middleware/checkAuth';
+import checkEmployee from '../middleware/checkEmployee';
 import checkAdminClient from '../middleware/checkAdminClient';
 import checkLaundry from '../middleware/checkLaundry';
 import StatusCodes from '../utils/statusCodes';
@@ -11,50 +12,14 @@ const router = Router();
 const laundryService = new LaundryService(new LaundryMongoRepository());
 
 router.get(
-  '/all',
-  checkAuth,
-  checkAdminClient,
-  (req: Request, res: Response, next: any) => {
-    laundryService
-      .getLaundries(req.query)
-      .then((data) => {
-        return res.status(StatusCodes.OK).json(data);
-      })
-      .catch((error) => {
-        return res
-          .status(StatusCodes.INTERNAL_ERROR)
-          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
-      });
-  }
-);
-
-router.get(
   '/personal-info',
   checkAuth,
-  checkLaundry,
+  checkEmployee,
   (req: Request, res: Response, next: any) => {
     laundryService
-      .getLaundryByUserId(req.body.userData.userId)
+      .getEmployeeByUserId(req.body.userData.userId)
       .then((data) => {
         return res.status(StatusCodes.OK).json(data);
-      })
-      .catch((error) => {
-        return res
-          .status(StatusCodes.INTERNAL_ERROR)
-          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
-      });
-  }
-);
-
-router.put(
-  '/update-laundry',
-  checkAuth,
-  checkLaundry,
-  (req: Request, res: Response, next: any) => {
-    laundryService
-      .updateLaundry(req.body)
-      .then((_) => {
-        return res.status(StatusCodes.OK).json();
       })
       .catch((error) => {
         return res
@@ -65,14 +30,14 @@ router.put(
 );
 
 router.get(
-  '/all-employees',
+  '/update-employee',
   checkAuth,
-  checkAdminClient,
+  checkEmployee,
   (req: Request, res: Response, next: any) => {
     laundryService
-      .getLaundryEmployees(req.body.userData.id, req.query)
-      .then((data) => {
-        return res.status(StatusCodes.OK).json(data);
+      .updateEmployee(req.body)
+      .then((_) => {
+        return res.status(StatusCodes.OK);
       })
       .catch((error) => {
         return res
