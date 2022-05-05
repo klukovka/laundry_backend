@@ -152,6 +152,14 @@ export class DatabaseMongo {
     }
   }
 
+  async getLaundryById(laundryId: string): Promise<any> {
+    try {
+      return await Laundry.findOne({ _id: laundryId }).populate('user');
+    } catch (error: any) {
+      throw new Error('Laundry is not exists');
+    }
+  }
+
   async updateLaundry(laundryId: string, options: any): Promise<void> {
     const laundry = await this.getLaundry(laundryId);
     if (laundry) {
@@ -368,7 +376,6 @@ export class DatabaseMongo {
             capacity: washMachine.capacity,
             powerUsage: washMachine.powerUsage,
             spinningSpeed: washMachine.spinningSpeed,
-            laundry: washMachine.laundryId,
             isWorking: washMachine.isWorking,
             isWashing: washMachine.isWashing,
             maxTime: washMachine.maxTime,

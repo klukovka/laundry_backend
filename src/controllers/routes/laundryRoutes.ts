@@ -4,6 +4,8 @@ import { LaundryService } from '../../domain/services/laundryService';
 import checkAuth from '../middleware/checkAuth';
 import checkAdminClient from '../middleware/checkAdminClient';
 import checkLaundry from '../middleware/checkLaundry';
+import checkLaundryEmployee from '../middleware/checkLaundryEmployee';
+import saveLaundryId from '../middleware/saveLaundryId';
 import StatusCodes from '../utils/statusCodes';
 import { ErrorMessage } from '../../domain/models/errorMessage';
 
@@ -67,10 +69,104 @@ router.put(
 router.get(
   '/all-employees',
   checkAuth,
-  checkAdminClient,
+  checkLaundry,
   (req: Request, res: Response, next: any) => {
     laundryService
       .getLaundryEmployees(req.body.userData.id, req.query)
+      .then((data) => {
+        return res.status(StatusCodes.OK).json(data);
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.post(
+  '/create-wash-machine',
+  checkAuth,
+  checkLaundryEmployee,
+  saveLaundryId,
+  (req: Request, res: Response, next: any) => {
+    laundryService
+      .createWashMachine(req.body.userData.laundryId, req.body)
+      .then((data) => {
+        return res.status(StatusCodes.CREATED).json({
+          washMachineId: data,
+        });
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.put(
+  '/update-wash-machine',
+  checkAuth,
+  checkLaundryEmployee,
+  (req: Request, res: Response, next: any) => {
+    laundryService
+      .updateWashMachine(req.body)
+      .then((data) => {
+        return res.status(StatusCodes.OK);
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.delete(
+  '/delete-wash-machine',
+  checkAuth,
+  checkLaundryEmployee,
+  (req: Request, res: Response, next: any) => {
+    laundryService
+      .deleteWashMachine(req.body.washMachineId)
+      .then((data) => {
+        return res.status(StatusCodes.OK);
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.get(
+  '/all-washing-machines-laundry',
+  checkAuth,
+  checkLaundryEmployee,
+  saveLaundryId,
+  (req: Request, res: Response, next: any) => {
+    laundryService
+      .getLaundryWashMachines(req.body.userData.laundryId, req.query)
+      .then((data) => {
+        return res.status(StatusCodes.OK).json(data);
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.get(
+  '/all-washing-machines-users',
+  checkAuth,
+  checkAdminClient,
+  (req: Request, res: Response, next: any) => {
+    laundryService
+      .getLaundryWashMachines(req.body.laundryId, req.query)
       .then((data) => {
         return res.status(StatusCodes.OK).json(data);
       })
