@@ -6,6 +6,7 @@ import Roles from '../../controllers/utils/roles';
 import { Employee } from '../models/employee';
 import { WashMachine } from '../models/washMachine';
 import { AdditionalMode } from '../models/additionalMode';
+import { Mode } from '../models/mode';
 
 export class LaundryService {
   private _laundryRepository: LaundryRepository;
@@ -282,6 +283,47 @@ export class LaundryService {
         totalElements,
         content
       );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async createMode(laundryId: string, mode: any): Promise<string | null> {
+    try {
+      return await this._laundryRepository.createMode(
+        new Mode(mode.name, mode.time, mode.costs, laundryId)
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateMode(mode: any): Promise<void> {
+    try {
+      await this._laundryRepository.updateMode(
+        new Mode(mode.name, mode.time, mode.costs, '', mode.modeId)
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteMode(modeId: string): Promise<void> {
+    try {
+      await this._laundryRepository.deleteMode(modeId);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getModes(laundryId: string): Promise<PagedModel<Mode>> {
+    try {
+      const totalElements = await this._laundryRepository.getModesAmount(
+        laundryId
+      );
+      const content = await this._laundryRepository.getModes(laundryId);
+
+      return new PagedModel<Mode>(0, totalElements, 1, totalElements, content);
     } catch (error) {
       throw error;
     }

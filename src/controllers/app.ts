@@ -5,6 +5,7 @@ import StatusCodes from './utils/statusCodes';
 import dataFlowRoutes from './routes/dataFlowRoutes';
 import authRoutes from './routes/authRoutes';
 import laundryRoutes from './routes/laundryRoutes';
+import employeeRoutes from './routes/employeeRoutes';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
@@ -52,6 +53,7 @@ app.use(cookieParser());
 app.use('/dataFlow', dataFlowRoutes);
 app.use('/auth', authRoutes);
 app.use('/laundry', laundryRoutes);
+app.use('/employee', employeeRoutes);
 
 //endpoint doesn't exist
 app.use((req: Request, res: Response, next: any) => {

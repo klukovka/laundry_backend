@@ -254,4 +254,80 @@ router.get(
   }
 );
 
+router.post(
+  '/create-mode',
+  checkAuth,
+  checkLaundryEmployee,
+  saveLaundryId,
+  (req: Request, res: Response, next: any) => {
+    laundryService
+      .createMode(req.body.userData.laundryId, req.body)
+      .then((data) => {
+        return res.status(StatusCodes.CREATED).json({
+          modeId: data,
+        });
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.put(
+  '/update-mode',
+  checkAuth,
+  checkLaundryEmployee,
+  (req: Request, res: Response, next: any) => {
+    laundryService
+      .updateMode(req.body)
+      .then((data) => {
+        return res.status(StatusCodes.OK);
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.delete(
+  '/delete-mode',
+  checkAuth,
+  checkLaundryEmployee,
+  (req: Request, res: Response, next: any) => {
+    laundryService
+      .deleteMode(req.body.modeId)
+      .then((data) => {
+        return res.status(StatusCodes.OK);
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.get(
+  '/all-modes',
+  checkAuth,
+  checkLaundryEmployee,
+  saveLaundryId,
+  (req: Request, res: Response, next: any) => {
+    laundryService
+      .getModes(req.body.userData.laundryId)
+      .then((data) => {
+        return res.status(StatusCodes.OK).json(data);
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
 export default router;
