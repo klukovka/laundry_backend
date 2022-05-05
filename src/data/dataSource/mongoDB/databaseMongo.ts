@@ -452,7 +452,6 @@ export class DatabaseMongo {
             name: additionalMode.name,
             time: additionalMode.time,
             costs: additionalMode.costs,
-            laundry: additionalMode.laundryId,
           },
         }
       );
@@ -477,15 +476,9 @@ export class DatabaseMongo {
     }
   }
 
-  async getAdditionalModes(
-    laundryId: string,
-    page: number,
-    size: number
-  ): Promise<any> {
+  async getAdditionalModes(laundryId: string): Promise<any> {
     try {
-      return await AdditionalMode.find({ laundry: laundryId })
-        .skip(page * size)
-        .limit(size);
+      return await AdditionalMode.find({ laundry: laundryId });
     } catch (error: any) {
       throw new Error(error.message);
     }
@@ -525,7 +518,6 @@ export class DatabaseMongo {
             name: mode.name,
             time: mode.time,
             costs: mode.costs,
-            laundry: mode.laundryId,
           },
         }
       );
@@ -550,11 +542,9 @@ export class DatabaseMongo {
     }
   }
 
-  async getModes(laundryId: string, page: number, size: number): Promise<any> {
+  async getModes(laundryId: string): Promise<any> {
     try {
-      return await Mode.find({ laundry: laundryId })
-        .skip(page * size)
-        .limit(size);
+      return await Mode.find({ laundry: laundryId });
     } catch (error: any) {
       throw new Error(error.message);
     }

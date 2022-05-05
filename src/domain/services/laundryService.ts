@@ -240,4 +240,50 @@ export class LaundryService {
       throw error;
     }
   }
+
+  async updateAdditionalMode(additionalMode: any): Promise<void> {
+    try {
+      await this._laundryRepository.updateAdditionalMode(
+        new AdditionalMode(
+          additionalMode.name,
+          additionalMode.time,
+          additionalMode.costs,
+          '',
+          additionalMode.additionalModeId
+        )
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteAdditionalMode(additionalModeId: string): Promise<void> {
+    try {
+      await this._laundryRepository.deleteAdditionalMode(additionalModeId);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getAdditionalModes(
+    laundryId: string
+  ): Promise<PagedModel<AdditionalMode>> {
+    try {
+      const totalElements =
+        await this._laundryRepository.getAdditionalModesAmount(laundryId);
+      const content = await this._laundryRepository.getAdditionalModes(
+        laundryId
+      );
+
+      return new PagedModel<AdditionalMode>(
+        0,
+        totalElements,
+        1,
+        totalElements,
+        content
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
 }

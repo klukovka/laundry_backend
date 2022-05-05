@@ -178,4 +178,80 @@ router.get(
   }
 );
 
+router.post(
+  '/create-additional-mode',
+  checkAuth,
+  checkLaundryEmployee,
+  saveLaundryId,
+  (req: Request, res: Response, next: any) => {
+    laundryService
+      .createAdditionalMode(req.body.userData.laundryId, req.body)
+      .then((data) => {
+        return res.status(StatusCodes.CREATED).json({
+          additionalModeId: data,
+        });
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.put(
+  '/update-additional-mode',
+  checkAuth,
+  checkLaundryEmployee,
+  (req: Request, res: Response, next: any) => {
+    laundryService
+      .updateAdditionalMode(req.body)
+      .then((data) => {
+        return res.status(StatusCodes.OK);
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.delete(
+  '/delete-additional-mode',
+  checkAuth,
+  checkLaundryEmployee,
+  (req: Request, res: Response, next: any) => {
+    laundryService
+      .deleteAdditionalMode(req.body.additionalModeId)
+      .then((data) => {
+        return res.status(StatusCodes.OK);
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.get(
+  '/all-additional-modes',
+  checkAuth,
+  checkLaundryEmployee,
+  saveLaundryId,
+  (req: Request, res: Response, next: any) => {
+    laundryService
+      .getAdditionalModes(req.body.userData.laundryId)
+      .then((data) => {
+        return res.status(StatusCodes.OK).json(data);
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
 export default router;

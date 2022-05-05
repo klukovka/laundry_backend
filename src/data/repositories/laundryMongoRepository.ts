@@ -169,16 +169,10 @@ export class LaundryMongoRepository implements LaundryRepository {
     }
   }
 
-  async getAdditionalModes(
-    laundryId: string,
-    page: number,
-    size: number
-  ): Promise<AdditionalMode[]> {
+  async getAdditionalModes(laundryId: string): Promise<AdditionalMode[]> {
     try {
       const additionalModes = await DatabaseMongo.getDB.getAdditionalModes(
-        laundryId,
-        page,
-        size
+        laundryId
       );
       const parsedAdditionalModes = new Array<AdditionalMode>();
       if (additionalModes) {
@@ -235,13 +229,9 @@ export class LaundryMongoRepository implements LaundryRepository {
     }
   }
 
-  async getModes(
-    laundryId: string,
-    page: number,
-    size: number
-  ): Promise<Mode[]> {
+  async getModes(laundryId: string): Promise<Mode[]> {
     try {
-      const modes = await DatabaseMongo.getDB.getModes(laundryId, page, size);
+      const modes = await DatabaseMongo.getDB.getModes(laundryId);
       const parsedModes = new Array<Mode>();
       if (modes) {
         for (let i = 0; i < modes.length; i++) {

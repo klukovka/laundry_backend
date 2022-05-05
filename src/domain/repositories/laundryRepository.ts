@@ -38,17 +38,13 @@ export interface LaundryRepository {
   getAdditionalModeById(
     additionalModeId: string
   ): Promise<AdditionalMode | null>;
-  getAdditionalModes(
-    laundryId: string,
-    page: number,
-    size: number
-  ): Promise<AdditionalMode[]>;
+  getAdditionalModes(laundryId: string): Promise<AdditionalMode[]>;
   getAdditionalModesAmount(laundryId: string): Promise<number>;
 
   createMode(mode: Mode): Promise<string | null>;
   updateMode(mode: Mode): Promise<void>;
   deleteMode(modeId: string): Promise<void>;
   getModeById(modeId: string): Promise<Mode | null>;
-  getModes(laundryId: string, page: number, size: number): Promise<Mode[]>;
+  getModes(laundryId: string): Promise<Mode[]>;
   getModesAmount(laundryId: string): Promise<number>;
 }
