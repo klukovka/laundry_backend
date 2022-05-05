@@ -1,36 +1,30 @@
-import { RepairCompany } from './repairCompany';
+import { RepairProduct } from './repairProduct';
 import { WashMachine } from './washMachine';
 
 export class RepairEvent {
   repairEventId?: string | null;
   costs: number;
-  description: string;
-  type: string;
   date: Date;
   washMachineId: string;
   washMachine: WashMachine | null;
-  repairCompanyId: string;
-  repairCompany: RepairCompany | null;
+  repairProductId: string;
+  repairProduct: RepairProduct | null;
 
   constructor(
     costs: number,
-    description: string,
-    type: string,
     date: Date,
     washMachineId: string,
-    repairCompanyId: string,
+    repairProductId: string,
     repairEventId: string | null = null,
-    repairCompany: RepairCompany | null = null,
+    repairProduct: RepairProduct | null = null,
     washMachine: WashMachine | null = null
   ) {
     this.costs = costs;
-    this.description = description;
-    this.type = type;
     this.date = date;
     this.washMachineId = washMachineId;
-    this.repairCompanyId = repairCompanyId;
+    this.repairProductId = repairProductId;
     this.repairEventId = repairEventId;
-    this.repairCompany = repairCompany;
+    this.repairProduct = repairProduct;
     this.washMachine = washMachine;
   }
 }

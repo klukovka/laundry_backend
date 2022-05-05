@@ -1,25 +1,25 @@
 import { Schema, model } from 'mongoose';
 
-const RepairEvent = new Schema({
+const RepairProduct = new Schema({
   _id: Schema.Types.ObjectId,
   costs: {
     type: Number,
     required: true,
   },
-  date: {
-    type: Date,
+
+  description: {
+    type: String,
     required: true,
   },
-  washMachine: {
-    type: Schema.Types.ObjectId,
-    ref: 'WashMachine',
+  type: {
+    type: String,
     required: true,
   },
-  repairProduct: {
+  repairCompany: {
     type: Schema.Types.ObjectId,
-    ref: 'RepairProduct',
+    ref: 'RepairCompany',
     required: true,
   },
 });
 
-export default model('RepairEvent', RepairEvent);
+export default model('RepairProduct', RepairProduct);
