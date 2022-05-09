@@ -3,8 +3,7 @@ import { LaundryMongoRepository } from '../../data/repositories/laundryMongoRepo
 import { LaundryService } from '../../domain/services/laundryService';
 import checkAuth from '../middleware/checkAuth';
 import checkEmployee from '../middleware/checkEmployee';
-import checkAdminClient from '../middleware/checkAdminClient';
-import checkLaundry from '../middleware/checkLaundry';
+import checkAdmin from '../middleware/checkAdmin';
 import StatusCodes from '../utils/statusCodes';
 import { ErrorMessage } from '../../domain/models/errorMessage';
 
@@ -36,6 +35,24 @@ router.get(
   (req: Request, res: Response, next: any) => {
     laundryService
       .updateEmployee(req.body)
+      .then((_) => {
+        return res.status(StatusCodes.OK);
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.get(
+  '/all-employees',
+  checkAuth,
+  checkEmployee,
+  (req: Request, res: Response, next: any) => {
+    laundryService
+      .getAllEmployees(req.query)
       .then((_) => {
         return res.status(StatusCodes.OK);
       })

@@ -357,6 +357,25 @@ export class DatabaseMongo {
     }
   }
 
+  async getAllEmployees(page: number, size: number): Promise<any> {
+    try {
+      return await Employee.find()
+        .populate('user')
+        .skip(page * size)
+        .limit(size);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getAllEmployeesAmount(): Promise<number> {
+    try {
+      return await Employee.find().count();
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
   /// Repair Companies
 
   async createRepairCompany(repairCompany: any): Promise<string> {

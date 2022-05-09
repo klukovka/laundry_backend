@@ -6,6 +6,7 @@ import dataFlowRoutes from './routes/dataFlowRoutes';
 import authRoutes from './routes/authRoutes';
 import laundryRoutes from './routes/laundryRoutes';
 import employeeRoutes from './routes/employeeRoutes';
+import clientRoutes from './routes/clientRoutes';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
@@ -54,6 +55,7 @@ app.use('/dataFlow', dataFlowRoutes);
 app.use('/auth', authRoutes);
 app.use('/laundry', laundryRoutes);
 app.use('/employee', employeeRoutes);
+app.use('/client', clientRoutes);
 
 //endpoint doesn't exist
 app.use((req: Request, res: Response, next: any) => {

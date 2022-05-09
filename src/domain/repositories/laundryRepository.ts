@@ -20,6 +20,8 @@ export interface LaundryRepository {
     size: number
   ): Promise<Employee[]>;
   getEmployeesAmount(laundryId: string): Promise<number>;
+  getAllEmployees(page: number, size: number): Promise<Employee[]>;
+  getAllEmployeesAmount(): Promise<number>;
 
   createWashMachine(washMachine: WashMachine): Promise<string | null>;
   updateWashMachine(washMachine: WashMachine): Promise<void>;

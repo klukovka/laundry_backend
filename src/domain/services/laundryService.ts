@@ -123,6 +123,25 @@ export class LaundryService {
     }
   }
 
+  async getAllEmployees(query: any): Promise<PagedModel<Employee>> {
+    try {
+      const page = Number(query.page ?? 0);
+      const size = Number(query.size ?? 15);
+      const totalElements =
+        await this._laundryRepository.getAllEmployeesAmount();
+      const content = await this._laundryRepository.getAllEmployees(page, size);
+      return new PagedModel<Employee>(
+        page,
+        size,
+        Math.ceil(totalElements / size),
+        totalElements,
+        content
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async createWashMachine(
     laundryId: string,
     washMachine: any
