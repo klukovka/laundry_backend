@@ -148,7 +148,7 @@ router.get(
   saveLaundryId,
   (req: Request, res: Response, next: any) => {
     laundryService
-      .getLaundryWashMachines(req.body.userData.laundryId, req.query)
+      .getLaundryWashMachines(req.body.userData.id, req.query)
       .then((data) => {
         return res.status(StatusCodes.OK).json(data);
       })
@@ -200,12 +200,12 @@ router.post(
 );
 
 router.put(
-  '/update-additional-mode',
+  '/update-additional-mode/:additionalModeId',
   checkAuth,
   checkLaundryEmployee,
   (req: Request, res: Response, next: any) => {
     laundryService
-      .updateAdditionalMode(req.body)
+      .updateAdditionalMode(req.params.additionalModeId, req.body)
       .then((data) => {
         return res.status(StatusCodes.OK);
       })
@@ -218,12 +218,12 @@ router.put(
 );
 
 router.delete(
-  '/delete-additional-mode',
+  '/delete-additional-mode/:additionalModeId',
   checkAuth,
   checkLaundryEmployee,
   (req: Request, res: Response, next: any) => {
     laundryService
-      .deleteAdditionalMode(req.body.additionalModeId)
+      .deleteAdditionalMode(req.params.additionalModeId)
       .then((data) => {
         return res.status(StatusCodes.OK);
       })
@@ -276,12 +276,12 @@ router.post(
 );
 
 router.put(
-  '/update-mode',
+  '/update-mode/:modeId',
   checkAuth,
   checkLaundryEmployee,
   (req: Request, res: Response, next: any) => {
     laundryService
-      .updateMode(req.body)
+      .updateMode(req.params.modeId, req.body)
       .then((data) => {
         return res.status(StatusCodes.OK);
       })
@@ -294,12 +294,12 @@ router.put(
 );
 
 router.delete(
-  '/delete-mode',
+  '/delete-mode:modeId',
   checkAuth,
   checkLaundryEmployee,
   (req: Request, res: Response, next: any) => {
     laundryService
-      .deleteMode(req.body.modeId)
+      .deleteMode(req.params.modeId)
       .then((data) => {
         return res.status(StatusCodes.OK);
       })

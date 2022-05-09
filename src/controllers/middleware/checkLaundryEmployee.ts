@@ -6,6 +6,7 @@ import StatusCodes from '../utils/statusCodes';
 export default (req: Request, res: Response, next: any) => {
   try {
     const role = req.body.userData.role;
+
     if (role == Roles.EMPLOYEE || role == Roles.LAUNDRY) {
       next();
     } else {

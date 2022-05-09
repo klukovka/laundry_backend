@@ -40,6 +40,7 @@ export class LaundryMongoRepository implements LaundryRepository {
   async getLaundries(page: number, size: number): Promise<Laundry[]> {
     try {
       const laundries = await DatabaseMongo.getDB.getLaundries(page, size);
+      console.log(laundries);
       const parsedLaundries = new Array<Laundry>();
 
       if (laundries) {

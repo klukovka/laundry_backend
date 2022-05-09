@@ -268,7 +268,10 @@ export class LaundryService {
     }
   }
 
-  async updateAdditionalMode(additionalMode: any): Promise<void> {
+  async updateAdditionalMode(
+    additionalModeId: string,
+    additionalMode: any
+  ): Promise<void> {
     try {
       await this._laundryRepository.updateAdditionalMode(
         new AdditionalMode(
@@ -276,7 +279,7 @@ export class LaundryService {
           additionalMode.time,
           additionalMode.costs,
           '',
-          additionalMode.additionalModeId
+          additionalModeId
         )
       );
     } catch (error) {
@@ -324,10 +327,10 @@ export class LaundryService {
     }
   }
 
-  async updateMode(mode: any): Promise<void> {
+  async updateMode(modeId: string, mode: any): Promise<void> {
     try {
       await this._laundryRepository.updateMode(
-        new Mode(mode.name, mode.time, mode.costs, '', mode.modeId)
+        new Mode(mode.name, mode.time, mode.costs, '', modeId)
       );
     } catch (error) {
       throw error;
