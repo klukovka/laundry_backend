@@ -100,7 +100,14 @@ export class LaundryMongoRepository implements LaundryRepository {
 
   async updateWashMachine(washMachine: WashMachine): Promise<void> {
     try {
-      await DatabaseMongo.getDB.updateWashMachine(washMachine);
+      await DatabaseMongo.getDB.updateWashMachine(washMachine.washMachineId!, {
+        model: washMachine.model,
+        manufacturer: washMachine.manufacturer,
+        capacity: washMachine.capacity,
+        powerUsage: washMachine.powerUsage,
+        spinningSpeed: washMachine.spinningSpeed,
+        maxTime: washMachine.maxTime,
+      });
     } catch (error) {
       throw error;
     }

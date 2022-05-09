@@ -106,14 +106,14 @@ router.post(
 );
 
 router.put(
-  '/update-wash-machine',
+  '/update-wash-machine/:washMachineId',
   checkAuth,
   checkLaundryEmployee,
   (req: Request, res: Response, next: any) => {
     laundryService
-      .updateWashMachine(req.body)
-      .then((data) => {
-        return res.status(StatusCodes.OK);
+      .updateWashMachine(req.params.washMachineId, req.body)
+      .then((_) => {
+        return res.status(StatusCodes.OK).json();
       })
       .catch((error) => {
         return res
@@ -124,14 +124,14 @@ router.put(
 );
 
 router.delete(
-  '/delete-wash-machine',
+  '/delete-wash-machine/:washMachineId',
   checkAuth,
   checkLaundryEmployee,
   (req: Request, res: Response, next: any) => {
     laundryService
-      .deleteWashMachine(req.body.washMachineId)
+      .deleteWashMachine(req.params.washMachineId)
       .then((data) => {
-        return res.status(StatusCodes.OK);
+        return res.status(StatusCodes.OK).json();
       })
       .catch((error) => {
         return res
@@ -161,12 +161,12 @@ router.get(
 );
 
 router.get(
-  '/all-washing-machines-users',
+  '/all-washing-machines-users/:laundryId',
   checkAuth,
   checkAdminClient,
   (req: Request, res: Response, next: any) => {
     laundryService
-      .getLaundryWashMachines(req.body.laundryId, req.query)
+      .getLaundryWashMachines(req.params.laundryId, req.query)
       .then((data) => {
         return res.status(StatusCodes.OK).json(data);
       })

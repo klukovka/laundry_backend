@@ -56,7 +56,6 @@ export class DatabaseMongo {
       }).save();
       return createdUser?._id.toString();
     } catch (error) {
-      console.log(error);
       throw new Error('User creating is failed');
     }
   }
@@ -424,22 +423,15 @@ export class DatabaseMongo {
     }
   }
 
-  async updateWashMachine(washMachine: any): Promise<void> {
+  async updateWashMachine(
+    washMachineId: string,
+    washMachine: any
+  ): Promise<void> {
     try {
-      await WashMachine.updateMany(
-        { _id: washMachine.washMachineId },
+      await WashMachine.updateOne(
+        { _id: washMachineId },
         {
-          $set: {
-            model: washMachine.model,
-            manufacturer: washMachine.manufacturer,
-            capacity: washMachine.capacity,
-            powerUsage: washMachine.powerUsage,
-            spinningSpeed: washMachine.spinningSpeed,
-            isWorking: washMachine.isWorking,
-            isWashing: washMachine.isWashing,
-            maxTime: washMachine.maxTime,
-            currentTime: washMachine.currentTime,
-          },
+          $set: washMachine,
         }
       );
     } catch (error) {

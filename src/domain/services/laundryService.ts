@@ -150,7 +150,7 @@ export class LaundryService {
       const washMachinesAmount =
         await this._laundryRepository.getWashMachinesAmount(laundryId);
       const laundry = await this._laundryRepository.getLaundryById(laundryId);
-      if (laundry?.maxAmount ?? 0 < washMachinesAmount) {
+      if ((laundry?.maxAmount ?? 0) < washMachinesAmount) {
         throw new Error(
           "You can't create new wash mashine because you achive max amount"
         );
@@ -172,10 +172,13 @@ export class LaundryService {
     }
   }
 
-  async updateWashMachine(washMachine: any): Promise<void> {
+  async updateWashMachine(
+    washMachineId: string,
+    washMachine: any
+  ): Promise<void> {
     try {
       const washMachineDB = await this._laundryRepository.getWashMachineById(
-        washMachine.washMachineId
+        washMachineId
       );
       if (washMachineDB == null) {
         throw new Error("Wash Machine doesn't exist");
@@ -200,9 +203,10 @@ export class LaundryService {
           washMachineDB!.currentTime,
           washMachineDB!.isWorking,
           washMachineDB!.isWashing,
-          washMachineDB!.washMachineId
+          washMachineId
         )
       );
+      return;
     } catch (error) {
       throw error;
     }
@@ -226,11 +230,14 @@ export class LaundryService {
       const totalElements = await this._laundryRepository.getWashMachinesAmount(
         laundryId
       );
+      console.log(totalElements);
       const content = await this._laundryRepository.getWashMachines(
         laundryId,
         page,
         size
       );
+      console.log(content);
+
       return new PagedModel<WashMachine>(
         page,
         size,
