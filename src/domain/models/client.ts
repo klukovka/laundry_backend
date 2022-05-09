@@ -5,6 +5,7 @@ export class Client {
   name: string;
   phone: string;
   bonuses: number;
+  sale: number;
   user?: User | null;
   userId: string;
 
@@ -13,6 +14,7 @@ export class Client {
     phone: string,
     userId: string,
     bonuses: number = 0,
+    sale: number = 0,
     clientId: string | null = null,
     user: User | null = null
   ) {
@@ -22,5 +24,6 @@ export class Client {
     this.clientId = clientId;
     this.user = user;
     this.userId = userId;
+    this.sale = sale;
   }
 }

@@ -6,4 +6,8 @@ export class ErrorMessage {
     this.message = message;
     this.statusCode = statusCode;
   }
+
+  public toString = (): string => {
+    return `${this.message}`;
+  };
 }

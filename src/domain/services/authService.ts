@@ -245,7 +245,8 @@ export class AuthService {
       case Roles.ADMIN:
         return userId;
       case Roles.CLIENT:
-        return (await this._clientRepository.getClientId(userId))?.clientId;
+        return (await this._clientRepository.getClientByUserId(userId))
+          ?.clientId;
       case Roles.LAUNDRY:
         return (await this._laundryRepository.getLaundryByUserId(userId))
           ?.laundryId;

@@ -4,7 +4,45 @@ import { ClientRepository } from '../../domain/repositories/clientRepository';
 import { DatabaseMongo } from '../dataSource/mongoDB/databaseMongo';
 
 export class ClientMongoRepository implements ClientRepository {
-  async getClientId(userId: string): Promise<Client | null> {
+  async getClientsAmount(): Promise<number> {
+    try {
+      return await DatabaseMongo.getDB.getClientsAmount();
+    } catch (error) {
+      throw error;
+    }
+  }
+  async getClients(page: number, size: number): Promise<Client[]> {
+    try {
+      const clients = await DatabaseMongo.getDB.getClients(page, size);
+      const parsedParsed = new Array<Client>();
+      if (clients) {
+        for (let i = 0; i < clients.length; i++) {
+          parsedParsed.push(this._getClient(clients[i])!);
+        }
+      }
+      return parsedParsed;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async updateClient(client: Client): Promise<void> {
+    try {
+      await DatabaseMongo.getDB.updateClient(
+        client.clientId!,
+        {
+          email: client.user?.email,
+          userId: client.userId,
+        },
+        {
+          name: client.name,
+          phone: client.phone,
+        }
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+  async getClientByUserId(userId: string): Promise<Client | null> {
     try {
       const user = await DatabaseMongo.getDB.getClientByUserId(userId);
       return this._getClient(user);
@@ -22,6 +60,7 @@ export class ClientMongoRepository implements ClientRepository {
       client?.phone,
       client?.user?._id.toString(),
       client?.bonuses,
+      client?.sale,
       client?._id.toString(),
       new User(
         client?.user?.email,

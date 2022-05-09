@@ -15,6 +15,10 @@ const Client = new Schema({
     type: Number,
     default: 0,
   },
+  sale: {
+    type: Number,
+    default: 0,
+  },
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User',

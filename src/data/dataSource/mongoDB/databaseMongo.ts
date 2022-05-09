@@ -239,6 +239,46 @@ export class DatabaseMongo {
     }
   }
 
+  async updateClient(
+    clientId: string,
+    userOptions: any,
+    options: any
+  ): Promise<void> {
+    try {
+      await User.updateOne(
+        { _id: userOptions.userId },
+        { $set: { email: userOptions.email } }
+      );
+      await Client.updateOne(
+        { _id: clientId },
+        {
+          $set: options,
+        }
+      );
+    } catch (error) {
+      throw new Error('Client updating is failed');
+    }
+  }
+
+  async getClients(page: number, size: number): Promise<any> {
+    try {
+      return await Client.find()
+        .populate('user')
+        .skip(page * size)
+        .limit(size);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getClientsAmount(): Promise<number> {
+    try {
+      return await Employee.find().count();
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
   /// Employees
 
   async createEmployee(employee: any): Promise<string> {
