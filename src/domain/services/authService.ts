@@ -243,6 +243,7 @@ export class AuthService {
   ): Promise<string | null | undefined> {
     switch (role) {
       case Roles.ADMIN:
+      case Roles.IOT:
         return userId;
       case Roles.CLIENT:
         return (await this._clientRepository.getClientByUserId(userId))

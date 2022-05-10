@@ -59,6 +59,29 @@ router.post(
 );
 
 router.post(
+  '/signup-iot',
+  checkAuth,
+  checkAdmin,
+  (req: Request, res: Response, next: any) => {
+    const { email, password } = req.body;
+    const user = new User(email, Roles.IOT, password);
+
+    authService
+      .createUser(user)
+      .then((userId) => {
+        return res.status(StatusCodes.CREATED).json({
+          userId: userId,
+        });
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.post(
   '/signup-laundry',
   checkAuth,
   checkAdmin,

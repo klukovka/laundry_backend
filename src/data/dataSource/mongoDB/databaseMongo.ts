@@ -67,6 +67,7 @@ export class DatabaseMongo {
       try {
         switch (user.role) {
           case Roles.ADMIN:
+          case Roles.IOT:
             await User.deleteOne({ _id: userId });
           case Roles.CLIENT:
             await User.deleteOne({ _id: userId });
