@@ -649,6 +649,29 @@ export class DatabaseMongo {
     }
   }
 
+  async getFilteredEvents(
+    options: any,
+    page: number,
+    size: number
+  ): Promise<any> {
+    try {
+      return await WashMachine.find(options)
+        .populate('mode additionalMode')
+        .skip(page * size)
+        .limit(size);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getFilteredEventsAmount(options: any): Promise<any> {
+    try {
+      return await WashMachine.find(options).count();
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
   ///
   /// Backups
   ///

@@ -12,20 +12,20 @@ export interface EventRepository {
     clientId: string,
     page: number,
     size: number
-  ): Promise<Client[]>;
+  ): Promise<Event[]>;
   getClientEventsAmount(clientId: string): Promise<number>;
 
   getLaundryEvents(
     laundryId: string,
     page: number,
     size: number
-  ): Promise<Client[]>;
+  ): Promise<Event[]>;
   getLaundryEventsAmount(laundryId: string): Promise<number>;
 
   getWashMachineEvents(
     washMachineId: string,
     page: number,
     size: number
-  ): Promise<Client[]>;
+  ): Promise<Event[]>;
   getWashMachineEventsAmount(washMachineId: string): Promise<number>;
 }

@@ -46,16 +46,18 @@ export class EventMongoRepository implements EventRepository {
     clientId: string,
     page: number,
     size: number
-  ): Promise<Client[]> {
-    throw new Error('Method not implemented.');
+  ): Promise<Event[]> {
     try {
+      return await this._getParsedEvents({ client: clientId }, page, size);
     } catch (error) {
       throw error;
     }
   }
   async getClientEventsAmount(clientId: string): Promise<number> {
-    throw new Error('Method not implemented.');
     try {
+      return await DatabaseMongo.getDB.getFilteredEventsAmount({
+        client: clientId,
+      });
     } catch (error) {
       throw error;
     }
@@ -64,16 +66,18 @@ export class EventMongoRepository implements EventRepository {
     laundryId: string,
     page: number,
     size: number
-  ): Promise<Client[]> {
-    throw new Error('Method not implemented.');
+  ): Promise<Event[]> {
     try {
+      return await this._getParsedEvents({ laundry: laundryId }, page, size);
     } catch (error) {
       throw error;
     }
   }
   async getLaundryEventsAmount(laundryId: string): Promise<number> {
-    throw new Error('Method not implemented.');
     try {
+      return await DatabaseMongo.getDB.getFilteredEventsAmount({
+        laundry: laundryId,
+      });
     } catch (error) {
       throw error;
     }
@@ -82,16 +86,45 @@ export class EventMongoRepository implements EventRepository {
     washMachineId: string,
     page: number,
     size: number
-  ): Promise<Client[]> {
-    throw new Error('Method not implemented.');
+  ): Promise<Event[]> {
     try {
+      return await this._getParsedEvents(
+        { washMachine: washMachineId },
+        page,
+        size
+      );
     } catch (error) {
       throw error;
     }
   }
   async getWashMachineEventsAmount(washMachineId: string): Promise<number> {
-    throw new Error('Method not implemented.');
     try {
+      return await DatabaseMongo.getDB.getFilteredEventsAmount({
+        washMachine: washMachineId,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  private async _getParsedEvents(
+    options: any,
+    page: number,
+    size: number
+  ): Promise<Event[]> {
+    try {
+      const events = await DatabaseMongo.getDB.getFilteredEvents(
+        options,
+        page,
+        size
+      );
+      const parsedEvents = new Array<Event>();
+      if (events) {
+        for (let i = 0; i < events.length; i++) {
+          parsedEvents.push(this._getEvent(events[i])!);
+        }
+      }
+      return parsedEvents;
     } catch (error) {
       throw error;
     }
