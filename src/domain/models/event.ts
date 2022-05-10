@@ -17,6 +17,7 @@ export class Event {
   clientId: string | null;
   client: Client | null;
   timeBegin: Date | null;
+  timeEnd: Date | null;
   paidStatus: Boolean;
   paidBonuses: number;
   paidMoney: number;
@@ -36,6 +37,7 @@ export class Event {
     clientId: string | null = null,
     client: Client | null = null,
     timeBegin: Date | null = null,
+    timeEnd: Date | null = null,
     paidStatus: Boolean = false,
     paidBonuses: number = 0,
     paidMoney: number = 0,
@@ -54,6 +56,7 @@ export class Event {
     this.clientId = clientId;
     this.client = client;
     this.timeBegin = timeBegin;
+    this.timeEnd = timeEnd;
     this.paidStatus = paidStatus;
     this.paidBonuses = paidBonuses;
     this.paidMoney = paidMoney;

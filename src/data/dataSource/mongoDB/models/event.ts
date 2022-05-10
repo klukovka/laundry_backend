@@ -31,6 +31,9 @@ const Event = new Schema({
   timeBegin: {
     type: Date,
   },
+  timeEnd: {
+    type: Date,
+  },
   paidStatus: {
     type: Boolean,
     default: false,
