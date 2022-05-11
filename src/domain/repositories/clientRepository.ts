@@ -5,4 +5,5 @@ export interface ClientRepository {
   getClients(page: number, size: number): Promise<Client[]>;
   getClientsAmount(): Promise<number>;
   updateClient(client: Client): Promise<void>;
+  getClientById(clientId: string): Promise<Client | null>;
 }
