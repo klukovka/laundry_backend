@@ -2,6 +2,7 @@ import { EventRepository } from '../repositories/eventRepository';
 import { ClientRepository } from '../repositories/clientRepository';
 import { LaundryRepository } from '../repositories/laundryRepository';
 import { Event } from '../models/event';
+import firestore from '../../../server';
 
 const minute = 60000;
 
@@ -117,6 +118,14 @@ export class EventService {
     }
   }
 
+  async takeEvent(eventId: string): Promise<void> {
+    try {
+      await this._eventRepository.updateEvent(eventId, { taken: true });
+    } catch (error) {
+      throw error;
+    }
+  }
+
   private async _updateClientBonuses(
     userId: string,
     paidMoney: number,
@@ -196,16 +205,84 @@ export class EventService {
       throw error;
     }
   }
+
+  async getClientEvents(
+    clientId: string,
+    page: number,
+    size: number
+  ): Promise<PagedModel<Event>> {
+    try {
+      const content = await this._eventRepository.getClientEvents(
+        clientId,
+        page,
+        size
+      );
+      const totalElements = await this._eventRepository.getClientEventsAmount(
+        clientId
+      );
+
+      return new PagedModel<Event>(
+        page,
+        size,
+        Math.ceil(totalElements / size),
+        totalElements,
+        content
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getLaundryEvents(
+    laundryId: string,
+    page: number,
+    size: number
+  ): Promise<PagedModel<Event>> {
+    try {
+      const content = await this._eventRepository.getLaundryEvents(
+        laundryId,
+        page,
+        size
+      );
+      const totalElements = await this._eventRepository.getLaundryEventsAmount(
+        laundryId
+      );
+
+      return new PagedModel<Event>(
+        page,
+        size,
+        Math.ceil(totalElements / size),
+        totalElements,
+        content
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getWashMachineEvents(
+    washMachineId: string,
+    page: number,
+    size: number
+  ): Promise<PagedModel<Event>> {
+    try {
+      const content = await this._eventRepository.getWashMachineEvents(
+        washMachineId,
+        page,
+        size
+      );
+      const totalElements =
+        await this._eventRepository.getWashMachineEventsAmount(washMachineId);
+
+      return new PagedModel<Event>(
+        page,
+        size,
+        Math.ceil(totalElements / size),
+        totalElements,
+        content
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
 }
-
-//   const time =
-//     (event?.additionalMode?.time ?? 0) + (event?.mode?.time ?? 0);
-//   console.log(time);
-
-//   setTimeout(function () {
-//     const notifications = firestore.collection('Notifications');
-//     notifications.doc(eventId).set({
-//       title: 'Wathing is over!',
-//       body: "Don't forget to take your clothes",
-//     });
-//   }, 60000 * time);
