@@ -34,18 +34,27 @@ export class EventService {
         )
       );
 
-      setTimeout(function () {
-        if (eventId) {
-          this._eventRepository.getEvent(eventId).then((event) => {
-            if (!event?.paidStatus) {
-              this._eventRepository.deleteEvent(eventId).then((_) => {
-                console.log('Event was deleted');
-              });
-            }
-          });
-        }
-      }, minute * 15);
-
+      setTimeout(
+        function (
+          eventId: string | null,
+          getEvent: (eventId: string) => Promise<Event | null>,
+          deleteEvent: (eventId: string) => Promise<void>
+        ) {
+          if (eventId) {
+            getEvent(eventId).then((event) => {
+              if (!event?.paidStatus) {
+                deleteEvent(eventId).then((_) => {
+                  console.log('Event was deleted');
+                });
+              }
+            });
+          }
+        },
+        minute * 15,
+        eventId,
+        this._eventRepository.getEvent,
+        this._eventRepository.deleteEvent
+      );
       return eventId;
     } catch (error) {
       throw error;
@@ -76,27 +85,6 @@ export class EventService {
 
       const paidMoney = costs - options.paidBonuses;
 
-      setTimeout(function () {
-        const notifications = firestore.collection('Notifications');
-        notifications.doc(eventId).set({
-          title: 'Wathing is over!',
-          body: "Don't forget to take your clothes",
-        });
-        this._eventRepository
-          .updateEvent(eventId, {
-            timeEnd: Date.now(),
-          })
-          .then((_) => {
-            this._updateWashMachineTime(
-              options.washMachineId,
-              eventId,
-              time
-            ).then((_) => {
-              console.log('Wash machine updated');
-            });
-          });
-      }, minute * time);
-
       await this._eventRepository.updateEvent(eventId, {
         client: clientId,
         timeBegin: Date.now(),
@@ -113,6 +101,37 @@ export class EventService {
         options.userData.userId,
         paidMoney,
         options.paidBonuses
+      );
+
+      setTimeout(
+        function (
+          eventId: string,
+          updateEvent: (eventId: string, options: any) => Promise<void>,
+          updateWashMachineTime: (
+            washMachineId: string,
+            eventId: string,
+            time: number
+          ) => Promise<void>
+        ) {
+          const notifications = firestore.collection('Notifications');
+          notifications.doc(eventId).set({
+            title: 'Wathing is over!',
+            body: "Don't forget to take your clothes",
+          });
+          updateEvent(eventId, {
+            timeEnd: Date.now(),
+          }).then((_) => {
+            updateWashMachineTime(options.washMachineId, eventId, time).then(
+              (_) => {
+                console.log('Wash machine updated');
+              }
+            );
+          });
+        },
+        minute * time,
+        eventId,
+        this._eventRepository.updateEvent,
+        this._updateWashMachineTime
       );
     } catch (error) {
       throw error;
@@ -179,11 +198,20 @@ export class EventService {
 
         await this._eventRepository.updateWashMachine(washMachineId, options);
 
-        setTimeout(function () {
-          this._takeEventAutomatically(eventId).than((_) => {
-            console.log('Washing completed');
-          });
-        }, minute * 120);
+        setTimeout(
+          function (
+            eventId: string,
+            takeEventAutomatically: (eventId: string) => Promise<void>
+          ) {
+            takeEventAutomatically(eventId).then((_) => {
+              console.log('Washing completed');
+            });
+          },
+          minute * 1,
+          eventId,
+          this._takeEventAutomatically
+        );
+        //TODO: 120 minutes
       }
     } catch (error) {
       throw error;
@@ -200,7 +228,7 @@ export class EventService {
         await this._eventRepository.updateEvent(eventId, { taken: true });
 
         const client = await this._clientRepository.getClientById(
-          event.clientId
+          event.clientId!
         );
 
         if (client) {

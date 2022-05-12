@@ -4,6 +4,7 @@ import express, { Application, Request, Response } from 'express';
 import StatusCodes from './utils/statusCodes';
 import dataFlowRoutes from './routes/dataFlowRoutes';
 import authRoutes from './routes/authRoutes';
+import eventRoutes from './routes/eventRoutes';
 import laundryRoutes from './routes/laundryRoutes';
 import employeeRoutes from './routes/employeeRoutes';
 import clientRoutes from './routes/clientRoutes';
@@ -56,6 +57,7 @@ app.use('/auth', authRoutes);
 app.use('/laundry', laundryRoutes);
 app.use('/employee', employeeRoutes);
 app.use('/client', clientRoutes);
+app.use('/event', eventRoutes);
 
 //endpoint doesn't exist
 app.use((req: Request, res: Response, next: any) => {
