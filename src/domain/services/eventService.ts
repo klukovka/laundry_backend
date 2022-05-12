@@ -2,6 +2,7 @@ import { EventRepository } from '../repositories/eventRepository';
 import { ClientRepository } from '../repositories/clientRepository';
 import { LaundryRepository } from '../repositories/laundryRepository';
 import { Event } from '../models/event';
+import { PagedModel } from '../models/pagedModel';
 import firestore from '../../../server';
 
 const minute = 60000;
@@ -121,6 +122,14 @@ export class EventService {
   async takeEvent(eventId: string): Promise<void> {
     try {
       await this._eventRepository.updateEvent(eventId, { taken: true });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async rateEvent(eventId: string, mark: number): Promise<void> {
+    try {
+      await this._eventRepository.updateEvent(eventId, { rating: mark });
     } catch (error) {
       throw error;
     }

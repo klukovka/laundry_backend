@@ -6,6 +6,15 @@ import { EventRepository } from '../../domain/repositories/eventRepository';
 import { DatabaseMongo } from '../dataSource/mongoDB/databaseMongo';
 
 export class EventMongoRepository implements EventRepository {
+  async deleteEvent(eventId: string): Promise<void>{
+try{
+      await DatabaseMongo.getDB.deleteEvent(eventId);
+
+}catch(error){
+  
+}
+  }
+
   async updateClient(clientId: string, options: any): Promise<void> {
     try {
       await DatabaseMongo.getDB.updateClient(clientId, null, options);

@@ -4,6 +4,13 @@ import { ClientRepository } from '../../domain/repositories/clientRepository';
 import { DatabaseMongo } from '../dataSource/mongoDB/databaseMongo';
 
 export class ClientMongoRepository implements ClientRepository {
+  async getClientById(clientId: string): Promise<Client | null> {
+    try {
+      return this._getClient(await DatabaseMongo.getDB.getClientById(clientId));
+    } catch (error) {
+      throw error;
+    }
+  }
   async getClientsAmount(): Promise<number> {
     try {
       return await DatabaseMongo.getDB.getClientsAmount();

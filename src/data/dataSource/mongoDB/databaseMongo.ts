@@ -239,6 +239,14 @@ export class DatabaseMongo {
     }
   }
 
+    async getClientById(clientId: string): Promise<any> {
+    try {
+      return await Client.findOne({ _id: clientId }).populate('user');
+    } catch (error: any) {
+      throw new Error('Client is not exists');
+    }
+  }
+
   async updateClient(
     clientId: string,
     userOptions: any,
@@ -668,6 +676,14 @@ export class DatabaseMongo {
   async getFilteredEventsAmount(options: any): Promise<any> {
     try {
       return await WashMachine.find(options).count();
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async deleteEvent(eventId: string): Promise<void> {
+    try {
+      await Event.deleteOne({ _id: eventId });
     } catch (error: any) {
       throw new Error(error.message);
     }
