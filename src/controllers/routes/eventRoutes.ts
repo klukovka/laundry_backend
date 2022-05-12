@@ -3,7 +3,8 @@ import { LaundryMongoRepository } from '../../data/repositories/laundryMongoRepo
 import { LaundryService } from '../../domain/services/laundryService';
 import checkAuth from '../middleware/checkAuth';
 import checkIOT from '../middleware/checkIOT';
-import checkAdminClient from '../middleware/checkAdminClient';
+import checkAdmin from '../middleware/checkAdmin';
+import checkClientIOT from '../middleware/checkClientIOT';
 import checkLaundry from '../middleware/checkLaundry';
 import checkLaundryEmployee from '../middleware/checkLaundryEmployee';
 import checkClient from '../middleware/checkClient';
@@ -12,6 +13,7 @@ import { ErrorMessage } from '../../domain/models/errorMessage';
 import { EventService } from '../../domain/services/eventService';
 import { EventMongoRepository } from '../../data/repositories/eventMongoRepository';
 import { ClientMongoRepository } from '../../data/repositories/clientMongoRepository';
+import saveLaundryId from '../middleware/saveLaundryId';
 
 const router = Router();
 const eventService = new EventService(
@@ -83,6 +85,97 @@ router.post(
       .rateEvent(req.params.eventId, req.body.mark)
       .then((_) => {
         return res.status(StatusCodes.OK).json();
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.get(
+  '/info/:eventId',
+  checkAuth,
+  checkClientIOT,
+  (req: Request, res: Response, next: any) => {
+    eventService
+      .getEvent(req.params.eventId)
+      .then((event) => {
+        return res.status(StatusCodes.OK).json(event);
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.get(
+  '/client-events',
+  checkAuth,
+  checkClient,
+  (req: Request, res: Response, next: any) => {
+    eventService
+      .getClientEvents(req.body, req.query)
+      .then((event) => {
+        return res.status(StatusCodes.OK).json(event);
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.get(
+  '/wash-machine-events/:washMachineId',
+  checkAuth,
+
+  (req: Request, res: Response, next: any) => {
+    eventService
+      .getWashMachineEvents(req.params.washMachineId, req.query)
+      .then((event) => {
+        return res.status(StatusCodes.OK).json(event);
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.get(
+  '/laundry-events',
+  checkAuth,
+  checkLaundryEmployee,
+  saveLaundryId,
+  (req: Request, res: Response, next: any) => {
+    eventService
+      .getWashMachineEvents(req.body.userData.laundryId, req.query)
+      .then((event) => {
+        return res.status(StatusCodes.OK).json(event);
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.get(
+  '/all',
+  checkAuth,
+  checkAdmin,
+  (req: Request, res: Response, next: any) => {
+    eventService
+      .getAllEvents(req.query)
+      .then((event) => {
+        return res.status(StatusCodes.OK).json(event);
       })
       .catch((error) => {
         return res

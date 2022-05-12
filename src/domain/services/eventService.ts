@@ -217,10 +217,11 @@ export class EventService {
 
   async getClientEvents(
     clientId: string,
-    page: number,
-    size: number
+    options: any
   ): Promise<PagedModel<Event>> {
     try {
+      const page = options.page;
+      const size = options.size;
       const content = await this._eventRepository.getClientEvents(
         clientId,
         page,
@@ -244,10 +245,11 @@ export class EventService {
 
   async getLaundryEvents(
     laundryId: string,
-    page: number,
-    size: number
+    options: any
   ): Promise<PagedModel<Event>> {
     try {
+      const page = options.page;
+      const size = options.size;
       const content = await this._eventRepository.getLaundryEvents(
         laundryId,
         page,
@@ -271,10 +273,11 @@ export class EventService {
 
   async getWashMachineEvents(
     washMachineId: string,
-    page: number,
-    size: number
+    options: any
   ): Promise<PagedModel<Event>> {
     try {
+      const page = options.page;
+      const size = options.size;
       const content = await this._eventRepository.getWashMachineEvents(
         washMachineId,
         page,
@@ -282,6 +285,25 @@ export class EventService {
       );
       const totalElements =
         await this._eventRepository.getWashMachineEventsAmount(washMachineId);
+
+      return new PagedModel<Event>(
+        page,
+        size,
+        Math.ceil(totalElements / size),
+        totalElements,
+        content
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getAllEvents(options: any): Promise<PagedModel<Event>> {
+    try {
+      const page = options.page;
+      const size = options.size;
+      const content = await this._eventRepository.getAllEvents(page, size);
+      const totalElements = await this._eventRepository.getAllEventsAmount();
 
       return new PagedModel<Event>(
         page,

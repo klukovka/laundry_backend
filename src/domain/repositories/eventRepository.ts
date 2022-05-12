@@ -9,6 +9,9 @@ export interface EventRepository {
   updateWashMachine(washMachineId: string, options: any): Promise<void>;
   updateClient(clientId: string, options: any): Promise<void>;
 
+  getAllEvents(page: number, size: number): Promise<Event[]>;
+  getAllEventsAmount(): Promise<number>;
+
   getClientEvents(
     clientId: string,
     page: number,
