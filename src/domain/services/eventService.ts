@@ -113,7 +113,6 @@ export class EventService {
             laundryRepository: LaundryRepository
           ) => Promise<void>,
           eventRepository: EventRepository,
-          clientRepository: ClientRepository,
           laundryRepository: LaundryRepository
         ) {
           const notifications = firestore.collection('Notifications');
@@ -140,7 +139,6 @@ export class EventService {
         eventId,
         this._updateWashMachineTime,
         this._eventRepository,
-        this._clientRepository,
         this._laundryRepository
       );
     } catch (error) {
@@ -226,8 +224,8 @@ export class EventService {
     options: any
   ): Promise<PagedModel<Event>> {
     try {
-      const page = options.page;
-      const size = options.size;
+      const page = Number(options.page ?? 0);
+      const size = Number(options.size ?? 20);
       const content = await this._eventRepository.getClientEvents(
         clientId,
         page,
@@ -254,8 +252,8 @@ export class EventService {
     options: any
   ): Promise<PagedModel<Event>> {
     try {
-      const page = options.page;
-      const size = options.size;
+      const page = Number(options.page ?? 0);
+      const size = Number(options.size ?? 20);
       const content = await this._eventRepository.getLaundryEvents(
         laundryId,
         page,
@@ -282,8 +280,8 @@ export class EventService {
     options: any
   ): Promise<PagedModel<Event>> {
     try {
-      const page = options.page;
-      const size = options.size;
+      const page = Number(options.page ?? 0);
+      const size = Number(options.size ?? 20);
       const content = await this._eventRepository.getWashMachineEvents(
         washMachineId,
         page,
@@ -306,8 +304,8 @@ export class EventService {
 
   async getAllEvents(options: any): Promise<PagedModel<Event>> {
     try {
-      const page = options.page;
-      const size = options.size;
+      const page = Number(options.page ?? 0);
+      const size = Number(options.size ?? 20);
       const content = await this._eventRepository.getAllEvents(page, size);
       const totalElements = await this._eventRepository.getAllEventsAmount();
 

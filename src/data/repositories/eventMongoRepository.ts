@@ -141,12 +141,14 @@ export class EventMongoRepository implements EventRepository {
         page,
         size
       );
+
       const parsedEvents = new Array<Event>();
       if (events) {
         for (let i = 0; i < events.length; i++) {
           parsedEvents.push(this._getEvent(events[i])!);
         }
       }
+
       return parsedEvents;
     } catch (error) {
       throw error;

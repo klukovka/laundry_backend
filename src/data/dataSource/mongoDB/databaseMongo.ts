@@ -664,7 +664,7 @@ export class DatabaseMongo {
     size: number
   ): Promise<any> {
     try {
-      return await WashMachine.find(options)
+      return await Event.find(options)
         .populate('mode additionalMode')
         .skip(page * size)
         .limit(size);
@@ -675,7 +675,7 @@ export class DatabaseMongo {
 
   async getFilteredEventsAmount(options: any): Promise<any> {
     try {
-      return await WashMachine.find(options).count();
+      return await Event.find(options).count();
     } catch (error: any) {
       throw new Error(error.message);
     }

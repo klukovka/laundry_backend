@@ -118,7 +118,7 @@ router.get(
   checkClient,
   (req: Request, res: Response, next: any) => {
     eventService
-      .getClientEvents(req.body, req.query)
+      .getClientEvents(req.body.userData.id, req.query)
       .then((event) => {
         return res.status(StatusCodes.OK).json(event);
       })
@@ -155,7 +155,7 @@ router.get(
   saveLaundryId,
   (req: Request, res: Response, next: any) => {
     eventService
-      .getWashMachineEvents(req.body.userData.laundryId, req.query)
+      .getLaundryEvents(req.body.userData.laundryId, req.query)
       .then((event) => {
         return res.status(StatusCodes.OK).json(event);
       })
