@@ -106,32 +106,46 @@ export class EventService {
       setTimeout(
         function (
           eventId: string,
-          updateEvent: (eventId: string, options: any) => Promise<void>,
           updateWashMachineTime: (
             washMachineId: string,
             eventId: string,
-            time: number
-          ) => Promise<void>
+            time: number,
+            eventRepository: EventRepository,
+            clientRepository: ClientRepository,
+            laundryRepository: LaundryRepository
+          ) => Promise<void>,
+          eventRepository: EventRepository,
+          clientRepository: ClientRepository,
+          laundryRepository: LaundryRepository
         ) {
           const notifications = firestore.collection('Notifications');
           notifications.doc(eventId).set({
             title: 'Wathing is over!',
             body: "Don't forget to take your clothes",
           });
-          updateEvent(eventId, {
-            timeEnd: Date.now(),
-          }).then((_) => {
-            updateWashMachineTime(options.washMachineId, eventId, time).then(
-              (_) => {
+          eventRepository
+            .updateEvent(eventId, {
+              timeEnd: Date.now(),
+            })
+            .then((_) => {
+              updateWashMachineTime(
+                options.washMachineId,
+                eventId,
+                time,
+                eventRepository,
+                clientRepository,
+                laundryRepository
+              ).then((_) => {
                 console.log('Wash machine updated');
-              }
-            );
-          });
+              });
+            });
         },
         minute * time,
         eventId,
-        this._eventRepository.updateEvent,
-        this._updateWashMachineTime
+        this._updateWashMachineTime,
+        this._eventRepository,
+        this._clientRepository,
+        this._laundryRepository
       );
     } catch (error) {
       throw error;
@@ -181,10 +195,13 @@ export class EventService {
   private async _updateWashMachineTime(
     washMachineId: string,
     eventId: string,
-    time: number
+    time: number,
+    eventRepository: EventRepository,
+    clientRepository: ClientRepository,
+    laundryRepository: LaundryRepository
   ): Promise<void> {
     try {
-      const washMachine = await this._laundryRepository.getWashMachineById(
+      const washMachine = await laundryRepository.getWashMachineById(
         washMachineId
       );
       let options;
@@ -196,47 +213,7 @@ export class EventService {
           options = { currentTime: 0, isWorking: false };
         }
 
-        await this._eventRepository.updateWashMachine(washMachineId, options);
-
-        setTimeout(
-          function (
-            eventId: string,
-            takeEventAutomatically: (eventId: string) => Promise<void>
-          ) {
-            takeEventAutomatically(eventId).then((_) => {
-              console.log('Washing completed');
-            });
-          },
-          minute * 1,
-          eventId,
-          this._takeEventAutomatically
-        );
-        //TODO: 120 minutes
-      }
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  private async _takeEventAutomatically(eventId: string): Promise<void> {
-    try {
-      const event = await this.getEvent(eventId);
-      if (event && !event?.taken) {
-        await this._eventRepository.updateWashMachine(event.washMachineId, {
-          isWashing: false,
-        });
-        await this._eventRepository.updateEvent(eventId, { taken: true });
-
-        const client = await this._clientRepository.getClientById(
-          event.clientId!
-        );
-
-        if (client) {
-          const sale = client.sale ?? 0;
-          this._eventRepository.updateClient(client.clientId!, {
-            sale: sale == 0 ? 0 : sale - 1,
-          });
-        }
+        await eventRepository.updateWashMachine(washMachineId, options);
       }
     } catch (error) {
       throw error;

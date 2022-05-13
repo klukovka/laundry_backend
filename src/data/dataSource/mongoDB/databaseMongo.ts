@@ -239,7 +239,7 @@ export class DatabaseMongo {
     }
   }
 
-    async getClientById(clientId: string): Promise<any> {
+  async getClientById(clientId: string): Promise<any> {
     try {
       return await Client.findOne({ _id: clientId }).populate('user');
     } catch (error: any) {
