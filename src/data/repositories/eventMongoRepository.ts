@@ -45,7 +45,7 @@ export class EventMongoRepository implements EventRepository {
   }
   async getEvent(eventId: string): Promise<Event | null> {
     try {
-      return DatabaseMongo.getDB.getEventById(eventId);
+      return this._getEvent(await DatabaseMongo.getDB.getEventById(eventId));
     } catch (error) {
       throw error;
     }
@@ -158,28 +158,56 @@ export class EventMongoRepository implements EventRepository {
       return null;
     }
 
+    if (event?.additionalMode)
+      return new Event(
+        event?.washMachine?._id.toString(),
+        event?.temperature,
+        event?.spinning,
+        event?.mode?._id.toString(),
+        event?.additionalMode?._id.toString(),
+        event?._id.toString(),
+        null,
+        new Mode(
+          event?.mode?.name,
+          event?.mode?.time,
+          event?.mode?.costs,
+          '',
+          event?.mode?._id.toString()
+        ),
+        new AdditionalMode(
+          event?.additionalMode?.name,
+          event?.additionalMode?.time,
+          event?.additionalMode?.costs,
+          '',
+          event?.additionalMode?._id.toString()
+        ),
+        event?.client?._id.toString(),
+        null,
+        event?.timeBegin,
+        event?.timeEnd,
+        event?.paidStatus,
+        event?.paidBonuses,
+        event?.paidMoney,
+        event?.taken,
+        event?.rating
+      );
+
     return new Event(
-      event?.washMachineId,
+      event?.washMachine?._id.toString(),
       event?.temperature,
       event?.spinning,
       event?.mode?._id.toString(),
-      event?.additionalMode?._id.toString(),
+      null,
       event?._id.toString(),
       null,
       new Mode(
         event?.mode?.name,
         event?.mode?.time,
-        event?.mode?.number,
+        event?.mode?.costs,
         '',
         event?.mode?._id.toString()
       ),
-      new AdditionalMode(
-        event?.additionalMode?.name,
-        event?.additionalMode?.time,
-        event?.additionalMode?.number,
-        '',
-        event?.additionalMode?._id.toString()
-      ),
+      null,
       event?.client?._id.toString(),
       null,
       event?.timeBegin,

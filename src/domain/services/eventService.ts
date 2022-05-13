@@ -108,10 +108,8 @@ export class EventService {
           eventId: string,
           updateWashMachineTime: (
             washMachineId: string,
-            eventId: string,
             time: number,
             eventRepository: EventRepository,
-            clientRepository: ClientRepository,
             laundryRepository: LaundryRepository
           ) => Promise<void>,
           eventRepository: EventRepository,
@@ -130,10 +128,8 @@ export class EventService {
             .then((_) => {
               updateWashMachineTime(
                 options.washMachineId,
-                eventId,
                 time,
                 eventRepository,
-                clientRepository,
                 laundryRepository
               ).then((_) => {
                 console.log('Wash machine updated');
@@ -154,7 +150,14 @@ export class EventService {
 
   async takeEvent(eventId: string): Promise<void> {
     try {
-      await this._eventRepository.updateEvent(eventId, { taken: true });
+      await this._eventRepository.updateEvent(eventId, {
+        taken: true,
+        timeEnd: Date.now(),
+      });
+      const event = await this._eventRepository.getEvent(eventId);
+      await this._eventRepository.updateWashMachine(event?.washMachineId!, {
+        isWashing: false,
+      });
     } catch (error) {
       throw error;
     }
@@ -194,10 +197,8 @@ export class EventService {
 
   private async _updateWashMachineTime(
     washMachineId: string,
-    eventId: string,
     time: number,
     eventRepository: EventRepository,
-    clientRepository: ClientRepository,
     laundryRepository: LaundryRepository
   ): Promise<void> {
     try {
