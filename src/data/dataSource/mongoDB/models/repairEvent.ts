@@ -20,6 +20,10 @@ const RepairEvent = new Schema({
     ref: 'RepairProduct',
     required: true,
   },
+    done: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 export default model('RepairEvent', RepairEvent);

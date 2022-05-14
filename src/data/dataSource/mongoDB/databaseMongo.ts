@@ -7,6 +7,8 @@ import User from './models/user';
 import Client from './models/client';
 import Employee from './models/employee';
 import RepairCompany from './models/repairCompany';
+import RepairProduct from './models/repairProduct';
+import RepairEvent from './models/repairEvent';
 import Event from './models/event';
 import path from 'path';
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
@@ -408,6 +410,173 @@ export class DatabaseMongo {
       return await RepairCompany.findOne({ user: userId }).populate('user');
     } catch (error: any) {
       throw new Error('Repair company is not exists');
+    }
+  }
+
+  async getRepairCompanyById(repairCompanyId: string): Promise<any> {
+    try {
+      return await RepairCompany.findOne({ _id: repairCompanyId }).populate(
+        'user'
+      );
+    } catch (error: any) {
+      throw new Error('Repair company is not exists');
+    }
+  }
+
+  async getRepairCompanies(page: number, size: number): Promise<any> {
+    try {
+      return await RepairCompany.find()
+        .populate('user')
+        .skip(page * size)
+        .limit(size);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getRepairCompaniesAmount(): Promise<number> {
+    try {
+      return await RepairCompany.find().count();
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async updateRepairCompany(
+    repairCompanyId: string,
+    options: any
+  ): Promise<void> {
+    try {
+      await User.updateOne(
+        { _id: options.userId },
+        { $set: { email: options.email } }
+      );
+      await RepairCompany.updateOne(
+        { _id: repairCompanyId },
+        {
+          $set: {
+            name: options.name,
+            phone: options.phone,
+            address: options.address,
+          },
+        }
+      );
+    } catch (error) {
+      throw new Error('Repair Company updating is failed');
+    }
+  }
+
+  /// Repair Company
+
+  async getRepairProducts(repairCompanyId: string): Promise<any> {
+    try {
+      return await RepairProduct.find({ repairCompany: repairCompanyId });
+    } catch (error: any) {
+      throw new Error('Repair products are not exists');
+    }
+  }
+
+  async getRepairProductsAmount(repairCompanyId: string): Promise<number> {
+    try {
+      return await RepairProduct.find({
+        repairCompany: repairCompanyId,
+      }).count();
+    } catch (error: any) {
+      throw new Error('Repair products are not exists');
+    }
+  }
+
+  async updateRepairProduct(
+    repairProductId: string,
+    options: any
+  ): Promise<void> {
+    try {
+      await RepairProduct.updateOne(
+        { _id: repairProductId },
+        {
+          $set: options,
+        }
+      );
+    } catch (error) {
+      throw new Error('Repair Product updating is failed');
+    }
+  }
+
+  async deleteRepairProduct(repairProductId: string): Promise<void> {
+    try {
+      await RepairProduct.deleteOne({ _id: repairProductId });
+    } catch (error) {
+      throw new Error('Repair Product deleting is failed');
+    }
+  }
+
+  async createRepairProduct(repairProduct: any): Promise<string> {
+    try {
+      const product = await new RepairProduct({
+        _id: new mongoose.Types.ObjectId(),
+        costs: repairProduct.costs,
+        description: repairProduct.description,
+        type: repairProduct.type,
+        repairCompany: repairProduct.repairCompanyId,
+      }).save();
+      return product?._id.toString();
+    } catch (error) {
+      throw new Error('Repair Product creating is failed');
+    }
+  }
+
+  /// Repair Event
+
+  async getRepairEvents(options: any): Promise<any> {
+    try {
+      return await RepairEvent.find(options);
+    } catch (error: any) {
+      throw new Error('Repair events are not exists');
+    }
+  }
+
+  async getRepaiEventsAmount(options: any): Promise<number> {
+    try {
+      return await RepairEvent.find(options).count();
+    } catch (error: any) {
+      throw new Error('Repair events are not exists');
+    }
+  }
+
+  async updateRepairEvent(repairEventId: string, options: any): Promise<void> {
+    try {
+      await RepairEvent.updateOne(
+        { _id: repairEventId },
+        {
+          $set: options,
+        }
+      );
+    } catch (error) {
+      throw new Error('Repair event updating is failed');
+    }
+  }
+
+  async deleteRepairEvent(repairEventId: string): Promise<void> {
+    try {
+      await RepairEvent.deleteOne({ _id: repairEventId });
+    } catch (error) {
+      throw new Error('Repair event deleting is failed');
+    }
+  }
+
+  async createRepairEvent(repairEvent: any): Promise<string> {
+    try {
+      const event = await new RepairEvent({
+        _id: new mongoose.Types.ObjectId(),
+        costs: repairEvent.costs,
+        date: repairEvent.date,
+        washMachine: repairEvent.washMachineId,
+        repairProduct: repairEvent.repairProductId,
+        done: repairEvent.done,
+      }).save();
+      return event?._id.toString();
+    } catch (error) {
+      throw new Error('Repair event creating is failed');
     }
   }
 

@@ -9,12 +9,14 @@ export class RepairEvent {
   washMachine: WashMachine | null;
   repairProductId: string;
   repairProduct: RepairProduct | null;
+  done: boolean;
 
   constructor(
     costs: number,
     date: Date,
     washMachineId: string,
     repairProductId: string,
+    done: boolean = false,
     repairEventId: string | null = null,
     repairProduct: RepairProduct | null = null,
     washMachine: WashMachine | null = null
@@ -26,5 +28,6 @@ export class RepairEvent {
     this.repairEventId = repairEventId;
     this.repairProduct = repairProduct;
     this.washMachine = washMachine;
+    this.done = done;
   }
 }
