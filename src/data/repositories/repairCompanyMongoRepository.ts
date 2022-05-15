@@ -103,8 +103,8 @@ export class RepairCompanyMongoRepository implements RepairCompanyRepository {
     repairProductId: string
   ): Promise<RepairProduct | null> {
     try {
-      const product = await DatabaseMongo.getDB.repairProductId(
-        repairCompanyId
+      const product = await DatabaseMongo.getDB.getRepairProductById(
+        repairProductId
       );
 
       return this._getRepairProduct(product);
