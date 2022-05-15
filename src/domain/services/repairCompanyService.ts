@@ -163,10 +163,14 @@ export class RepairCompanyService {
   }
   async createRepairEvent(repairEvent: any): Promise<string> {
     try {
+      const repairProduct =
+        await this._repairCompanyRepository.getRepairProductById(
+          repairEvent.repairProductId
+        );
       return await this._repairCompanyRepository.createRepairEvent(
         new RepairEvent(
-          repairEvent.costs,
-          repairEvent.date,
+          repairProduct?.costs,
+          new Date(),
           repairEvent.washMachineId,
           repairEvent.repairProductId
         )

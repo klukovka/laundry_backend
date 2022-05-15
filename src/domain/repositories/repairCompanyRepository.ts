@@ -10,6 +10,7 @@ export interface RepairCompanyRepository {
   getRepairCompanyById(repairCompanyId: string): Promise<RepairCompany | null>;
 
   getRepairProducts(repairCompanyId: string): Promise<RepairProduct[]>;
+  getRepairProductById(repairProductId: string): Promise<RepairProduct|null>;
   getRepairProductsAmount(repairCompanyId: string): Promise<number>;
   updateRepairProduct(repairProductId: string, options: any): Promise<void>;
   deleteRepairProduct(repairProductId: string): Promise<void>;

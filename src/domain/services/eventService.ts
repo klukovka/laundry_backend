@@ -87,7 +87,7 @@ export class EventService {
 
       await this._eventRepository.updateEvent(eventId, {
         client: clientId,
-        timeBegin: Date.now(),
+        timeBegin: new Date(),
         paidStatus: true,
         paidBonuses: options.paidBonuses,
         paidMoney: paidMoney,
@@ -122,7 +122,7 @@ export class EventService {
           });
           eventRepository
             .updateEvent(eventId, {
-              timeEnd: Date.now(),
+              timeEnd: new Date(),
             })
             .then((_) => {
               updateWashMachineTime(
@@ -150,7 +150,7 @@ export class EventService {
     try {
       await this._eventRepository.updateEvent(eventId, {
         taken: true,
-        timeEnd: Date.now(),
+        timeEnd: new Date(),
       });
       const event = await this._eventRepository.getEvent(eventId);
       await this._eventRepository.updateWashMachine(event?.washMachineId!, {

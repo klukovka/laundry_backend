@@ -99,6 +99,20 @@ export class RepairCompanyMongoRepository implements RepairCompanyRepository {
     }
   }
 
+  async getRepairProductById(
+    repairProductId: string
+  ): Promise<RepairProduct | null> {
+    try {
+      const product = await DatabaseMongo.getDB.repairProductId(
+        repairCompanyId
+      );
+
+      return this._getRepairProduct(product);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async updateRepairProduct(
     repairProductId: string,
     options: any

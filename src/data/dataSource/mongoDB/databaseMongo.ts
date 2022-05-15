@@ -468,6 +468,14 @@ export class DatabaseMongo {
 
   /// Repair Company
 
+  async getRepairProductById(repairProductId: string): Promise<any> {
+    try {
+      return await RepairProduct.findOne({ _id: repairProductId });
+    } catch (error: any) {
+      throw new Error('Repair products are not exists');
+    }
+  }
+
   async getRepairProducts(repairCompanyId: string): Promise<any> {
     try {
       return await RepairProduct.find({ repairCompany: repairCompanyId });
@@ -863,7 +871,7 @@ export class DatabaseMongo {
   ///
 
   backupMongo(): ChildProcessWithoutNullStreams {
-    const archivePath = `backup/${Date.now()}.gzip`;
+    const archivePath = `backup/${new Date()}.gzip`;
     return spawn('mongodump', [
       `${process.env.URL}`,
       `--archive=./${archivePath}`,
