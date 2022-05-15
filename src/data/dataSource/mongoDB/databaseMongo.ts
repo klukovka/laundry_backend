@@ -543,7 +543,7 @@ export class DatabaseMongo {
     }
   }
 
-  async getRepaiEventsAmount(options: any): Promise<number> {
+  async getRepairEventsAmount(options: any): Promise<number> {
     try {
       return await RepairEvent.find(options).count();
     } catch (error: any) {

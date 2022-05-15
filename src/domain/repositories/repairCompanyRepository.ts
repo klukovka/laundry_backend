@@ -10,14 +10,14 @@ export interface RepairCompanyRepository {
   getRepairCompanyById(repairCompanyId: string): Promise<RepairCompany | null>;
 
   getRepairProducts(repairCompanyId: string): Promise<RepairProduct[]>;
-  getRepairProductById(repairProductId: string): Promise<RepairProduct|null>;
+  getRepairProductById(repairProductId: string): Promise<RepairProduct | null>;
   getRepairProductsAmount(repairCompanyId: string): Promise<number>;
   updateRepairProduct(repairProductId: string, options: any): Promise<void>;
   deleteRepairProduct(repairProductId: string): Promise<void>;
   createRepairProduct(repairProduct: RepairProduct): Promise<string>;
 
   getRepairEvents(options: any): Promise<RepairEvent[]>;
-  getRepaiEventsAmount(options: any): Promise<number>;
+  getRepairEventsAmount(options: any): Promise<number>;
   updateRepairEvent(repairEventId: string, options: any): Promise<void>;
   deleteRepairEvent(repairEventId: string): Promise<void>;
   createRepairEvent(repairEvent: RepairEvent): Promise<string>;

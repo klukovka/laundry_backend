@@ -155,9 +155,9 @@ export class RepairCompanyMongoRepository implements RepairCompanyRepository {
     }
   }
 
-  async getRepaiEventsAmount(options: any): Promise<number> {
+  async getRepairEventsAmount(options: any): Promise<number> {
     try {
-      return await DatabaseMongo.getDB.getRepaiEventsAmount(options);
+      return await DatabaseMongo.getDB.getRepairEventsAmount(options);
     } catch (error) {
       throw error;
     }

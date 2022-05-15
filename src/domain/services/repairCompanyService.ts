@@ -129,7 +129,7 @@ export class RepairCompanyService {
         options
       );
       const totalElements =
-        await this._repairCompanyRepository.getRepaiEventsAmount(options);
+        await this._repairCompanyRepository.getRepairEventsAmount(options);
 
       return new PagedModel<RepairEvent>(
         0,

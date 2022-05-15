@@ -2,20 +2,25 @@ import { StatisticLaundry } from '../models/statisticLaundry';
 import { WashMachine } from '../models/washMachine';
 import { Laundry } from '../models/laundry';
 import { Event } from '../models/event';
+import { RepairEvent } from '../models/repairEvent';
 import { PagedModel } from '../models/pagedModel';
 import { EventRepository } from '../repositories/eventRepository';
 import { LaundryRepository } from '../repositories/laundryRepository';
+import { RepairCompanyRepository } from '../repositories/repairCompanyRepository';
 
 export class StatisticService {
   private _eventRepository: EventRepository;
   private _laundryRepository: LaundryRepository;
+  private _repairCompanyRepository: RepairCompanyRepository;
 
   constructor(
     eventRepository: EventRepository,
-    laundryRepository: LaundryRepository
+    laundryRepository: LaundryRepository,
+    repairCompanyRepository: RepairCompanyRepository
   ) {
     this._eventRepository = eventRepository;
     this._laundryRepository = laundryRepository;
+    this._repairCompanyRepository = repairCompanyRepository;
   }
 
   async allLaundryRatingStatistic(
@@ -356,5 +361,117 @@ export class StatisticService {
     } catch (error) {
       throw error;
     }
+  }
+
+  async allLaundryRepairEventStatistic(
+    query: any
+  ): Promise<PagedModel<StatisticLaundry<any>>> {
+    try {
+      const page = Number(query.page ?? 0);
+      const size = Number(query.size ?? 15);
+      const totalElements = await this._laundryRepository.getLaundriesAmount();
+      const laundries = await this._laundryRepository.getLaundries(page, size);
+
+      const content = new Array<StatisticLaundry<any>>();
+      if (laundries) {
+        for (let i = 0; i < laundries.length; i++) {
+          content.push(
+            await this.laundryRepairEventStatistic(laundries[i].laundryId!)
+          );
+        }
+      }
+
+      return new PagedModel<StatisticLaundry<any>>(
+        page,
+        size,
+        Math.ceil(totalElements / size),
+        totalElements,
+        content
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async laundryRepairEventStatistic(
+    laundryId: string
+  ): Promise<StatisticLaundry<any>> {
+    try {
+      const laundry = await this._laundryRepository.getLaundryById(laundryId);
+
+      const washMachinesAmount =
+        await this._laundryRepository.getWashMachinesAmount(laundryId);
+      const washMachines = await this._laundryRepository.getWashMachines(
+        laundryId,
+        0,
+        washMachinesAmount
+      );
+
+      const laundryRepairEvent = await this._laundryRepairEvent(laundry!);
+
+      let washMachinesRepairEvents = new Map<WashMachine, any>();
+
+      for (let i = 0; i < washMachines.length; i++) {
+        const statistic = await this._washMachineRepairEvent(washMachines[i]);
+        if (statistic) {
+          washMachinesRepairEvents.set(washMachines[i], statistic);
+        }
+      }
+
+      return new StatisticLaundry<any>(
+        laundry!,
+        laundryRepairEvent,
+        washMachinesRepairEvents
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  private async _laundryRepairEvent(laundry: Laundry): Promise<any> {
+    try {
+      const eventsAmount =
+        await this._repairCompanyRepository.getRepairEventsAmount({
+          laundry: laundry.laundryId!,
+        });
+      if (eventsAmount == 0) return null;
+
+      const events = await this._repairCompanyRepository.getRepairEvents({
+        laundry: laundry.laundryId!,
+      });
+
+      return this._countRepairEvents(events);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  private async _washMachineRepairEvent(
+    washMachine: WashMachine
+  ): Promise<any> {
+    try {
+      const eventsAmount =
+        await this._repairCompanyRepository.getRepairEventsAmount({
+          washMachine: washMachine.washMachineId!,
+        });
+      if (eventsAmount == 0) return null;
+
+      const events = await this._repairCompanyRepository.getRepairEvents({
+        washMachine: washMachine.washMachineId!,
+      });
+
+      return this._countRepairEvents(events);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  private _countRepairEvents(events: RepairEvent[]): any {
+    let statistic = { amount: events.length, money: 0 };
+    for (let i = 0; i < events.length; i++) {
+      statistic.money += events[i].costs;
+    }
+
+    return statistic;
   }
 }

@@ -7,7 +7,11 @@ export default (req: Request, res: Response, next: any) => {
   try {
     const role = req.body.userData.role;
 
-    if (role == Roles.EMPLOYEE || role == Roles.LAUNDRY || role == Role.ADMIN) {
+    if (
+      role == Roles.EMPLOYEE ||
+      role == Roles.LAUNDRY ||
+      role == Roles.ADMIN
+    ) {
       next();
     } else {
       return res
