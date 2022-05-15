@@ -976,6 +976,7 @@ export class DatabaseMongo {
           throw error;
         }
 
+        await this.connection?.dropDatabase();
         try {
           const backup_objects = JSON.parse(content);
           backup_objects.laundries.forEach(async (element: any) => {
