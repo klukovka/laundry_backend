@@ -1,7 +1,7 @@
-import { ChildProcessWithoutNullStreams } from 'child_process';
+import { ChildProcessWithoutNullStreams } from "child_process";
 
 export interface DataFlowRepository {
-  backup(): ChildProcessWithoutNullStreams;
-  restore(backup: string): ChildProcessWithoutNullStreams;
+  backup(): Promise<void>;
+  restore(backup: string): Promise<void>;
   getAllBackups(): Array<string>;
 }

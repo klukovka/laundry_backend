@@ -1,23 +1,23 @@
-import { Router, Request, Response } from 'express';
-import { DataFlowMongoRepository } from '../../data/repositories/dataFlowMongoRepository';
-import { DataFlowService } from '../../domain/services/dataFlowService';
-import StatusCodes from '../utils/statusCodes';
-import checkAuth from '../middleware/checkAuth';
-import checkAdmin from '../middleware/checkAdmin';
-import { ErrorMessage } from '../../domain/models/errorMessage';
+import { Router, Request, Response } from "express";
+import { DataFlowMongoRepository } from "../../data/repositories/dataFlowMongoRepository";
+import { DataFlowService } from "../../domain/services/dataFlowService";
+import StatusCodes from "../utils/statusCodes";
+import checkAuth from "../middleware/checkAuth";
+import checkAdmin from "../middleware/checkAdmin";
+import { ErrorMessage } from "../../domain/models/errorMessage";
 
 const router = Router();
 const dataFlowService = new DataFlowService(new DataFlowMongoRepository());
 
 router.get(
-  '/all',
+  "/all",
   checkAuth,
   checkAdmin,
   (req: Request, res: Response, next: any) => {
     try {
       const backups = dataFlowService.getAllBackups();
       res.status(StatusCodes.OK).json({
-        message: 'Successfully get backups',
+        message: "Successfully get backups",
         backups: backups,
       });
     } catch (error: any) {
@@ -29,64 +29,42 @@ router.get(
 );
 
 router.get(
-  '/backup',
+  "/backup",
   checkAuth,
   checkAdmin,
   (req: Request, res: Response, next: any) => {
-    const backupProcess = dataFlowService.backup();
-
-    backupProcess.on('error', (error) => {
-      return res
-        .status(StatusCodes.INTERNAL_ERROR)
-        .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error));
-    });
-
-    backupProcess.on('exit', (code, signal) => {
-      if (code) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-          message: `Backup process exited with code: ${code}`,
-        });
-      } else if (signal) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-          message: `Backup process killed with signal: ${signal}`,
-        });
-      } else {
+    dataFlowService
+      .backup()
+      .then(() => {
         return res.status(StatusCodes.CREATED).json({
-          message: 'Successfully backedup the database',
+          message: "Successfully backedup the database",
         });
-      }
-    });
+      })
+      .catch((err) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, err));
+      });
   }
 );
 
 router.post(
-  '/restore/:backupId',
+  "/restore/:backupId",
   checkAuth,
   checkAdmin,
   (req: Request, res: Response, next: any) => {
-    const restoreProcess = dataFlowService.restore(req.params.backupId);
-
-    restoreProcess.on('error', (error) => {
-      return res
-        .status(StatusCodes.INTERNAL_ERROR)
-        .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error));
-    });
-
-    restoreProcess.on('exit', (code, signal) => {
-      if (code) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-          message: `Restore process exited with code: ${code}`,
-        });
-      } else if (signal) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-          message: `Restore process killed with signal: ${signal}`,
-        });
-      } else {
+    dataFlowService
+      .restore(req.params.backupId)
+      .then(() => {
         return res.status(StatusCodes.CREATED).json({
-          message: 'Successfully restore the database',
+          message: "Successfully restore the database",
         });
-      }
-    });
+      })
+      .catch((err) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, err));
+      });
   }
 );
 

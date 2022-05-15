@@ -1,5 +1,5 @@
-import { ChildProcessWithoutNullStreams } from 'child_process';
-import { DataFlowRepository } from '../repositories/dataFlowRepository';
+import { ChildProcessWithoutNullStreams } from "child_process";
+import { DataFlowRepository } from "../repositories/dataFlowRepository";
 
 export class DataFlowService {
   private _repository: DataFlowRepository;
@@ -8,11 +8,11 @@ export class DataFlowService {
     this._repository = repository;
   }
 
-  backup(): ChildProcessWithoutNullStreams {
+  backup(): Promise<void> {
     return this._repository.backup();
   }
 
-  restore(backup: string): ChildProcessWithoutNullStreams {
+  restore(backup: string): Promise<void> {
     return this._repository.restore(backup);
   }
 
