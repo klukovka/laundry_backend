@@ -1,4 +1,4 @@
-import mongoose, { Connection } from "mongoose";
+import mongoose, { Collection, Connection, now } from "mongoose";
 import Laundry from "./models/laundry";
 import AdditionalMode from "./models/additionalMode";
 import Mode from "./models/mode";
@@ -11,6 +11,7 @@ import RepairProduct from "./models/repairProduct";
 import RepairEvent from "./models/repairEvent";
 import Event from "./models/event";
 import path from "path";
+import fs from "fs";
 import { ChildProcessWithoutNullStreams, spawn } from "child_process";
 import Roles from "../../../controllers/utils/roles";
 
@@ -926,22 +927,104 @@ export class DatabaseMongo {
   /// Backups
   ///
 
-  backupMongo(): ChildProcessWithoutNullStreams {
-    const archivePath = `backup/${Date.now()}.gzip`;
-    return spawn("mongodump", [
-      `${process.env.URL}`,
-      `--archive=./${archivePath}`,
-      "--gzip",
-    ]);
+  async backupMongo(): Promise<void> {
+    const laundries = await Laundry.find().lean();
+    const additionalmodes = await AdditionalMode.find().lean();
+    const modes = await Mode.find().lean();
+    const washmachines = await WashMachine.find().lean();
+    const users = await User.find().lean();
+    const clients = await Client.find().lean();
+    const employees = await Employee.find().lean();
+    const repaircompanies = await RepairCompany.find().lean();
+    const repairproducts = await RepairProduct.find().lean();
+    const repairevents = await RepairEvent.find().lean();
+    const events = await Event.find().lean();
+
+    const backup_object: any = {
+      laundries,
+      additionalmodes,
+      modes,
+      washmachines,
+      users,
+      clients,
+      employees,
+      repaircompanies,
+      repairproducts,
+      repairevents,
+      events,
+    };
+
+    const backup_json: any = JSON.stringify(backup_object, null, 4);
+    fs.writeFile(
+      path.join(__dirname, `../../../../backup/backup_${Date.now()}.json`),
+      backup_json,
+      "utf8",
+      (err) => {
+        if (err) {
+          throw err;
+        }
+      }
+    );
   }
 
-  restoreMongo(backup: string): ChildProcessWithoutNullStreams {
-    const archivePath = `backup/${backup}.gzip`;
-    return spawn("mongorestore", [
-      `${process.env.URL}`,
-      `--archive=./${archivePath}`,
-      "--gzip",
-      "--drop",
-    ]);
+  async restoreMongo(backup: string): Promise<void> {
+    fs.readFile(
+      path.join(__dirname, `../../../../backup/${backup}`),
+      "utf-8",
+      async (error, content) => {
+        if (error) {
+          throw error;
+        }
+
+        try {
+          const backup_objects = JSON.parse(content);
+          backup_objects.laundries.forEach(async (element: any) => {
+            await Laundry.create(element);
+          });
+
+          backup_objects.additionalmodes.forEach(async (element: any) => {
+            await AdditionalMode.create(element);
+          });
+
+          backup_objects.modes.forEach(async (element: any) => {
+            await Mode.create(element);
+          });
+
+          backup_objects.washmachines.forEach(async (element: any) => {
+            await WashMachine.create(element);
+          });
+
+          backup_objects.users.forEach(async (element: any) => {
+            await User.create(element);
+          });
+
+          backup_objects.clients.forEach(async (element: any) => {
+            await Client.create(element);
+          });
+
+          backup_objects.employees.forEach(async (element: any) => {
+            await Employee.create(element);
+          });
+
+          backup_objects.repaircompanies.forEach(async (element: any) => {
+            await RepairCompany.create(element);
+          });
+
+          backup_objects.repairproducts.forEach(async (element: any) => {
+            await RepairProduct.create(element);
+          });
+
+          backup_objects.repairevents.forEach(async (element: any) => {
+            await RepairEvent.create(element);
+          });
+
+          backup_objects.events.forEach(async (element: any) => {
+            await Event.create(element);
+          });
+        } catch (err) {
+          throw err;
+        }
+      }
+    );
   }
 }
