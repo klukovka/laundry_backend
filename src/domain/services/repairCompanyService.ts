@@ -3,17 +3,23 @@ import { RepairCompany } from "../models/repairCompany";
 import { RepairProduct } from "../models/repairProduct";
 import { RepairEvent } from "../models/repairEvent";
 import { RepairCompanyRepository } from "../repositories/repairCompanyRepository";
+import { EventRepository } from "../repositories/eventRepository";
 
 export class RepairCompanyService {
   private _repairCompanyRepository: RepairCompanyRepository;
+  private _eventRepository: EventRepository;
 
-  constructor(repairCompanyRepository: RepairCompanyRepository) {
+  constructor(
+    repairCompanyRepository: RepairCompanyRepository,
+    eventRepository: EventRepository
+  ) {
     this._repairCompanyRepository = repairCompanyRepository;
+    this._eventRepository = eventRepository;
   }
 
   async getRepairCompanies(options: any): Promise<PagedModel<RepairCompany>> {
     try {
-      const size = Number(options.size ?? 0);
+      const size = Number(options.size ?? 15);
       const page = Number(options.page ?? 0);
       const content = await this._repairCompanyRepository.getRepairCompanies(
         page,
@@ -149,6 +155,14 @@ export class RepairCompanyService {
         repairEventId,
         options
       );
+      const repairEvent =
+        await this._repairCompanyRepository.getRepairEventById(repairEventId);
+      await this._eventRepository.updateWashMachine(
+        repairEvent!.washMachineId,
+        {
+          isWorking: true,
+        }
+      );
     } catch (error) {
       throw error;
     }
@@ -161,12 +175,16 @@ export class RepairCompanyService {
       throw error;
     }
   }
+
   async createRepairEvent(repairEvent: any): Promise<string> {
     try {
       const repairProduct =
         await this._repairCompanyRepository.getRepairProductById(
           repairEvent.repairProductId
         );
+      await this._eventRepository.updateWashMachine(repairEvent.washMachineId, {
+        isWorking: false,
+      });
       return await this._repairCompanyRepository.createRepairEvent(
         new RepairEvent(
           repairProduct?.costs ?? 0,

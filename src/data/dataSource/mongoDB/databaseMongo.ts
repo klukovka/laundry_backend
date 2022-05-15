@@ -1,35 +1,35 @@
-import mongoose, { Connection } from 'mongoose';
-import Laundry from './models/laundry';
-import AdditionalMode from './models/additionalMode';
-import Mode from './models/mode';
-import WashMachine from './models/washMachine';
-import User from './models/user';
-import Client from './models/client';
-import Employee from './models/employee';
-import RepairCompany from './models/repairCompany';
-import RepairProduct from './models/repairProduct';
-import RepairEvent from './models/repairEvent';
-import Event from './models/event';
-import path from 'path';
-import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
-import Roles from '../../../controllers/utils/roles';
+import mongoose, { Connection } from "mongoose";
+import Laundry from "./models/laundry";
+import AdditionalMode from "./models/additionalMode";
+import Mode from "./models/mode";
+import WashMachine from "./models/washMachine";
+import User from "./models/user";
+import Client from "./models/client";
+import Employee from "./models/employee";
+import RepairCompany from "./models/repairCompany";
+import RepairProduct from "./models/repairProduct";
+import RepairEvent from "./models/repairEvent";
+import Event from "./models/event";
+import path from "path";
+import { ChildProcessWithoutNullStreams, spawn } from "child_process";
+import Roles from "../../../controllers/utils/roles";
 
 export class DatabaseMongo {
   private static db: DatabaseMongo;
   private connection: Connection | null = null;
 
   private constructor() {
-    const connectionString = process.env.CONNECTION || '';
+    const connectionString = process.env.CONNECTION || "";
     mongoose.Promise = global.Promise;
 
     mongoose
       .connect(connectionString)
-      .then(() => console.log('MongoDB connection opened!'));
+      .then(() => console.log("MongoDB connection opened!"));
 
     this.connection = mongoose.connection;
     this.connection.on(
-      'error',
-      console.error.bind(console, 'MongoDB connection error: ')
+      "error",
+      console.error.bind(console, "MongoDB connection error: ")
     );
   }
 
@@ -43,7 +43,7 @@ export class DatabaseMongo {
   close() {
     this.connection
       ?.close()
-      .then(() => console.log('MongoDB connection closed!'));
+      .then(() => console.log("MongoDB connection closed!"));
   }
 
   /// Users
@@ -58,7 +58,7 @@ export class DatabaseMongo {
       }).save();
       return createdUser?._id.toString();
     } catch (error) {
-      throw new Error('User creating is failed');
+      throw new Error("User creating is failed");
     }
   }
 
@@ -92,10 +92,10 @@ export class DatabaseMongo {
             await RepairCompany.deleteMany({ user: userId });
         }
       } catch (error) {
-        throw new Error('User deleting is failed');
+        throw new Error("User deleting is failed");
       }
     } else {
-      throw new Error('User has already been deleted!');
+      throw new Error("User has already been deleted!");
     }
   }
 
@@ -105,10 +105,10 @@ export class DatabaseMongo {
       try {
         await User.updateOne({ _id: userId }, { $set: options });
       } catch (error) {
-        throw new Error('User updating is failed');
+        throw new Error("User updating is failed");
       }
     } else {
-      throw new Error('User is not exist');
+      throw new Error("User is not exist");
     }
   }
 
@@ -116,7 +116,7 @@ export class DatabaseMongo {
     try {
       return await User.findOne({ _id: userId });
     } catch (error: any) {
-      throw new Error('User is not exists');
+      throw new Error("User is not exists");
     }
   }
 
@@ -124,7 +124,7 @@ export class DatabaseMongo {
     try {
       return await User.findOne({ email });
     } catch (error: any) {
-      throw new Error('User is not exists');
+      throw new Error("User is not exists");
     }
   }
 
@@ -142,23 +142,23 @@ export class DatabaseMongo {
       }).save();
       return createdLaundry?._id.toString();
     } catch (error) {
-      throw new Error('Laundry creating is failed');
+      throw new Error("Laundry creating is failed");
     }
   }
 
   async getLaundryByUserId(userId: string): Promise<any> {
     try {
-      return await Laundry.findOne({ user: userId }).populate('user');
+      return await Laundry.findOne({ user: userId }).populate("user");
     } catch (error: any) {
-      throw new Error('Laundry is not exists');
+      throw new Error("Laundry is not exists");
     }
   }
 
   async getLaundryById(laundryId: string): Promise<any> {
     try {
-      return await Laundry.findOne({ _id: laundryId }).populate('user');
+      return await Laundry.findOne({ _id: laundryId }).populate("user");
     } catch (error: any) {
-      throw new Error('Laundry is not exists');
+      throw new Error("Laundry is not exists");
     }
   }
 
@@ -182,10 +182,10 @@ export class DatabaseMongo {
           }
         );
       } catch (error) {
-        throw new Error('Laundry updating is failed');
+        throw new Error("Laundry updating is failed");
       }
     } else {
-      throw new Error('Laundry is not exist');
+      throw new Error("Laundry is not exist");
     }
   }
 
@@ -200,7 +200,7 @@ export class DatabaseMongo {
   async getLaundries(page: number, size: number): Promise<any> {
     try {
       return await Laundry.find()
-        .populate('user')
+        .populate("user")
         .skip(page * size)
         .limit(size);
     } catch (error: any) {
@@ -229,23 +229,23 @@ export class DatabaseMongo {
       }).save();
       return createdClient?._id.toString();
     } catch (error) {
-      throw new Error('Client creating is failed');
+      throw new Error("Client creating is failed");
     }
   }
 
   async getClientByUserId(userId: string): Promise<any> {
     try {
-      return await Client.findOne({ user: userId }).populate('user');
+      return await Client.findOne({ user: userId }).populate("user");
     } catch (error: any) {
-      throw new Error('Client is not exists');
+      throw new Error("Client is not exists");
     }
   }
 
   async getClientById(clientId: string): Promise<any> {
     try {
-      return await Client.findOne({ _id: clientId }).populate('user');
+      return await Client.findOne({ _id: clientId }).populate("user");
     } catch (error: any) {
-      throw new Error('Client is not exists');
+      throw new Error("Client is not exists");
     }
   }
 
@@ -268,14 +268,14 @@ export class DatabaseMongo {
         }
       );
     } catch (error) {
-      throw new Error('Client updating is failed');
+      throw new Error("Client updating is failed");
     }
   }
 
   async getClients(page: number, size: number): Promise<any> {
     try {
       return await Client.find()
-        .populate('user')
+        .populate("user")
         .skip(page * size)
         .limit(size);
     } catch (error: any) {
@@ -305,15 +305,15 @@ export class DatabaseMongo {
       }).save();
       return createdEmployee?._id.toString();
     } catch (error) {
-      throw new Error('Employee creating is failed');
+      throw new Error("Employee creating is failed");
     }
   }
 
   async getEmployeeByUserId(userId: string): Promise<any> {
     try {
-      return await Employee.findOne({ user: userId }).populate('user laundry');
+      return await Employee.findOne({ user: userId }).populate("user laundry");
     } catch (error: any) {
-      throw new Error('Client is not exists');
+      throw new Error("Client is not exists");
     }
   }
 
@@ -334,7 +334,7 @@ export class DatabaseMongo {
         }
       );
     } catch (error) {
-      throw new Error('Employee updating is failed');
+      throw new Error("Employee updating is failed");
     }
   }
 
@@ -353,7 +353,7 @@ export class DatabaseMongo {
   ): Promise<any> {
     try {
       return await Employee.find({ laundry: laundryId })
-        .populate('user')
+        .populate("user")
         .skip(page * size)
         .limit(size);
     } catch (error: any) {
@@ -372,7 +372,7 @@ export class DatabaseMongo {
   async getAllEmployees(page: number, size: number): Promise<any> {
     try {
       return await Employee.find()
-        .populate('user')
+        .populate("user")
         .skip(page * size)
         .limit(size);
     } catch (error: any) {
@@ -401,32 +401,32 @@ export class DatabaseMongo {
       }).save();
       return createdRepairCompany?._id.toString();
     } catch (error) {
-      throw new Error('Repair Company creating is failed');
+      throw new Error("Repair Company creating is failed");
     }
   }
 
   async getRepairCompanyByUserId(userId: string): Promise<any> {
     try {
-      return await RepairCompany.findOne({ user: userId }).populate('user');
+      return await RepairCompany.findOne({ user: userId }).populate("user");
     } catch (error: any) {
-      throw new Error('Repair company is not exists');
+      throw new Error("Repair company is not exists");
     }
   }
 
   async getRepairCompanyById(repairCompanyId: string): Promise<any> {
     try {
       return await RepairCompany.findOne({ _id: repairCompanyId }).populate(
-        'user'
+        "user"
       );
     } catch (error: any) {
-      throw new Error('Repair company is not exists');
+      throw new Error("Repair company is not exists");
     }
   }
 
   async getRepairCompanies(page: number, size: number): Promise<any> {
     try {
       return await RepairCompany.find()
-        .populate('user')
+        .populate("user")
         .skip(page * size)
         .limit(size);
     } catch (error: any) {
@@ -462,7 +462,7 @@ export class DatabaseMongo {
         }
       );
     } catch (error) {
-      throw new Error('Repair Company updating is failed');
+      throw new Error("Repair Company updating is failed");
     }
   }
 
@@ -472,7 +472,7 @@ export class DatabaseMongo {
     try {
       return await RepairProduct.findOne({ _id: repairProductId });
     } catch (error: any) {
-      throw new Error('Repair products are not exists');
+      throw new Error("Repair products are not exists");
     }
   }
 
@@ -480,7 +480,7 @@ export class DatabaseMongo {
     try {
       return await RepairProduct.find({ repairCompany: repairCompanyId });
     } catch (error: any) {
-      throw new Error('Repair products are not exists');
+      throw new Error("Repair products are not exists");
     }
   }
 
@@ -490,7 +490,7 @@ export class DatabaseMongo {
         repairCompany: repairCompanyId,
       }).count();
     } catch (error: any) {
-      throw new Error('Repair products are not exists');
+      throw new Error("Repair products are not exists");
     }
   }
 
@@ -506,7 +506,7 @@ export class DatabaseMongo {
         }
       );
     } catch (error) {
-      throw new Error('Repair Product updating is failed');
+      throw new Error("Repair Product updating is failed");
     }
   }
 
@@ -514,7 +514,7 @@ export class DatabaseMongo {
     try {
       await RepairProduct.deleteOne({ _id: repairProductId });
     } catch (error) {
-      throw new Error('Repair Product deleting is failed');
+      throw new Error("Repair Product deleting is failed");
     }
   }
 
@@ -529,17 +529,25 @@ export class DatabaseMongo {
       }).save();
       return product?._id.toString();
     } catch (error) {
-      throw new Error('Repair Product creating is failed');
+      throw new Error("Repair Product creating is failed");
     }
   }
 
   /// Repair Event
 
+  async getRepairEventById(id: string): Promise<any> {
+    try {
+      return await RepairEvent.findOne({ _id: id });
+    } catch (error: any) {
+      throw new Error("Repair events are not exists");
+    }
+  }
+
   async getRepairEvents(options: any): Promise<any> {
     try {
       return await RepairEvent.find(options);
     } catch (error: any) {
-      throw new Error('Repair events are not exists');
+      throw new Error("Repair events are not exists");
     }
   }
 
@@ -547,7 +555,7 @@ export class DatabaseMongo {
     try {
       return await RepairEvent.find(options).count();
     } catch (error: any) {
-      throw new Error('Repair events are not exists');
+      throw new Error("Repair events are not exists");
     }
   }
 
@@ -560,7 +568,7 @@ export class DatabaseMongo {
         }
       );
     } catch (error) {
-      throw new Error('Repair event updating is failed');
+      throw new Error("Repair event updating is failed");
     }
   }
 
@@ -568,7 +576,7 @@ export class DatabaseMongo {
     try {
       await RepairEvent.deleteOne({ _id: repairEventId });
     } catch (error) {
-      throw new Error('Repair event deleting is failed');
+      throw new Error("Repair event deleting is failed");
     }
   }
 
@@ -584,7 +592,7 @@ export class DatabaseMongo {
       }).save();
       return event?._id.toString();
     } catch (error) {
-      throw new Error('Repair event creating is failed');
+      throw new Error("Repair event creating is failed");
     }
   }
 
@@ -607,7 +615,7 @@ export class DatabaseMongo {
       }).save();
       return createdWashMachine?._id.toString();
     } catch (error) {
-      throw new Error('WashMachine creating is failed');
+      throw new Error("WashMachine creating is failed");
     }
   }
 
@@ -623,7 +631,7 @@ export class DatabaseMongo {
         }
       );
     } catch (error) {
-      throw new Error('WashMachine updating is failed');
+      throw new Error("WashMachine updating is failed");
     }
   }
 
@@ -631,7 +639,7 @@ export class DatabaseMongo {
     try {
       await WashMachine.deleteOne({ _id: washMachineId });
     } catch (error) {
-      throw new Error('WashMachine deleting is failed');
+      throw new Error("WashMachine deleting is failed");
     }
   }
 
@@ -678,7 +686,7 @@ export class DatabaseMongo {
       }).save();
       return createdAdditionalMode?._id.toString();
     } catch (error) {
-      throw new Error('Additional Mode creating is failed');
+      throw new Error("Additional Mode creating is failed");
     }
   }
 
@@ -695,7 +703,7 @@ export class DatabaseMongo {
         }
       );
     } catch (error) {
-      throw new Error('Additional Mode updating is failed');
+      throw new Error("Additional Mode updating is failed");
     }
   }
 
@@ -703,7 +711,7 @@ export class DatabaseMongo {
     try {
       await AdditionalMode.deleteOne({ _id: additionalModeId });
     } catch (error) {
-      throw new Error('Additional Mode deleting is failed');
+      throw new Error("Additional Mode deleting is failed");
     }
   }
 
@@ -744,7 +752,7 @@ export class DatabaseMongo {
       }).save();
       return createdMode?._id.toString();
     } catch (error) {
-      throw new Error('Mode creating is failed');
+      throw new Error("Mode creating is failed");
     }
   }
 
@@ -761,7 +769,7 @@ export class DatabaseMongo {
         }
       );
     } catch (error) {
-      throw new Error('Mode updating is failed');
+      throw new Error("Mode updating is failed");
     }
   }
 
@@ -769,7 +777,7 @@ export class DatabaseMongo {
     try {
       await Mode.deleteOne({ _id: modeId });
     } catch (error) {
-      throw new Error('Mode deleting is failed');
+      throw new Error("Mode deleting is failed");
     }
   }
 
@@ -813,14 +821,14 @@ export class DatabaseMongo {
       }).save();
       return createdEvent?._id.toString();
     } catch (error) {
-      throw new Error('Client creating is failed');
+      throw new Error("Client creating is failed");
     }
   }
 
   async getEventById(eventId: string): Promise<any> {
     try {
       return await Event.findOne({ _id: eventId }).populate(
-        'mode additionalMode'
+        "mode additionalMode"
       );
     } catch (error: any) {
       throw new Error(error.message);
@@ -842,7 +850,7 @@ export class DatabaseMongo {
   ): Promise<any> {
     try {
       return await Event.find(options)
-        .populate('mode additionalMode')
+        .populate("mode additionalMode")
         .skip(page * size)
         .limit(size);
     } catch (error: any) {
@@ -871,21 +879,21 @@ export class DatabaseMongo {
   ///
 
   backupMongo(): ChildProcessWithoutNullStreams {
-    const archivePath = `backup/${new Date()}.gzip`;
-    return spawn('mongodump', [
+    const archivePath = `backup/${Date.now()}.gzip`;
+    return spawn("mongodump", [
       `${process.env.URL}`,
       `--archive=./${archivePath}`,
-      '--gzip',
+      "--gzip",
     ]);
   }
 
   restoreMongo(backup: string): ChildProcessWithoutNullStreams {
     const archivePath = `backup/${backup}.gzip`;
-    return spawn('mongorestore', [
+    return spawn("mongorestore", [
       `${process.env.URL}`,
       `--archive=./${archivePath}`,
-      '--gzip',
-      '--drop',
+      "--gzip",
+      "--drop",
     ]);
   }
 }

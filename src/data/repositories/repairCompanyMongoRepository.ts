@@ -1,11 +1,19 @@
-import { RepairCompany } from '../../domain/models/repairCompany';
-import { RepairEvent } from '../../domain/models/repairEvent';
-import { RepairProduct } from '../../domain/models/repairProduct';
-import { User } from '../../domain/models/user';
-import { RepairCompanyRepository } from '../../domain/repositories/repairCompanyRepository';
-import { DatabaseMongo } from '../dataSource/mongoDB/databaseMongo';
+import { RepairCompany } from "../../domain/models/repairCompany";
+import { RepairEvent } from "../../domain/models/repairEvent";
+import { RepairProduct } from "../../domain/models/repairProduct";
+import { User } from "../../domain/models/user";
+import { RepairCompanyRepository } from "../../domain/repositories/repairCompanyRepository";
+import { DatabaseMongo } from "../dataSource/mongoDB/databaseMongo";
 
 export class RepairCompanyMongoRepository implements RepairCompanyRepository {
+  async getRepairEventById(id: string): Promise<RepairEvent | null> {
+    try {
+      const event = await DatabaseMongo.getDB.getRepairEventById(id);
+      return this._getRepairEvent(event);
+    } catch (error) {
+      throw error;
+    }
+  }
   async getRepairCompanyId(userId: string): Promise<RepairCompany | null> {
     try {
       const user = await DatabaseMongo.getDB.getRepairCompanyByUserId(userId);

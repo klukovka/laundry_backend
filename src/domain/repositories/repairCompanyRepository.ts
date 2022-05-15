@@ -1,6 +1,6 @@
-import { RepairCompany } from '../models/repairCompany';
-import { RepairProduct } from '../models/repairProduct';
-import { RepairEvent } from '../models/repairEvent';
+import { RepairCompany } from "../models/repairCompany";
+import { RepairProduct } from "../models/repairProduct";
+import { RepairEvent } from "../models/repairEvent";
 
 export interface RepairCompanyRepository {
   getRepairCompanyId(userId: string): Promise<RepairCompany | null>;
@@ -17,6 +17,7 @@ export interface RepairCompanyRepository {
   createRepairProduct(repairProduct: RepairProduct): Promise<string>;
 
   getRepairEvents(options: any): Promise<RepairEvent[]>;
+  getRepairEventById(id: string): Promise<RepairEvent | null>;
   getRepairEventsAmount(options: any): Promise<number>;
   updateRepairEvent(repairEventId: string, options: any): Promise<void>;
   deleteRepairEvent(repairEventId: string): Promise<void>;
