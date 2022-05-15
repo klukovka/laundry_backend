@@ -1,15 +1,15 @@
 import { Laundry } from './laundry';
 import { WashMachine } from './washMachine';
 
-export class StatisticLaundry {
+export class StatisticLaundry<T> {
   laundry: Laundry;
-  laundryValue: number;
-  washMachineValue: Map<WashMachine, number>;
+  laundryValue: T;
+  washMachineValue: Map<WashMachine, T>;
 
   constructor(
     laundry: Laundry,
-    laundryValue: number,
-    washMachineValue: Map<WashMachine, number>
+    laundryValue: T,
+    washMachineValue: Map<WashMachine, T>
   ) {
     this.laundry = laundry;
     this.washMachineValue = washMachineValue;

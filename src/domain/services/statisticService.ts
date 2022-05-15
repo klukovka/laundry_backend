@@ -19,7 +19,7 @@ export class StatisticService {
 
   async allLaundryRatingStatistic(
     query: any
-  ): Promise<PagedModel<StatisticLaundry>> {
+  ): Promise<PagedModel<StatisticLaundry<number>>> {
     try {
       const page = Number(query.page ?? 0);
       const size = Number(query.size ?? 15);
@@ -35,7 +35,7 @@ export class StatisticService {
         }
       }
 
-      return new PagedModel<StatisticLaundry>(
+      return new PagedModel<StatisticLaundry<number>>(
         page,
         size,
         Math.ceil(totalElements / size),
@@ -47,7 +47,9 @@ export class StatisticService {
     }
   }
 
-  async laundryRatingStatistic(laundryId: string): Promise<StatisticLaundry> {
+  async laundryRatingStatistic(
+    laundryId: string
+  ): Promise<StatisticLaundry<number>> {
     try {
       const laundry = await this._laundryRepository.getLaundryById(laundryId);
 
@@ -70,7 +72,11 @@ export class StatisticService {
         }
       }
 
-      return new StatisticLaundry(laundry!, laundryRating, washMachinesRating);
+      return new StatisticLaundry<number>(
+        laundry!,
+        laundryRating,
+        washMachinesRating
+      );
     } catch (error) {
       throw error;
     }
