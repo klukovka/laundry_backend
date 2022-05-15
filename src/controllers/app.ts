@@ -9,7 +9,7 @@ import laundryRoutes from "./routes/laundryRoutes";
 import employeeRoutes from "./routes/employeeRoutes";
 import clientRoutes from "./routes/clientRoutes";
 import repairCompanyRoutes from "./routes/repairCompanyRoutes";
-import statisticRoles from "./routes/statisticRoles";
+import statisticRoutes from "./routes/statisticRoutes";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -61,7 +61,7 @@ app.use("/employee", employeeRoutes);
 app.use("/client", clientRoutes);
 app.use("/event", eventRoutes);
 app.use("/repairCompany", repairCompanyRoutes);
-app.use("/statistic", statisticRoles);
+app.use("/statistic", statisticRoutes);
 
 //endpoint doesn't exist
 app.use((req: Request, res: Response, next: any) => {
