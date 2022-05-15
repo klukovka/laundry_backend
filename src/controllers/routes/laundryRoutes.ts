@@ -1,19 +1,19 @@
-import { Router, Request, Response } from 'express';
-import { LaundryMongoRepository } from '../../data/repositories/laundryMongoRepository';
-import { LaundryService } from '../../domain/services/laundryService';
-import checkAuth from '../middleware/checkAuth';
-import checkAdminClient from '../middleware/checkAdminClient';
-import checkLaundry from '../middleware/checkLaundry';
-import checkLaundryEmployee from '../middleware/checkLaundryEmployee';
-import saveLaundryId from '../middleware/saveLaundryId';
-import StatusCodes from '../utils/statusCodes';
-import { ErrorMessage } from '../../domain/models/errorMessage';
+import { Router, Request, Response } from "express";
+import { LaundryMongoRepository } from "../../data/repositories/laundryMongoRepository";
+import { LaundryService } from "../../domain/services/laundryService";
+import checkAuth from "../middleware/checkAuth";
+import checkAdminClient from "../middleware/checkAdminClient";
+import checkLaundry from "../middleware/checkLaundry";
+import checkLaundryEmployee from "../middleware/checkLaundryEmployee";
+import saveLaundryId from "../middleware/saveLaundryId";
+import StatusCodes from "../utils/statusCodes";
+import { ErrorMessage } from "../../domain/models/errorMessage";
 
 const router = Router();
 const laundryService = new LaundryService(new LaundryMongoRepository());
 
 router.get(
-  '/all',
+  "/all",
   checkAuth,
   checkAdminClient,
   (req: Request, res: Response, next: any) => {
@@ -31,9 +31,10 @@ router.get(
 );
 
 router.get(
-  '/personal-info',
+  "/personal-info",
   checkAuth,
-  checkLaundry,
+  checkLaundryEmployee,
+  saveLaundryId,
   (req: Request, res: Response, next: any) => {
     laundryService
       .getLaundryByUserId(req.body.userData.userId)
@@ -49,7 +50,7 @@ router.get(
 );
 
 router.put(
-  '/update-laundry',
+  "/update-laundry",
   checkAuth,
   checkLaundry,
   (req: Request, res: Response, next: any) => {
@@ -67,7 +68,7 @@ router.put(
 );
 
 router.get(
-  '/all-employees',
+  "/all-employees",
   checkAuth,
   checkLaundry,
   (req: Request, res: Response, next: any) => {
@@ -85,7 +86,7 @@ router.get(
 );
 
 router.post(
-  '/create-wash-machine',
+  "/create-wash-machine",
   checkAuth,
   checkLaundryEmployee,
   saveLaundryId,
@@ -106,7 +107,7 @@ router.post(
 );
 
 router.put(
-  '/update-wash-machine/:washMachineId',
+  "/update-wash-machine/:washMachineId",
   checkAuth,
   checkLaundryEmployee,
   (req: Request, res: Response, next: any) => {
@@ -124,7 +125,7 @@ router.put(
 );
 
 router.delete(
-  '/delete-wash-machine/:washMachineId',
+  "/delete-wash-machine/:washMachineId",
   checkAuth,
   checkLaundryEmployee,
   (req: Request, res: Response, next: any) => {
@@ -142,7 +143,7 @@ router.delete(
 );
 
 router.get(
-  '/all-washing-machines-laundry',
+  "/all-washing-machines-laundry",
   checkAuth,
   checkLaundryEmployee,
   saveLaundryId,
@@ -161,7 +162,7 @@ router.get(
 );
 
 router.get(
-  '/all-washing-machines-users/:laundryId',
+  "/all-washing-machines-users/:laundryId",
   checkAuth,
   checkAdminClient,
   (req: Request, res: Response, next: any) => {
@@ -179,7 +180,7 @@ router.get(
 );
 
 router.post(
-  '/create-additional-mode',
+  "/create-additional-mode",
   checkAuth,
   checkLaundryEmployee,
   saveLaundryId,
@@ -200,14 +201,14 @@ router.post(
 );
 
 router.put(
-  '/update-additional-mode/:additionalModeId',
+  "/update-additional-mode/:additionalModeId",
   checkAuth,
   checkLaundryEmployee,
   (req: Request, res: Response, next: any) => {
     laundryService
       .updateAdditionalMode(req.params.additionalModeId, req.body)
       .then((data) => {
-        return res.status(StatusCodes.OK);
+        return res.status(StatusCodes.OK).json();
       })
       .catch((error) => {
         return res
@@ -218,14 +219,14 @@ router.put(
 );
 
 router.delete(
-  '/delete-additional-mode/:additionalModeId',
+  "/delete-additional-mode/:additionalModeId",
   checkAuth,
   checkLaundryEmployee,
   (req: Request, res: Response, next: any) => {
     laundryService
       .deleteAdditionalMode(req.params.additionalModeId)
       .then((data) => {
-        return res.status(StatusCodes.OK);
+        return res.status(StatusCodes.OK).json();
       })
       .catch((error) => {
         return res
@@ -236,7 +237,7 @@ router.delete(
 );
 
 router.get(
-  '/all-additional-modes',
+  "/all-additional-modes",
   checkAuth,
   checkLaundryEmployee,
   saveLaundryId,
@@ -255,7 +256,7 @@ router.get(
 );
 
 router.post(
-  '/create-mode',
+  "/create-mode",
   checkAuth,
   checkLaundryEmployee,
   saveLaundryId,
@@ -276,14 +277,14 @@ router.post(
 );
 
 router.put(
-  '/update-mode/:modeId',
+  "/update-mode/:modeId",
   checkAuth,
   checkLaundryEmployee,
   (req: Request, res: Response, next: any) => {
     laundryService
       .updateMode(req.params.modeId, req.body)
       .then((data) => {
-        return res.status(StatusCodes.OK);
+        return res.status(StatusCodes.OK).json();
       })
       .catch((error) => {
         return res
@@ -294,14 +295,14 @@ router.put(
 );
 
 router.delete(
-  '/delete-mode:modeId',
+  "/delete-mode/:modeId",
   checkAuth,
   checkLaundryEmployee,
   (req: Request, res: Response, next: any) => {
     laundryService
       .deleteMode(req.params.modeId)
       .then((data) => {
-        return res.status(StatusCodes.OK);
+        return res.status(StatusCodes.OK).json();
       })
       .catch((error) => {
         return res
@@ -312,7 +313,7 @@ router.delete(
 );
 
 router.get(
-  '/all-modes',
+  "/all-modes",
   checkAuth,
   checkLaundryEmployee,
   saveLaundryId,

@@ -1,17 +1,17 @@
-import { Router, Request, Response } from 'express';
-import { LaundryMongoRepository } from '../../data/repositories/laundryMongoRepository';
-import { LaundryService } from '../../domain/services/laundryService';
-import checkAuth from '../middleware/checkAuth';
-import checkEmployee from '../middleware/checkEmployee';
-import checkAdmin from '../middleware/checkAdmin';
-import StatusCodes from '../utils/statusCodes';
-import { ErrorMessage } from '../../domain/models/errorMessage';
+import { Router, Request, Response } from "express";
+import { LaundryMongoRepository } from "../../data/repositories/laundryMongoRepository";
+import { LaundryService } from "../../domain/services/laundryService";
+import checkAuth from "../middleware/checkAuth";
+import checkEmployee from "../middleware/checkEmployee";
+import checkAdmin from "../middleware/checkAdmin";
+import StatusCodes from "../utils/statusCodes";
+import { ErrorMessage } from "../../domain/models/errorMessage";
 
 const router = Router();
 const laundryService = new LaundryService(new LaundryMongoRepository());
 
 router.get(
-  '/personal-info',
+  "/personal-info",
   checkAuth,
   checkEmployee,
   (req: Request, res: Response, next: any) => {
@@ -28,15 +28,15 @@ router.get(
   }
 );
 
-router.get(
-  '/update-employee',
+router.put(
+  "/update-employee",
   checkAuth,
   checkEmployee,
   (req: Request, res: Response, next: any) => {
     laundryService
       .updateEmployee(req.body)
       .then((_) => {
-        return res.status(StatusCodes.OK);
+        return res.status(StatusCodes.OK).json();
       })
       .catch((error) => {
         return res
@@ -47,14 +47,14 @@ router.get(
 );
 
 router.get(
-  '/all-employees',
+  "/all-employees",
   checkAuth,
-  checkEmployee,
+  checkAdmin,
   (req: Request, res: Response, next: any) => {
     laundryService
       .getAllEmployees(req.query)
-      .then((_) => {
-        return res.status(StatusCodes.OK);
+      .then((data) => {
+        return res.status(StatusCodes.OK).json(data);
       })
       .catch((error) => {
         return res

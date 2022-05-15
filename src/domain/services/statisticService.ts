@@ -1,12 +1,12 @@
-import { StatisticLaundry } from '../models/statisticLaundry';
-import { WashMachine } from '../models/washMachine';
-import { Laundry } from '../models/laundry';
-import { Event } from '../models/event';
-import { RepairEvent } from '../models/repairEvent';
-import { PagedModel } from '../models/pagedModel';
-import { EventRepository } from '../repositories/eventRepository';
-import { LaundryRepository } from '../repositories/laundryRepository';
-import { RepairCompanyRepository } from '../repositories/repairCompanyRepository';
+import { StatisticLaundry } from "../models/statisticLaundry";
+import { WashMachine } from "../models/washMachine";
+import { Laundry } from "../models/laundry";
+import { Event } from "../models/event";
+import { RepairEvent } from "../models/repairEvent";
+import { PagedModel } from "../models/pagedModel";
+import { EventRepository } from "../repositories/eventRepository";
+import { LaundryRepository } from "../repositories/laundryRepository";
+import { RepairCompanyRepository } from "../repositories/repairCompanyRepository";
 
 export class StatisticService {
   private _eventRepository: EventRepository;
@@ -203,7 +203,7 @@ export class StatisticService {
     }
   }
 
-  private async _laundryPayments(laundry: Laundry): Promise<number> {
+  private async _laundryPayments(laundry: Laundry): Promise<number | null> {
     try {
       const eventsAmount = await this._eventRepository.getLaundryEventsAmount(
         laundry.laundryId!
@@ -350,7 +350,7 @@ export class StatisticService {
       for (let i = 0; i < events.length; i++) {
         const diff =
           Math.abs(
-            events[i].timeEnd.getTime() - events[i].timeBegin.getTime()
+            events[i]!.timeEnd!.getTime() - events[i]!.timeBegin!.getTime()
           ) /
           1000 /
           60;

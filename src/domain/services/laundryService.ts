@@ -1,12 +1,12 @@
-import { LaundryRepository } from '../repositories/laundryRepository';
-import { PagedModel } from '../models/pagedModel';
-import { Laundry } from '../models/laundry';
-import { User } from '../models/user';
-import Roles from '../../controllers/utils/roles';
-import { Employee } from '../models/employee';
-import { WashMachine } from '../models/washMachine';
-import { AdditionalMode } from '../models/additionalMode';
-import { Mode } from '../models/mode';
+import { LaundryRepository } from "../repositories/laundryRepository";
+import { PagedModel } from "../models/pagedModel";
+import { Laundry } from "../models/laundry";
+import { User } from "../models/user";
+import Roles from "../../controllers/utils/roles";
+import { Employee } from "../models/employee";
+import { WashMachine } from "../models/washMachine";
+import { AdditionalMode } from "../models/additionalMode";
+import { Mode } from "../models/mode";
 
 export class LaundryService {
   private _laundryRepository: LaundryRepository;
@@ -53,7 +53,7 @@ export class LaundryService {
         );
       } else {
         throw new Error(
-          'Max amount of washing machines should be bigger than current amount'
+          "Max amount of washing machines should be bigger than current amount"
         );
       }
     } catch (error) {
@@ -83,11 +83,11 @@ export class LaundryService {
         employee.name,
         employee.phone,
         employee.birthday,
-        '',
+        "",
         employee.userData.userId,
         employee.userData.id,
         null,
-        new User(employee.userData.email, Roles.EMPLOYEE)
+        new User(employee.email, Roles.EMPLOYEE)
       )
     );
     try {
@@ -198,7 +198,7 @@ export class LaundryService {
           washMachine.capacity,
           washMachine.powerUsage,
           washMachine.spinningSpeed,
-          '',
+          "",
           washMachine.maxTime,
           washMachineDB!.currentTime,
           washMachineDB!.isWorking,
@@ -230,13 +230,11 @@ export class LaundryService {
       const totalElements = await this._laundryRepository.getWashMachinesAmount(
         laundryId
       );
-      console.log(totalElements);
       const content = await this._laundryRepository.getWashMachines(
         laundryId,
         page,
         size
       );
-      console.log(content);
 
       return new PagedModel<WashMachine>(
         page,
@@ -278,7 +276,7 @@ export class LaundryService {
           additionalMode.name,
           additionalMode.time,
           additionalMode.costs,
-          '',
+          "",
           additionalModeId
         )
       );
@@ -330,7 +328,7 @@ export class LaundryService {
   async updateMode(modeId: string, mode: any): Promise<void> {
     try {
       await this._laundryRepository.updateMode(
-        new Mode(mode.name, mode.time, mode.costs, '', modeId)
+        new Mode(mode.name, mode.time, mode.costs, "", modeId)
       );
     } catch (error) {
       throw error;

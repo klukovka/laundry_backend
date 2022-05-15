@@ -1,8 +1,8 @@
-import { PagedModel } from '../models/pagedModel';
-import { RepairCompany } from '../models/repairCompany';
-import { RepairProduct } from '../models/repairProduct';
-import { RepairEvent } from '../models/repairEvent';
-import { RepairCompanyRepository } from '../repositories/repairCompanyRepository';
+import { PagedModel } from "../models/pagedModel";
+import { RepairCompany } from "../models/repairCompany";
+import { RepairProduct } from "../models/repairProduct";
+import { RepairEvent } from "../models/repairEvent";
+import { RepairCompanyRepository } from "../repositories/repairCompanyRepository";
 
 export class RepairCompanyService {
   private _repairCompanyRepository: RepairCompanyRepository;
@@ -169,7 +169,7 @@ export class RepairCompanyService {
         );
       return await this._repairCompanyRepository.createRepairEvent(
         new RepairEvent(
-          repairProduct?.costs,
+          repairProduct?.costs ?? 0,
           new Date(),
           repairEvent.washMachineId,
           repairEvent.repairProductId

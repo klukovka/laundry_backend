@@ -1,19 +1,19 @@
-import { Router, Request, Response } from 'express';
-import { LaundryMongoRepository } from '../../data/repositories/laundryMongoRepository';
-import { LaundryService } from '../../domain/services/laundryService';
-import checkAuth from '../middleware/checkAuth';
-import checkIOT from '../middleware/checkIOT';
-import checkAdmin from '../middleware/checkAdmin';
-import checkClientIOT from '../middleware/checkClientIOT';
-import checkLaundry from '../middleware/checkLaundry';
-import checkLaundryEmployee from '../middleware/checkLaundryEmployee';
-import checkClient from '../middleware/checkClient';
-import StatusCodes from '../utils/statusCodes';
-import { ErrorMessage } from '../../domain/models/errorMessage';
-import { EventService } from '../../domain/services/eventService';
-import { EventMongoRepository } from '../../data/repositories/eventMongoRepository';
-import { ClientMongoRepository } from '../../data/repositories/clientMongoRepository';
-import saveLaundryId from '../middleware/saveLaundryId';
+import { Router, Request, Response } from "express";
+import { LaundryMongoRepository } from "../../data/repositories/laundryMongoRepository";
+import { LaundryService } from "../../domain/services/laundryService";
+import checkAuth from "../middleware/checkAuth";
+import checkIOT from "../middleware/checkIOT";
+import checkAdmin from "../middleware/checkAdmin";
+import checkClientIOT from "../middleware/checkClientIOT";
+import checkLaundry from "../middleware/checkLaundry";
+import checkLaundryEmployee from "../middleware/checkLaundryEmployee";
+import checkClient from "../middleware/checkClient";
+import StatusCodes from "../utils/statusCodes";
+import { ErrorMessage } from "../../domain/models/errorMessage";
+import { EventService } from "../../domain/services/eventService";
+import { EventMongoRepository } from "../../data/repositories/eventMongoRepository";
+import { ClientMongoRepository } from "../../data/repositories/clientMongoRepository";
+import saveLaundryId from "../middleware/saveLaundryId";
 
 const router = Router();
 const eventService = new EventService(
@@ -23,7 +23,7 @@ const eventService = new EventService(
 );
 
 router.post(
-  '/setup-event',
+  "/setup-event",
   checkAuth,
   checkIOT,
   (req: Request, res: Response, next: any) => {
@@ -41,7 +41,7 @@ router.post(
 );
 
 router.post(
-  '/pay-for-event',
+  "/pay-for-event",
   checkAuth,
   checkClient,
   (req: Request, res: Response, next: any) => {
@@ -59,7 +59,7 @@ router.post(
 );
 
 router.post(
-  '/take-event/:eventId',
+  "/take-event/:eventId",
   checkAuth,
   checkClient,
   (req: Request, res: Response, next: any) => {
@@ -77,7 +77,7 @@ router.post(
 );
 
 router.post(
-  '/rate-event/:eventId',
+  "/rate-event/:eventId",
   checkAuth,
   checkClient,
   (req: Request, res: Response, next: any) => {
@@ -95,7 +95,7 @@ router.post(
 );
 
 router.get(
-  '/info/:eventId',
+  "/info/:eventId",
   checkAuth,
   checkClientIOT,
   (req: Request, res: Response, next: any) => {
@@ -113,7 +113,7 @@ router.get(
 );
 
 router.get(
-  '/client-events',
+  "/client-events",
   checkAuth,
   checkClient,
   (req: Request, res: Response, next: any) => {
@@ -131,9 +131,8 @@ router.get(
 );
 
 router.get(
-  '/wash-machine-events/:washMachineId',
+  "/wash-machine-events/:washMachineId",
   checkAuth,
-
   (req: Request, res: Response, next: any) => {
     eventService
       .getWashMachineEvents(req.params.washMachineId, req.query)
@@ -149,7 +148,7 @@ router.get(
 );
 
 router.get(
-  '/laundry-events',
+  "/laundry-events",
   checkAuth,
   checkLaundryEmployee,
   saveLaundryId,
@@ -168,7 +167,7 @@ router.get(
 );
 
 router.get(
-  '/all',
+  "/all",
   checkAuth,
   checkAdmin,
   (req: Request, res: Response, next: any) => {
