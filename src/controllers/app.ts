@@ -1,27 +1,29 @@
-import morgan from 'morgan';
-import { urlencoded, json } from 'body-parser';
-import express, { Application, Request, Response } from 'express';
-import StatusCodes from './utils/statusCodes';
-import dataFlowRoutes from './routes/dataFlowRoutes';
-import authRoutes from './routes/authRoutes';
-import eventRoutes from './routes/eventRoutes';
-import laundryRoutes from './routes/laundryRoutes';
-import employeeRoutes from './routes/employeeRoutes';
-import clientRoutes from './routes/clientRoutes';
-import cookieParser from 'cookie-parser';
-import cors from 'cors';
+import morgan from "morgan";
+import { urlencoded, json } from "body-parser";
+import express, { Application, Request, Response } from "express";
+import StatusCodes from "./utils/statusCodes";
+import dataFlowRoutes from "./routes/dataFlowRoutes";
+import authRoutes from "./routes/authRoutes";
+import eventRoutes from "./routes/eventRoutes";
+import laundryRoutes from "./routes/laundryRoutes";
+import employeeRoutes from "./routes/employeeRoutes";
+import clientRoutes from "./routes/clientRoutes";
+import repairCompanyRoutes from "./routes/repairCompanyRoutes";
+import statisticRoles from "./routes/statisticRoles";
+import cookieParser from "cookie-parser";
+import cors from "cors";
 
 const options: cors.CorsOptions = {
   allowedHeaders: [
-    'Origin',
-    'X-Requested-With',
-    'Content-Type',
-    'Accept',
-    'X-Access-Token',
+    "Origin",
+    "X-Requested-With",
+    "Content-Type",
+    "Accept",
+    "X-Access-Token",
   ],
   credentials: true,
-  methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
-  origin: '*',
+  methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
+  origin: "*",
   preflightContinue: true,
 };
 
@@ -29,39 +31,41 @@ const app: Application = express();
 app.use(cors(options));
 
 app.use((req: Request, res: Response, next: any) => {
-  res.setHeader('Content-Type', 'application/json');
+  res.setHeader("Content-Type", "application/json");
   res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
-  if (req.method === 'OPTIONS') {
+  if (req.method === "OPTIONS") {
     res.setHeader(
-      'Access-Control-Allow-Methods',
-      'PUT, POST, PATCH, DELETE, GET'
+      "Access-Control-Allow-Methods",
+      "PUT, POST, PATCH, DELETE, GET"
     );
     return res.status(200).json({});
   }
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
 
   next();
 });
 
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 app.use(urlencoded({ extended: false }));
 app.use(json());
 app.use(cookieParser());
 
-app.use('/dataFlow', dataFlowRoutes);
-app.use('/auth', authRoutes);
-app.use('/laundry', laundryRoutes);
-app.use('/employee', employeeRoutes);
-app.use('/client', clientRoutes);
-app.use('/event', eventRoutes);
+app.use("/dataFlow", dataFlowRoutes);
+app.use("/auth", authRoutes);
+app.use("/laundry", laundryRoutes);
+app.use("/employee", employeeRoutes);
+app.use("/client", clientRoutes);
+app.use("/event", eventRoutes);
+app.use("/repairCompany", repairCompanyRoutes);
+app.use("/statistic", statisticRoles);
 
 //endpoint doesn't exist
 app.use((req: Request, res: Response, next: any) => {
-  const error = { message: 'URL is not found', status: StatusCodes.NOT_FOUND };
+  const error = { message: "URL is not found", status: StatusCodes.NOT_FOUND };
   next(error);
 });
 
