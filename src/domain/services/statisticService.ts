@@ -7,6 +7,7 @@ import { PagedModel } from "../models/pagedModel";
 import { EventRepository } from "../repositories/eventRepository";
 import { LaundryRepository } from "../repositories/laundryRepository";
 import { RepairCompanyRepository } from "../repositories/repairCompanyRepository";
+import { WashMachineEntry } from "../models/washMachineEntry";
 
 export class StatisticService {
   private _eventRepository: EventRepository;
@@ -69,12 +70,14 @@ export class StatisticService {
 
       const laundryRating = (await this._laundryRating(laundry!)) ?? 0;
 
-      let washMachinesRating = new Map<WashMachine, number>();
+      let washMachinesRating = new Array<WashMachineEntry<number>>();
 
       for (let i = 0; i < washMachines.length; i++) {
         const rating = await this._washMachineRating(washMachines[i]);
         if (rating) {
-          washMachinesRating.set(washMachines[i], rating);
+          washMachinesRating.push(
+            new WashMachineEntry<number>(washMachines[i], rating)
+          );
         }
       }
 
@@ -184,12 +187,14 @@ export class StatisticService {
 
       const laundryPayment = await this._laundryPayments(laundry!);
 
-      let washMachinesPaymments = new Map<WashMachine, any>();
+      let washMachinesPaymments = new Array<WashMachineEntry<any>>();
 
       for (let i = 0; i < washMachines.length; i++) {
         const payment = await this._washMachinePayments(washMachines[i]);
         if (payment) {
-          washMachinesPaymments.set(washMachines[i], payment);
+          washMachinesPaymments.push(
+            new WashMachineEntry<any>(washMachines[i], payment)
+          );
         }
       }
 
@@ -297,14 +302,16 @@ export class StatisticService {
         washMachinesAmount
       );
 
-      let washMachinesTimeAndUsage = new Map<WashMachine, any>();
+      let washMachinesTimeAndUsage = new Array<WashMachineEntry<any>>();
 
       for (let i = 0; i < washMachines.length; i++) {
         const timeAndUsage = await this._washMachineTimeAndUsage(
           washMachines[i]
         );
         if (timeAndUsage) {
-          washMachinesTimeAndUsage.set(washMachines[i], timeAndUsage);
+          washMachinesTimeAndUsage.push(
+            new WashMachineEntry<any>(washMachines[i], timeAndUsage)
+          );
         }
       }
 
@@ -318,12 +325,12 @@ export class StatisticService {
     }
   }
 
-  private _laundryTimeAndUsage(map: Map<WashMachine, any>) {
+  private _laundryTimeAndUsage(map: Array<WashMachineEntry<any>>) {
     let sum = { time: 0, powerUsage: 0 };
 
-    map.forEach((value: any, key: WashMachine) => {
-      sum.time += value.time;
-      sum.powerUsage += value.powerUsage;
+    map.forEach((value: WashMachineEntry<any>) => {
+      sum.time += value.value.time;
+      sum.powerUsage += value.value.powerUsage;
     });
 
     return sum;
@@ -409,12 +416,14 @@ export class StatisticService {
 
       const laundryRepairEvent = await this._laundryRepairEvent(laundry!);
 
-      let washMachinesRepairEvents = new Map<WashMachine, any>();
+      let washMachinesRepairEvents = new Array<WashMachineEntry<any>>();
 
       for (let i = 0; i < washMachines.length; i++) {
         const statistic = await this._washMachineRepairEvent(washMachines[i]);
         if (statistic) {
-          washMachinesRepairEvents.set(washMachines[i], statistic);
+          washMachinesRepairEvents.push(
+            new WashMachineEntry<any>(washMachines[i], statistic)
+          );
         }
       }
 

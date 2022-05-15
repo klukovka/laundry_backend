@@ -1,11 +1,11 @@
-import { AdditionalMode } from '../../domain/models/additionalMode';
-import { Employee } from '../../domain/models/employee';
-import { Laundry } from '../../domain/models/laundry';
-import { Mode } from '../../domain/models/mode';
-import { User } from '../../domain/models/user';
-import { WashMachine } from '../../domain/models/washMachine';
-import { LaundryRepository } from '../../domain/repositories/laundryRepository';
-import { DatabaseMongo } from '../dataSource/mongoDB/databaseMongo';
+import { AdditionalMode } from "../../domain/models/additionalMode";
+import { Employee } from "../../domain/models/employee";
+import { Laundry } from "../../domain/models/laundry";
+import { Mode } from "../../domain/models/mode";
+import { User } from "../../domain/models/user";
+import { WashMachine } from "../../domain/models/washMachine";
+import { LaundryRepository } from "../../domain/repositories/laundryRepository";
+import { DatabaseMongo } from "../dataSource/mongoDB/databaseMongo";
 
 export class LaundryMongoRepository implements LaundryRepository {
   async getAllEmployees(page: number, size: number): Promise<Employee[]> {
@@ -40,7 +40,6 @@ export class LaundryMongoRepository implements LaundryRepository {
   async getLaundries(page: number, size: number): Promise<Laundry[]> {
     try {
       const laundries = await DatabaseMongo.getDB.getLaundries(page, size);
-      console.log(laundries);
       const parsedLaundries = new Array<Laundry>();
 
       if (laundries) {

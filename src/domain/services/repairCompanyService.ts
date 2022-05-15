@@ -161,6 +161,7 @@ export class RepairCompanyService {
         repairEvent!.washMachineId,
         {
           isWorking: true,
+          currentTime: 0,
         }
       );
     } catch (error) {
