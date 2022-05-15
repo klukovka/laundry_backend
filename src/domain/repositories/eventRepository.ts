@@ -1,9 +1,10 @@
-import { Client } from '../models/client';
-import { Event } from '../models/event';
+import { Client } from "../models/client";
+import { Event } from "../models/event";
 
 export interface EventRepository {
   createEvent(event: Event): Promise<string>;
   getEvent(eventId: string): Promise<Event | null>;
+  getNotParsedEvent(eventId: string): Promise<any>;
   deleteEvent(eventId: string): Promise<void>;
   updateEvent(eventId: string, options: any): Promise<void>;
   updateWashMachine(washMachineId: string, options: any): Promise<void>;

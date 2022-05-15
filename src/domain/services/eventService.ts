@@ -1,9 +1,9 @@
-import { EventRepository } from '../repositories/eventRepository';
-import { ClientRepository } from '../repositories/clientRepository';
-import { LaundryRepository } from '../repositories/laundryRepository';
-import { Event } from '../models/event';
-import { PagedModel } from '../models/pagedModel';
-import firestore from '../../../server';
+import { EventRepository } from "../repositories/eventRepository";
+import { ClientRepository } from "../repositories/clientRepository";
+import { LaundryRepository } from "../repositories/laundryRepository";
+import { Event } from "../models/event";
+import { PagedModel } from "../models/pagedModel";
+import firestore from "../../../server";
 
 const minute = 60000;
 
@@ -37,14 +37,14 @@ export class EventService {
       setTimeout(
         function (
           eventId: string | null,
-          getEvent: (eventId: string) => Promise<Event | null>,
+          getNotParsedEvent: (eventId: string) => Promise<any>,
           deleteEvent: (eventId: string) => Promise<void>
         ) {
           if (eventId) {
-            getEvent(eventId).then((event) => {
+            getNotParsedEvent(eventId!).then((event) => {
               if (!event?.paidStatus) {
                 deleteEvent(eventId).then((_) => {
-                  console.log('Event was deleted');
+                  console.log("Event was deleted");
                 });
               }
             });
@@ -52,7 +52,7 @@ export class EventService {
         },
         minute * 15,
         eventId,
-        this._eventRepository.getEvent,
+        this._eventRepository.getNotParsedEvent,
         this._eventRepository.deleteEvent
       );
       return eventId;
@@ -115,9 +115,9 @@ export class EventService {
           eventRepository: EventRepository,
           laundryRepository: LaundryRepository
         ) {
-          const notifications = firestore.collection('Notifications');
+          const notifications = firestore.collection("Notifications");
           notifications.doc(eventId).set({
-            title: 'Wathing is over!',
+            title: "Wathing is over!",
             body: "Don't forget to take your clothes",
           });
           eventRepository
@@ -131,7 +131,7 @@ export class EventService {
                 eventRepository,
                 laundryRepository
               ).then((_) => {
-                console.log('Wash machine updated');
+                console.log("Wash machine updated");
               });
             });
         },
