@@ -543,6 +543,28 @@ export class DatabaseMongo {
     }
   }
 
+  async getLaundryRepairEvents(laundryId: string): Promise<any> {
+    try {
+      const washMachines = await WashMachine.find({ laundry: laundryId });
+
+      return await RepairEvent.find({ washMachine: { $in: washMachines } });
+    } catch (error: any) {
+      throw new Error("Repair events are not exists");
+    }
+  }
+
+  async getLaundryRepairEventsAmount(laundryId: string): Promise<number> {
+    try {
+      const washMachines = await WashMachine.find({ laundry: laundryId });
+
+      return await RepairEvent.find({
+        washMachine: { $in: washMachines },
+      }).count();
+    } catch (error: any) {
+      throw new Error("Repair events are not exists");
+    }
+  }
+
   async getRepairEvents(options: any): Promise<any> {
     try {
       return await RepairEvent.find(options);
@@ -838,6 +860,32 @@ export class DatabaseMongo {
   async updateEventById(eventId: string, options: any): Promise<any> {
     try {
       return await Event.updateOne({ _id: eventId }, { $set: options });
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getLaundryEvents(
+    laundryId: string,
+    page: number,
+    size: number
+  ): Promise<any> {
+    try {
+      const washMachines = await WashMachine.find({ laundry: laundryId });
+      return await Event.find({ washMachine: { $in: washMachines } })
+        .populate("mode additionalMode")
+        .skip(page * size)
+        .limit(size);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getLaundryEventsAmount(laundryId: string): Promise<any> {
+    try {
+      const washMachines = await WashMachine.find({ laundry: laundryId });
+
+      return await Event.find({ washMachine: { $in: washMachines } }).count();
     } catch (error: any) {
       throw new Error(error.message);
     }

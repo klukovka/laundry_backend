@@ -22,4 +22,6 @@ export interface RepairCompanyRepository {
   updateRepairEvent(repairEventId: string, options: any): Promise<void>;
   deleteRepairEvent(repairEventId: string): Promise<void>;
   createRepairEvent(repairEvent: RepairEvent): Promise<string>;
+  getLaundryRepairEvents(id: string): Promise<RepairEvent[]>;
+  getLaundryRepairEventsAmount(id: string): Promise<number>;
 }

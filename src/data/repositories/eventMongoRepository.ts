@@ -1,9 +1,9 @@
-import { AdditionalMode } from '../../domain/models/additionalMode';
-import { Client } from '../../domain/models/client';
-import { Event } from '../../domain/models/event';
-import { Mode } from '../../domain/models/mode';
-import { EventRepository } from '../../domain/repositories/eventRepository';
-import { DatabaseMongo } from '../dataSource/mongoDB/databaseMongo';
+import { AdditionalMode } from "../../domain/models/additionalMode";
+import { Client } from "../../domain/models/client";
+import { Event } from "../../domain/models/event";
+import { Mode } from "../../domain/models/mode";
+import { EventRepository } from "../../domain/repositories/eventRepository";
+import { DatabaseMongo } from "../dataSource/mongoDB/databaseMongo";
 
 export class EventMongoRepository implements EventRepository {
   async getAllEvents(page: number, size: number): Promise<Event[]> {
@@ -91,16 +91,20 @@ export class EventMongoRepository implements EventRepository {
     size: number
   ): Promise<Event[]> {
     try {
-      return await this._getParsedEvents({ laundry: laundryId }, page, size);
+      const events = await DatabaseMongo.getDB.getLaundryEvents(
+        laundryId,
+        page,
+        size
+      );
+      return this._parseEvents(events);
     } catch (error) {
       throw error;
     }
   }
+
   async getLaundryEventsAmount(laundryId: string): Promise<number> {
     try {
-      return await DatabaseMongo.getDB.getFilteredEventsAmount({
-        laundry: laundryId,
-      });
+      return await DatabaseMongo.getDB.getLaundryEventsAmount(laundryId);
     } catch (error) {
       throw error;
     }
@@ -142,17 +146,21 @@ export class EventMongoRepository implements EventRepository {
         size
       );
 
-      const parsedEvents = new Array<Event>();
-      if (events) {
-        for (let i = 0; i < events.length; i++) {
-          parsedEvents.push(this._getEvent(events[i])!);
-        }
-      }
-
-      return parsedEvents;
+      return this._parseEvents(events);
     } catch (error) {
       throw error;
     }
+  }
+
+  private _parseEvents(events: any) {
+    const parsedEvents = new Array<Event>();
+    if (events) {
+      for (let i = 0; i < events.length; i++) {
+        parsedEvents.push(this._getEvent(events[i])!);
+      }
+    }
+
+    return parsedEvents;
   }
 
   private _getEvent(event: any): Event | null {
@@ -173,14 +181,14 @@ export class EventMongoRepository implements EventRepository {
           event?.mode?.name,
           event?.mode?.time,
           event?.mode?.costs,
-          '',
+          "",
           event?.mode?._id.toString()
         ),
         new AdditionalMode(
           event?.additionalMode?.name,
           event?.additionalMode?.time,
           event?.additionalMode?.costs,
-          '',
+          "",
           event?.additionalMode?._id.toString()
         ),
         event?.client?._id.toString(),
@@ -206,7 +214,7 @@ export class EventMongoRepository implements EventRepository {
         event?.mode?.name,
         event?.mode?.time,
         event?.mode?.costs,
-        '',
+        "",
         event?.mode?._id.toString()
       ),
       null,

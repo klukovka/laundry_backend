@@ -6,6 +6,28 @@ import { RepairCompanyRepository } from "../../domain/repositories/repairCompany
 import { DatabaseMongo } from "../dataSource/mongoDB/databaseMongo";
 
 export class RepairCompanyMongoRepository implements RepairCompanyRepository {
+  async getLaundryRepairEvents(id: string): Promise<RepairEvent[]> {
+    try {
+      const events = await DatabaseMongo.getDB.getLaundryRepairEvents(id);
+      const parsedEvents = new Array<RepairEvent>();
+      if (events) {
+        for (let i = 0; i < events.length; i++) {
+          parsedEvents.push(this._getRepairEvent(events[i])!);
+        }
+      }
+      return parsedEvents;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async getLaundryRepairEventsAmount(id: string): Promise<number> {
+    try {
+      return await DatabaseMongo.getDB.getLaundryRepairEventsAmount(id);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async getRepairEventById(id: string): Promise<RepairEvent | null> {
     try {
       const event = await DatabaseMongo.getDB.getRepairEventById(id);

@@ -440,14 +440,14 @@ export class StatisticService {
   private async _laundryRepairEvent(laundry: Laundry): Promise<any> {
     try {
       const eventsAmount =
-        await this._repairCompanyRepository.getRepairEventsAmount({
-          laundry: laundry.laundryId!,
-        });
+        await this._repairCompanyRepository.getLaundryRepairEventsAmount(
+          laundry.laundryId!
+        );
       if (eventsAmount == 0) return null;
 
-      const events = await this._repairCompanyRepository.getRepairEvents({
-        laundry: laundry.laundryId!,
-      });
+      const events = await this._repairCompanyRepository.getLaundryRepairEvents(
+        laundry.laundryId!
+      );
 
       return this._countRepairEvents(events);
     } catch (error) {
