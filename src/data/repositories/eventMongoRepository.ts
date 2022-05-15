@@ -43,13 +43,24 @@ export class EventMongoRepository implements EventRepository {
       throw error;
     }
   }
-  async getEvent(eventId: string): Promise<Event | null> {
+
+  async getNotParsedEvent(eventId: string): Promise<any> {
     try {
-      return this._getEvent(await DatabaseMongo.getDB.getEventById(eventId));
+      return await DatabaseMongo.getDB.getEventById(eventId);
     } catch (error) {
       throw error;
     }
   }
+
+  async getEvent(eventId: string): Promise<Event | null> {
+    try {
+      const event = await DatabaseMongo.getDB.getEventById(eventId);
+      return this._getEvent(event);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async updateEvent(eventId: string, options: any): Promise<void> {
     try {
       await DatabaseMongo.getDB.updateEventById(eventId, options);
