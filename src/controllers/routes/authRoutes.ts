@@ -35,6 +35,19 @@ router.post('/login', (req: Request, res: Response, next: any) => {
     });
 });
 
+router.get('/info', checkAuth, (req: Request, res: Response, next: any) => {
+  authService
+    .getById(req.body.userData.userId, false)
+    .then((data) => {
+      return res.status(StatusCodes.OK).json(data);
+    })
+    .catch((error) => {
+      return res
+        .status(StatusCodes.INTERNAL_ERROR)
+        .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+    });
+});
+
 router.post(
   '/signup-admin',
   checkAuth,
