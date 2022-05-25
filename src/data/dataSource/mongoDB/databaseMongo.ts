@@ -286,7 +286,7 @@ export class DatabaseMongo {
 
   async getClientsAmount(): Promise<number> {
     try {
-      return await Employee.find().count();
+      return await Client.find().count();
     } catch (error: any) {
       throw new Error(error.message);
     }

@@ -69,6 +69,14 @@ export class LaundryService {
     }
   }
 
+  async getLaundryById(laundryId: string): Promise<Laundry | null> {
+    try {
+      return await this._laundryRepository.getLaundryById(laundryId);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async getEmployeeByUserId(userId: string): Promise<Employee | null> {
     try {
       return await this._laundryRepository.getEmployeeByUserId(userId);

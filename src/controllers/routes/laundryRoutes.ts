@@ -3,6 +3,7 @@ import { LaundryMongoRepository } from "../../data/repositories/laundryMongoRepo
 import { LaundryService } from "../../domain/services/laundryService";
 import checkAuth from "../middleware/checkAuth";
 import checkAdminClient from "../middleware/checkAdminClient";
+import checkAdmin from "../middleware/checkAdmin";
 import checkLaundry from "../middleware/checkLaundry";
 import checkLaundryEmployee from "../middleware/checkLaundryEmployee";
 import saveLaundryId from "../middleware/saveLaundryId";
@@ -30,6 +31,7 @@ router.get(
   }
 );
 
+
 router.get(
   "/personal-info",
   checkAuth,
@@ -48,6 +50,27 @@ router.get(
       });
   }
 );
+
+// router.get(
+//   "/:laundryId",
+//   checkAuth,
+//   checkAdmin,
+//   (req: Request, res: Response, next: any) => {
+//     laundryService
+//       .getLaundryById(req.params.laundryId)
+//       .then((data) => {
+//         if (data){
+//           return res.status(StatusCodes.OK).json(data);
+//         }
+//         return res.status(StatusCodes.NOT_FOUND).json();
+//       })
+//       .catch((error) => {
+//         return res
+//           .status(StatusCodes.INTERNAL_ERROR)
+//           .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+//       });
+//   }
+// );
 
 router.put(
   "/update-laundry",
@@ -84,6 +107,26 @@ router.get(
       });
   }
 );
+
+router.get(
+  "/:laundryId/all-employees",
+  checkAuth,
+  checkAdmin,
+  (req: Request, res: Response, next: any) => {
+    laundryService
+      .getLaundryEmployees(req.params.laundryId, req.query)
+      .then((data) => {
+        return res.status(StatusCodes.OK).json(data);
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+
 
 router.post(
   "/create-wash-machine",
@@ -160,6 +203,7 @@ router.get(
       });
   }
 );
+
 
 router.get(
   "/all-washing-machines-users/:laundryId",

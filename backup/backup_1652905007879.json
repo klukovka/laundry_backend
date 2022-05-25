@@ -1,0 +1,917 @@
+{
+    "laundries": [
+        {
+            "_id": "627053851462d7f85a1fbb40",
+            "name": "Laundry Top Number 6",
+            "address": "address",
+            "phone": "0987654321",
+            "user": "627053841462d7f85a1fbb3e",
+            "maxAmount": 100,
+            "__v": 0
+        },
+        {
+            "_id": "627053611462d7f85a1fbb2c",
+            "name": "Laundry Top Number 1",
+            "address": "address",
+            "phone": "0987654321",
+            "user": "627053611462d7f85a1fbb2a",
+            "maxAmount": 100,
+            "__v": 0
+        },
+        {
+            "_id": "627053981462d7f85a1fbb4c",
+            "name": "Laundry Top Number 9",
+            "address": "address",
+            "phone": "0987654321",
+            "user": "627053981462d7f85a1fbb4a",
+            "maxAmount": 100,
+            "__v": 0
+        },
+        {
+            "_id": "62812a23b3b8f755b14612a1",
+            "name": "New small Laundry",
+            "address": "Some cool address",
+            "phone": "0987712634",
+            "user": "62812a23b3b8f755b146129f",
+            "maxAmount": 20,
+            "__v": 0
+        },
+        {
+            "_id": "626fd4089dc78f2a0041d736",
+            "name": "New small Laundry",
+            "address": "Some cool address",
+            "phone": "0987712634",
+            "user": "626fd4089dc78f2a0041d734",
+            "maxAmount": 20,
+            "__v": 0
+        },
+        {
+            "_id": "6270537c1462d7f85a1fbb3c",
+            "name": "Laundry Top Number 5",
+            "address": "address",
+            "phone": "0987654321",
+            "user": "6270537b1462d7f85a1fbb3a",
+            "maxAmount": 100,
+            "__v": 0
+        },
+        {
+            "_id": "627053561462d7f85a1fbb28",
+            "name": "Laundry Top Number One",
+            "address": "address",
+            "phone": "0987654321",
+            "user": "627053561462d7f85a1fbb26",
+            "maxAmount": 100,
+            "__v": 0
+        },
+        {
+            "_id": "627053721462d7f85a1fbb38",
+            "name": "Laundry Top Number 4",
+            "address": "address",
+            "phone": "0987654321",
+            "user": "627053721462d7f85a1fbb36",
+            "maxAmount": 100,
+            "__v": 0
+        },
+        {
+            "_id": "628542bd6faf107b515b64da",
+            "name": "Super Puper Laundry",
+            "address": "Super Puper Address",
+            "phone": "0987654321",
+            "user": "628542bd6faf107b515b64d8",
+            "maxAmount": 12,
+            "__v": 0
+        },
+        {
+            "_id": "6270538a1462d7f85a1fbb44",
+            "name": "Laundry Top Number 7",
+            "address": "address",
+            "phone": "0987654321",
+            "user": "6270538a1462d7f85a1fbb42",
+            "maxAmount": 100,
+            "__v": 0
+        },
+        {
+            "_id": "627053661462d7f85a1fbb30",
+            "name": "Laundry Top Number 2",
+            "address": "address",
+            "phone": "0987654321",
+            "user": "627053661462d7f85a1fbb2e",
+            "maxAmount": 100,
+            "__v": 0
+        },
+        {
+            "_id": "6270536d1462d7f85a1fbb34",
+            "name": "Laundry Top Number 3",
+            "address": "address",
+            "phone": "0987654321",
+            "user": "6270536d1462d7f85a1fbb32",
+            "maxAmount": 100,
+            "__v": 0
+        },
+        {
+            "_id": "627053901462d7f85a1fbb48",
+            "name": "Laundry Top Number 8",
+            "address": "address",
+            "phone": "0987654321",
+            "user": "627053901462d7f85a1fbb46",
+            "maxAmount": 100,
+            "__v": 0
+        },
+        {
+            "_id": "6270539e1462d7f85a1fbb50",
+            "name": "Laundry Top Number 10",
+            "address": "address",
+            "phone": "0987654321",
+            "user": "6270539e1462d7f85a1fbb4e",
+            "maxAmount": 100,
+            "__v": 0
+        }
+    ],
+    "additionalmodes": [
+        {
+            "_id": "628138982fe685cfaa023f46",
+            "name": "add mode laundry laundry 4",
+            "time": 3,
+            "costs": 100,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        },
+        {
+            "_id": "6281378b3134c781f68ab12b",
+            "name": "add mode laundry laundry",
+            "time": 5,
+            "costs": 50,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        },
+        {
+            "_id": "628137a33134c781f68ab133",
+            "name": "add mode laundry laundry 3",
+            "time": 1,
+            "costs": 50,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        },
+        {
+            "_id": "628137973134c781f68ab12f",
+            "name": "add mode laundry laundry 3",
+            "time": 1,
+            "costs": 50,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        },
+        {
+            "_id": "628137a63134c781f68ab135",
+            "name": "add mode laundry laundry 4",
+            "time": 3,
+            "costs": 100,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        },
+        {
+            "_id": "6281378f3134c781f68ab12d",
+            "name": "add mode laundry laundry 1",
+            "time": 5,
+            "costs": 50,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        }
+    ],
+    "modes": [
+        {
+            "_id": "62813a1ed088fa1c50ee3467",
+            "name": "mode laundry laundry 2",
+            "time": 1,
+            "costs": 50,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        },
+        {
+            "_id": "628139cad088fa1c50ee345f",
+            "name": "mode laundry laundry 1",
+            "time": 1,
+            "costs": 50,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        },
+        {
+            "_id": "628139c7d088fa1c50ee345d",
+            "name": "mode laundry laundry ",
+            "time": 1,
+            "costs": 50,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        },
+        {
+            "_id": "628139cfd088fa1c50ee3461",
+            "name": "mode laundry laundry 3",
+            "time": 1,
+            "costs": 50,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        }
+    ],
+    "washmachines": [
+        {
+            "_id": "62798e94de2c6d621659657c",
+            "model": "model",
+            "manufacturer": "Samsung",
+            "capacity": 6,
+            "powerUsage": 300,
+            "spinningSpeed": 1400,
+            "isWorking": true,
+            "isWashing": false,
+            "maxTime": 3600,
+            "currentTime": 0,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        },
+        {
+            "_id": "62798e91de2c6d621659656d",
+            "model": "model",
+            "manufacturer": "Samsung",
+            "capacity": 6,
+            "powerUsage": 300,
+            "spinningSpeed": 1400,
+            "isWorking": true,
+            "isWashing": false,
+            "maxTime": 3600,
+            "currentTime": 0,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        },
+        {
+            "_id": "62798e96de2c6d6216596586",
+            "model": "model",
+            "manufacturer": "Samsung",
+            "capacity": 6,
+            "powerUsage": 300,
+            "spinningSpeed": 1400,
+            "isWorking": true,
+            "isWashing": false,
+            "maxTime": 3600,
+            "currentTime": 0,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        },
+        {
+            "_id": "62798e93de2c6d6216596577",
+            "model": "model",
+            "manufacturer": "Samsung",
+            "capacity": 6,
+            "powerUsage": 300,
+            "spinningSpeed": 1400,
+            "isWorking": true,
+            "isWashing": false,
+            "maxTime": 3600,
+            "currentTime": 0,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        },
+        {
+            "_id": "6281352d3134c781f68ab104",
+            "model": "mi model 1",
+            "manufacturer": "xiaomi",
+            "capacity": 5,
+            "powerUsage": 100,
+            "spinningSpeed": 1200,
+            "isWorking": true,
+            "isWashing": false,
+            "maxTime": 150,
+            "currentTime": 0,
+            "laundry": "62812a23b3b8f755b14612a1",
+            "__v": 0
+        },
+        {
+            "_id": "62798e95de2c6d6216596581",
+            "model": "model",
+            "manufacturer": "Samsung",
+            "capacity": 6,
+            "powerUsage": 300,
+            "spinningSpeed": 1400,
+            "isWorking": true,
+            "isWashing": false,
+            "maxTime": 3600,
+            "currentTime": 0,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        },
+        {
+            "_id": "62798e8ede2c6d621659655e",
+            "model": "model",
+            "manufacturer": "Samsung",
+            "capacity": 6,
+            "powerUsage": 300,
+            "spinningSpeed": 1400,
+            "isWorking": true,
+            "isWashing": false,
+            "maxTime": 3600,
+            "currentTime": 0,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        },
+        {
+            "_id": "628135343134c781f68ab10e",
+            "model": "mi model 4",
+            "manufacturer": "xiaomi",
+            "capacity": 5,
+            "powerUsage": 100,
+            "spinningSpeed": 1200,
+            "isWorking": true,
+            "isWashing": false,
+            "maxTime": 150,
+            "currentTime": 0,
+            "laundry": "62812a23b3b8f755b14612a1",
+            "__v": 0
+        },
+        {
+            "_id": "62798e86de2c6d621659654f",
+            "model": "model",
+            "manufacturer": "Bosh",
+            "capacity": 5,
+            "powerUsage": 100,
+            "spinningSpeed": 1200,
+            "isWorking": true,
+            "isWashing": false,
+            "maxTime": 2500,
+            "currentTime": 5,
+            "laundry": "627053561462d7f85a1fbb28",
+            "__v": 0
+        },
+        {
+            "_id": "62798e92de2c6d6216596572",
+            "model": "model",
+            "manufacturer": "Samsung",
+            "capacity": 6,
+            "powerUsage": 300,
+            "spinningSpeed": 1400,
+            "isWorking": true,
+            "isWashing": false,
+            "maxTime": 3600,
+            "currentTime": 0,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        },
+        {
+            "_id": "6284e2aaca42ccbc5b9341a1",
+            "model": "NEW MODEL",
+            "manufacturer": "SAMSUNG",
+            "capacity": 6,
+            "powerUsage": 10,
+            "spinningSpeed": 120,
+            "isWorking": true,
+            "isWashing": false,
+            "maxTime": 1500,
+            "currentTime": 0,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        },
+        {
+            "_id": "6281357b3134c781f68ab118",
+            "model": "mi model 2",
+            "manufacturer": "xiaomi",
+            "capacity": 5,
+            "powerUsage": 100,
+            "spinningSpeed": 1200,
+            "isWorking": true,
+            "isWashing": false,
+            "maxTime": 150,
+            "currentTime": 0,
+            "laundry": "62812a23b3b8f755b14612a1",
+            "__v": 0
+        },
+        {
+            "_id": "62798e8fde2c6d6216596563",
+            "model": "model",
+            "manufacturer": "Samsung",
+            "capacity": 6,
+            "powerUsage": 300,
+            "spinningSpeed": 1400,
+            "isWorking": true,
+            "isWashing": false,
+            "maxTime": 3600,
+            "currentTime": 0,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        },
+        {
+            "_id": "6279997cf2d0fb862aa2a031",
+            "model": "model",
+            "manufacturer": "Xiaomi",
+            "capacity": 6,
+            "powerUsage": 300,
+            "spinningSpeed": 1400,
+            "isWorking": true,
+            "isWashing": false,
+            "maxTime": 3600,
+            "currentTime": 0,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        },
+        {
+            "_id": "6281351f3134c781f68ab0ff",
+            "model": "mi model",
+            "manufacturer": "xiaomi",
+            "capacity": 5,
+            "powerUsage": 100,
+            "spinningSpeed": 1200,
+            "isWorking": true,
+            "isWashing": false,
+            "maxTime": 150,
+            "currentTime": 0,
+            "laundry": "62812a23b3b8f755b14612a1",
+            "__v": 0
+        },
+        {
+            "_id": "628135333134c781f68ab109",
+            "model": "mi model 2",
+            "manufacturer": "xiaomi",
+            "capacity": 5,
+            "powerUsage": 100,
+            "spinningSpeed": 1200,
+            "isWorking": true,
+            "isWashing": false,
+            "maxTime": 150,
+            "currentTime": 0,
+            "laundry": "62812a23b3b8f755b14612a1",
+            "__v": 0
+        },
+        {
+            "_id": "62798e8dde2c6d6216596559",
+            "model": "model",
+            "manufacturer": "LG",
+            "capacity": 5,
+            "powerUsage": 100,
+            "spinningSpeed": 1200,
+            "isWorking": true,
+            "isWashing": false,
+            "maxTime": 2500,
+            "currentTime": 0,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        },
+        {
+            "_id": "62798e97de2c6d621659658b",
+            "model": "model",
+            "manufacturer": "Samsung",
+            "capacity": 6,
+            "powerUsage": 300,
+            "spinningSpeed": 1400,
+            "isWorking": true,
+            "isWashing": false,
+            "maxTime": 3600,
+            "currentTime": 0,
+            "laundry": "626fd4089dc78f2a0041d736",
+            "__v": 0
+        }
+    ],
+    "users": [
+        {
+            "_id": "626fd23f6fe755df1ec06463",
+            "email": "yuliia.koba@nure.ua",
+            "password": "$2b$10$1rgYZi8I4e6kuAKC8HwO7u7y8snLeOzYT1NqLIth.sIXlkZjoILNm",
+            "role": "ADMIN",
+            "__v": 0
+        },
+        {
+            "_id": "627ad0538d19a2955724bc10",
+            "email": "iot@gmail.com",
+            "password": "$2b$10$uU8t6A9fUOL3xvZpO.a6Tebr7KoCtJBDKccqByIKwJosOT65r034S",
+            "role": "IOT",
+            "__v": 0
+        },
+        {
+            "_id": "62841a32cba05fb557446edf",
+            "email": "newadmin@gmail.com",
+            "password": "$2b$10$oSyVLjkBgPMTMvGTRGoDuu2CAbpFatyMwE07cTA.kBqLu0J8h0dmu",
+            "role": "ADMIN",
+            "__v": 0
+        },
+        {
+            "_id": "627053611462d7f85a1fbb2a",
+            "email": "laundry1@gmail.com",
+            "password": "$2b$10$ySjnHH7FUB1fsLgH3vEBX.vZk/32gV0/m/ShQif0k1jehBniJdqAG",
+            "role": "LAUNDRY",
+            "__v": 0
+        },
+        {
+            "_id": "62812a91b3b8f755b14612a3",
+            "email": "john.john@gmail.com",
+            "password": "$2b$10$squ.A20.wNu0sOoOViCOH.15v.RTv90vD.VSY0xoEY8jSQamB1p7.",
+            "role": "CLIENT",
+            "__v": 0
+        },
+        {
+            "_id": "627053981462d7f85a1fbb4a",
+            "email": "laundry9@gmail.com",
+            "password": "$2b$10$LbsM9twlL0sMOrg1RavgzuLhZoXTorkK00Xjy1vCXRkfGmQEDfVeO",
+            "role": "LAUNDRY",
+            "__v": 0
+        },
+        {
+            "_id": "62812ae7b3b8f755b14612a8",
+            "email": "repair.company1@gmail.com",
+            "password": "$2b$10$J/Yojjs/fXp0kZvHN46YNeaVV4GO1Zgc8Ci8BpUYz2BV7LAc/su9m",
+            "role": "REPAIR_COMPANY",
+            "__v": 0
+        },
+        {
+            "_id": "627053561462d7f85a1fbb26",
+            "email": "laundry@gmail.com",
+            "password": "$2b$10$SFZP/yFlVDEFpagNlfnRVexo7EU.9hB7pZj6x7L07wYGK5F2Mvu8q",
+            "role": "LAUNDRY",
+            "__v": 0
+        },
+        {
+            "_id": "6270538a1462d7f85a1fbb42",
+            "email": "laundry7@gmail.com",
+            "password": "$2b$10$TvdUTX7dy7xlZtRKu0wPgOAWerwjNdIx0D/beCzESAOtjmM8i0stO",
+            "role": "LAUNDRY",
+            "__v": 0
+        },
+        {
+            "_id": "627053901462d7f85a1fbb46",
+            "email": "laundry8@gmail.com",
+            "password": "$2b$10$DTCKqdNrR25rWpm971Bo1upX2nOzWfrIPUvnwRxlAS.vBEakzvRUS",
+            "role": "LAUNDRY",
+            "__v": 0
+        },
+        {
+            "_id": "627053841462d7f85a1fbb3e",
+            "email": "laundry6@gmail.com",
+            "password": "$2b$10$Gf/nvw0wHwyMiKltJwknuOpiwP/tGf.3ToqQgYXaHGa/2anU6dAuO",
+            "role": "LAUNDRY",
+            "__v": 0
+        },
+        {
+            "_id": "62812a23b3b8f755b146129f",
+            "email": "laundry.laundry1@gmail.com",
+            "password": "$2b$10$8ES6f28LiaVggMoEaW4hx.ZRiR0rMp1u.YfgB7cI174BTrw2F42NG",
+            "role": "LAUNDRY",
+            "__v": 0
+        },
+        {
+            "_id": "627053661462d7f85a1fbb2e",
+            "email": "laundry2@gmail.com",
+            "password": "$2b$10$YQYFCdp4fHaXFugEIpchreuyk5X2dllJzWWuJ3qSF63zUWRSM.mm2",
+            "role": "LAUNDRY",
+            "__v": 0
+        },
+        {
+            "_id": "627053721462d7f85a1fbb36",
+            "email": "laundry4@gmail.com",
+            "password": "$2b$10$cHCRk4tjhf4XijdNhhOBgeCt5I2/9D/49OuSZJykopxFqlFehG8eq",
+            "role": "LAUNDRY",
+            "__v": 0
+        },
+        {
+            "_id": "626fd4189dc78f2a0041d73a",
+            "email": "repair@gmail.com",
+            "password": "$2b$10$i3spvFFvcCpyql.IGipqt.MA8GKLeV/ONYKO8Po8K1xqm5ZjthPMW",
+            "role": "REPAIR_COMPANY",
+            "__v": 0
+        },
+        {
+            "_id": "626fd6ad6adc7d31a047b632",
+            "email": "employee.tommy@gmail.com",
+            "password": "$2b$10$gZyt0aeDMXrExc3f4dLG.O/1Xcw/bIQepfSrkg37yv5irjK5F93r.",
+            "role": "EMPLOYEE",
+            "__v": 0
+        },
+        {
+            "_id": "628542bd6faf107b515b64d8",
+            "email": "super.laundry@gmail.com",
+            "password": "$2b$10$iRUr4dIOVBVngLc9NwvsWuYBXc8YLo6gf3N6MRPYDwWJRiJ4drwg.",
+            "role": "LAUNDRY",
+            "__v": 0
+        },
+        {
+            "_id": "62812b8fb3b8f755b14612af",
+            "email": "employee.john1@gmail.com",
+            "password": "$2b$10$B/r/isMFP.x2fxiK34zC5uEBAMRCiKk0KlpT5xHaKOOVVnY05Vf5e",
+            "role": "EMPLOYEE",
+            "__v": 0
+        },
+        {
+            "_id": "626fd4089dc78f2a0041d734",
+            "email": "laundry.laundry@gmail.com",
+            "password": "$2b$10$9XmPyv50MVYF53uQNq1fS.k5.N9hDYhrqPOU72jq/gqBKGnAuzG8O",
+            "role": "LAUNDRY",
+            "__v": 0
+        },
+        {
+            "_id": "626fd2556fe755df1ec0646c",
+            "email": "simon.smith@gmail.com",
+            "password": "$2b$10$YrnqmqvfQRa.SiJo2rj3P.FvilGzEZStwSCUESjVtN/hlPH1mG7Tu",
+            "role": "CLIENT",
+            "__v": 0
+        },
+        {
+            "_id": "626fd6c26adc7d31a047b636",
+            "email": "employee@gmail.com",
+            "password": "$2b$10$xltGTlzR8MMKs9.uk/LRceMGwbn5jwnlr5ND.s0CGyA6t6OWY.T36",
+            "role": "EMPLOYEE",
+            "__v": 0
+        },
+        {
+            "_id": "6270539e1462d7f85a1fbb4e",
+            "email": "laundry10@gmail.com",
+            "password": "$2b$10$UyL2QsJ4NJBiU53oqW8.3e3q.2CuiXBtKjTZzhzQJuJGjR5fa16vu",
+            "role": "LAUNDRY",
+            "__v": 0
+        },
+        {
+            "_id": "62812965b3b8f755b146129b",
+            "email": "iot1@gmail.com",
+            "password": "$2b$10$F6V0yc/HbY.3KjetNvaKBOG.ylvf5KdVowUq605tNJy.WSLZKbyAC",
+            "role": "IOT",
+            "__v": 0
+        },
+        {
+            "_id": "6270536d1462d7f85a1fbb32",
+            "email": "laundry3@gmail.com",
+            "password": "$2b$10$Ckq2ULqRT4Y8MYIXbp.8Q.nUP7Ac.oX4PkcU8aakd.YTj2WHKgHdm",
+            "role": "LAUNDRY",
+            "__v": 0
+        },
+        {
+            "_id": "6270537b1462d7f85a1fbb3a",
+            "email": "laundry5@gmail.com",
+            "password": "$2b$10$l1SAxNnCwcSftxtdMaJTXetkONkLw5jald9L4CkYlcjoLkhbAUGai",
+            "role": "LAUNDRY",
+            "__v": 0
+        },
+        {
+            "_id": "62812933b3b8f755b1461299",
+            "email": "admin@gmail.com",
+            "password": "$2b$10$K7PDMXvzEVnLvNtLfzpnTehXxdu52VhVsLhkKaL9ZVrHIqPmEikBW",
+            "role": "ADMIN",
+            "__v": 0
+        }
+    ],
+    "clients": [
+        {
+            "_id": "62812a91b3b8f755b14612a5",
+            "name": "John White",
+            "phone": "0274738248",
+            "bonuses": 0,
+            "sale": 0,
+            "user": "62812a91b3b8f755b14612a3",
+            "__v": 0
+        },
+        {
+            "_id": "626fd2556fe755df1ec0646e",
+            "name": "Simon Smith",
+            "phone": "0987212891",
+            "bonuses": 12,
+            "sale": 1,
+            "user": "626fd2556fe755df1ec0646c",
+            "__v": 0
+        }
+    ],
+    "employees": [
+        {
+            "_id": "626fd6ae6adc7d31a047b634",
+            "name": "Tommy Black111",
+            "phone": "0987212891",
+            "birthday": "2002-04-23T18:25:43.511Z",
+            "laundry": "626fd4089dc78f2a0041d736",
+            "user": "626fd6ad6adc7d31a047b632",
+            "__v": 0
+        },
+        {
+            "_id": "62812b8fb3b8f755b14612b1",
+            "name": "John John",
+            "phone": "0274738248",
+            "birthday": "2000-04-23T18:25:43.511Z",
+            "laundry": "627053611462d7f85a1fbb2c",
+            "user": "62812b8fb3b8f755b14612af",
+            "__v": 0
+        },
+        {
+            "_id": "626fd6c36adc7d31a047b638",
+            "name": "Max Shelby",
+            "phone": "0987212891",
+            "birthday": "2002-04-23T18:25:43.511Z",
+            "laundry": "626fd4089dc78f2a0041d736",
+            "user": "626fd6c26adc7d31a047b636",
+            "__v": 0
+        },
+        {
+            "_id": "626fd41f9dc78f2a0041d740",
+            "name": "Tommy Black",
+            "phone": "0987212891",
+            "birthday": "2002-04-23T18:25:43.511Z",
+            "laundry": "626ede011d7a4f72d430b7d6",
+            "user": "626fd41f9dc78f2a0041d73e",
+            "__v": 0
+        }
+    ],
+    "repaircompanies": [
+        {
+            "_id": "626fd4189dc78f2a0041d73c",
+            "name": "Fix your tech",
+            "phone": "0987654321",
+            "address": "address.  12wqdw",
+            "user": "626fd4189dc78f2a0041d73a",
+            "__v": 0
+        },
+        {
+            "_id": "62812ae7b3b8f755b14612aa",
+            "name": "Repair your Laundry",
+            "phone": "0987712634",
+            "address": "Some cool address",
+            "user": "62812ae7b3b8f755b14612a8",
+            "__v": 0
+        }
+    ],
+    "repairproducts": [
+        {
+            "_id": "62814fb9061ab9227b41ea3e",
+            "costs": 123,
+            "description": "bla bla bla111",
+            "type": "FIX",
+            "repairCompany": "626fd4189dc78f2a0041d73c",
+            "__v": 0
+        },
+        {
+            "_id": "62814fbe061ab9227b41ea42",
+            "costs": 13,
+            "description": "bla bla bla111",
+            "type": "FIX",
+            "repairCompany": "626fd4189dc78f2a0041d73c",
+            "__v": 0
+        },
+        {
+            "_id": "62814fbc061ab9227b41ea40",
+            "costs": 13,
+            "description": "bla bla bla111",
+            "type": "FIX",
+            "repairCompany": "626fd4189dc78f2a0041d73c",
+            "__v": 0
+        },
+        {
+            "_id": "62814fbf061ab9227b41ea44",
+            "costs": 13,
+            "description": "bla bla bla111",
+            "type": "FIX",
+            "repairCompany": "626fd4189dc78f2a0041d73c",
+            "__v": 0
+        },
+        {
+            "_id": "62814fa0061ab9227b41ea3a",
+            "costs": 123,
+            "description": "bla bla bla",
+            "type": "FIX",
+            "repairCompany": "626fd4189dc78f2a0041d73c",
+            "__v": 0
+        }
+    ],
+    "repairevents": [
+        {
+            "_id": "6281530642bea4ea5ff8f9e7",
+            "costs": 123,
+            "date": "2022-05-15T19:22:46.709Z",
+            "washMachine": "62798e8fde2c6d6216596563",
+            "repairProduct": "62814fb9061ab9227b41ea3e",
+            "done": true,
+            "__v": 0
+        },
+        {
+            "_id": "6281531442bea4ea5ff8f9eb",
+            "costs": 123,
+            "date": "2022-05-15T19:23:00.111Z",
+            "washMachine": "62798e90de2c6d6216596568",
+            "repairProduct": "62814fb9061ab9227b41ea3e",
+            "done": true,
+            "__v": 0
+        },
+        {
+            "_id": "6281531b42bea4ea5ff8f9ef",
+            "costs": 123,
+            "date": "2022-05-15T19:23:07.571Z",
+            "washMachine": "62798e92de2c6d6216596572",
+            "repairProduct": "62814fb9061ab9227b41ea3e",
+            "done": true,
+            "__v": 0
+        },
+        {
+            "_id": "628152d042bea4ea5ff8f9e3",
+            "costs": 123,
+            "date": "2022-05-15T19:21:52.264Z",
+            "washMachine": "62798e8dde2c6d6216596559",
+            "repairProduct": "62814fb9061ab9227b41ea3e",
+            "done": true,
+            "__v": 0
+        }
+    ],
+    "events": [
+        {
+            "_id": "62814050309fc03034309222",
+            "washMachine": "62798e90de2c6d6216596568",
+            "temperature": 40,
+            "spinning": 800,
+            "mode": "628139c7d088fa1c50ee345d",
+            "additionalMode": "6281378b3134c781f68ab12b",
+            "client": "626fd2556fe755df1ec0646e",
+            "timeBegin": "2022-05-15T18:03:01.734Z",
+            "timeEnd": "2022-05-15T18:09:21.256Z",
+            "paidStatus": true,
+            "paidBonuses": 0,
+            "paidMoney": 100,
+            "taken": true,
+            "rating": 3,
+            "__v": 0
+        },
+        {
+            "_id": "6281402c309fc03034309217",
+            "washMachine": "62798e8fde2c6d6216596563",
+            "temperature": 40,
+            "spinning": 800,
+            "mode": "628139c7d088fa1c50ee345d",
+            "additionalMode": "6281378b3134c781f68ab12b",
+            "client": "626fd2556fe755df1ec0646e",
+            "timeBegin": "2022-05-15T18:02:31.484Z",
+            "timeEnd": "2022-05-15T18:08:32.357Z",
+            "paidStatus": true,
+            "paidBonuses": 0,
+            "paidMoney": 100,
+            "taken": false,
+            "rating": 5,
+            "__v": 0
+        },
+        {
+            "_id": "62816ffcbc329267f20fc606",
+            "washMachine": "62798e90de2c6d6216596568",
+            "temperature": 40,
+            "spinning": 800,
+            "mode": "628139c7d088fa1c50ee345d",
+            "additionalMode": "6281378b3134c781f68ab12b",
+            "paidStatus": false,
+            "paidBonuses": 0,
+            "paidMoney": 0,
+            "taken": false,
+            "rating": 5,
+            "__v": 0
+        },
+        {
+            "_id": "628171f01fd62566c1914eff",
+            "washMachine": "62798e90de2c6d6216596568",
+            "temperature": 40,
+            "spinning": 800,
+            "mode": "628139c7d088fa1c50ee345d",
+            "additionalMode": "6281378b3134c781f68ab12b",
+            "paidStatus": false,
+            "paidBonuses": 0,
+            "paidMoney": 0,
+            "taken": false,
+            "rating": 5,
+            "__v": 0
+        },
+        {
+            "_id": "62813ee7309fc03034309209",
+            "washMachine": "62798e8ede2c6d621659655e",
+            "temperature": 40,
+            "spinning": 800,
+            "mode": "628139c7d088fa1c50ee345d",
+            "additionalMode": "6281378b3134c781f68ab12b",
+            "client": "626fd2556fe755df1ec0646e",
+            "timeBegin": "2022-05-15T18:01:28.731Z",
+            "timeEnd": "2022-05-15T18:08:03.504Z",
+            "paidStatus": true,
+            "paidBonuses": 1,
+            "paidMoney": 99,
+            "taken": true,
+            "rating": 4,
+            "__v": 0
+        },
+        {
+            "_id": "62817276b5ffe2060706767d",
+            "washMachine": "62798e90de2c6d6216596568",
+            "temperature": 40,
+            "spinning": 800,
+            "mode": "628139c7d088fa1c50ee345d",
+            "additionalMode": "6281378b3134c781f68ab12b",
+            "paidStatus": false,
+            "paidBonuses": 0,
+            "paidMoney": 0,
+            "taken": false,
+            "rating": 5,
+            "__v": 0
+        },
+        {
+            "_id": "62816a7a5573ab9f191c9daa",
+            "washMachine": "62798e90de2c6d6216596568",
+            "temperature": 40,
+            "spinning": 800,
+            "mode": "628139c7d088fa1c50ee345d",
+            "additionalMode": "6281378b3134c781f68ab12b",
+            "paidStatus": false,
+            "paidBonuses": 0,
+            "paidMoney": 0,
+            "taken": false,
+            "rating": 5,
+            "__v": 0
+        }
+    ]
+}

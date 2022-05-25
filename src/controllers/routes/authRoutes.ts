@@ -221,4 +221,21 @@ router.patch(
   }
 );
 
+router.delete(
+  '/admin-delete/:userId',
+  checkAuth,
+  (req: Request, res: Response, next: any) => {
+    authService
+      .deleteUser(req.params.userId)
+      .then((_) => {
+        return res.status(StatusCodes.OK).json();
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
 export default router;
