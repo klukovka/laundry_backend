@@ -40,6 +40,30 @@ export class RepairCompanyService {
     }
   }
 
+  async getAllRepairProducts(options: any): Promise<PagedModel<RepairProduct>> {
+    try {
+      const size = Number(options.size ?? 15);
+      const page = Number(options.page ?? 0);
+      const content = await this._repairCompanyRepository.getAllRepairProducts(
+        page,
+        size
+      );
+      const totalElements =
+        await this._repairCompanyRepository.getAllRepairProductsAmount();
+
+      return new PagedModel<RepairProduct>(
+        page,
+        size,
+        Math.ceil(totalElements / size),
+        totalElements,
+        content
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+
   async updateRepairCompany(repairCompany: any): Promise<void> {
     try {
       await this._repairCompanyRepository.updateRepairCompany(

@@ -495,6 +495,24 @@ export class DatabaseMongo {
     }
   }
 
+  async getAllRepairProducts(page: number, size: number): Promise<any> {
+    try {
+      return await RepairProduct.find().skip(page * size)
+      .limit(size);
+    } catch (error: any) {
+      throw new Error("Repair products are not exists");
+    }
+  }
+
+  async getAllRepairProductsAmount(): Promise<number> {
+    try {
+      return await RepairProduct.find({
+      }).count();
+    } catch (error: any) {
+      throw new Error("Repair products are not exists");
+    }
+  }
+
   async updateRepairProduct(
     repairProductId: string,
     options: any

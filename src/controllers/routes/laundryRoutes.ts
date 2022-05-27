@@ -192,7 +192,7 @@ router.get(
   saveLaundryId,
   (req: Request, res: Response, next: any) => {
     laundryService
-      .getLaundryWashMachines(req.body.userData.id, req.query)
+      .getLaundryWashMachines(req.body.userData.laundryId, req.query)
       .then((data) => {
         return res.status(StatusCodes.OK).json(data);
       })

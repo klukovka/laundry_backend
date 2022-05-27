@@ -1,6 +1,7 @@
 import { RepairCompany } from "../models/repairCompany";
 import { RepairProduct } from "../models/repairProduct";
 import { RepairEvent } from "../models/repairEvent";
+import {WashMachine} from '../models/washMachine';
 
 export interface RepairCompanyRepository {
   getRepairCompanyId(userId: string): Promise<RepairCompany | null>;
@@ -15,6 +16,11 @@ export interface RepairCompanyRepository {
   updateRepairProduct(repairProductId: string, options: any): Promise<void>;
   deleteRepairProduct(repairProductId: string): Promise<void>;
   createRepairProduct(repairProduct: RepairProduct): Promise<string>;
+  getAllRepairProducts(
+    page: number,
+    size: number
+  ): Promise<RepairProduct[]>;
+  getAllRepairProductsAmount(): Promise<number>;
 
   getRepairEvents(options: any): Promise<RepairEvent[]>;
   getRepairEventById(id: string): Promise<RepairEvent | null>;

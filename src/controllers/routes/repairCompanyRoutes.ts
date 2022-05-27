@@ -10,6 +10,7 @@ import checkRepairCompany from "../middleware/checkRepairCompany";
 import { RepairCompanyService } from "../../domain/services/repairCompanyService";
 import { RepairCompanyMongoRepository } from "../../data/repositories/repairCompanyMongoRepository";
 import { EventMongoRepository } from "../../data/repositories/eventMongoRepository";
+import saveLaundryId from '../middleware/saveLaundryId';
 
 const router = Router();
 const repairCompanyService = new RepairCompanyService(
@@ -24,6 +25,24 @@ router.get(
   (req: Request, res: Response, next: any) => {
     repairCompanyService
       .getRepairCompanies(req.query)
+      .then((data) => {
+        return res.status(StatusCodes.OK).json(data);
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.get(
+  "/all-products",
+  checkAuth,
+  checkAdminLaundryEmployee,
+  (req: Request, res: Response, next: any) => {
+    repairCompanyService
+      .getAllRepairProducts(req.query)
       .then((data) => {
         return res.status(StatusCodes.OK).json(data);
       })
@@ -152,6 +171,25 @@ router.post(
       .createRepairProduct(req.body)
       .then((id) => {
         return res.status(StatusCodes.CREATED).json({ repairProductId: id });
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.get(
+  "/laundry-own-repair-events",
+  checkAuth,
+  checkLaundryEmployee,
+  saveLaundryId,
+  (req: Request, res: Response, next: any) => {
+    repairCompanyService
+      .getRepairEvents({ laundry: req.body.userData.laundryId})
+      .then((data) => {
+        return res.status(StatusCodes.OK).json(data);
       })
       .catch((error) => {
         return res

@@ -6,6 +6,8 @@ import { RepairCompanyRepository } from "../../domain/repositories/repairCompany
 import { DatabaseMongo } from "../dataSource/mongoDB/databaseMongo";
 
 export class RepairCompanyMongoRepository implements RepairCompanyRepository {
+
+
   async getLaundryRepairEvents(id: string): Promise<RepairEvent[]> {
     try {
       const events = await DatabaseMongo.getDB.getLaundryRepairEvents(id);
@@ -121,6 +123,31 @@ export class RepairCompanyMongoRepository implements RepairCompanyRepository {
     }
   }
 
+ async getAllRepairProducts(page: number, size: number): Promise<RepairProduct[]> {
+    try {
+      const products = await DatabaseMongo.getDB.getAllRepairProducts(
+      page, size
+      );
+      const parsedProducts = new Array<RepairProduct>();
+      if (products) {
+        for (let i = 0; i < products.length; i++) {
+          parsedProducts.push(this._getRepairProduct(products[i])!);
+        }
+      }
+      return parsedProducts;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getAllRepairProductsAmount(): Promise<number> {
+    try {
+      return await DatabaseMongo.getDB.getAllRepairProductsAmount();
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async getRepairProductsAmount(repairCompanyId: string): Promise<number> {
     try {
       return await DatabaseMongo.getDB.getRepairProductsAmount(repairCompanyId);
@@ -225,7 +252,7 @@ export class RepairCompanyMongoRepository implements RepairCompanyRepository {
       repairEvent.date,
       repairEvent.washMachine?._id.toString(),
       repairEvent.repairProduct?._id.toString(),
-      repairEvent.done
+      repairEvent.done, 
     );
   }
 
