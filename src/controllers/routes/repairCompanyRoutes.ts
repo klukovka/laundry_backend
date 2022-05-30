@@ -218,12 +218,12 @@ router.get(
 );
 
 router.get(
-  "/company-repair-events/:repairCompanyId",
+  "/company-repair-events",
   checkAuth,
-  checkAdmin,
+  checkRepairCompany,
   (req: Request, res: Response, next: any) => {
     repairCompanyService
-      .getRepairEvents({ repairCompany: req.params.repairCompanyId })
+      .getRepairEvents({ repairCompany: req.body.userData.id })
       .then((data) => {
         return res.status(StatusCodes.OK).json(data);
       })

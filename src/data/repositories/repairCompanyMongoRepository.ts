@@ -253,6 +253,7 @@ export class RepairCompanyMongoRepository implements RepairCompanyRepository {
       repairEvent.washMachine?._id.toString(),
       repairEvent.repairProduct?._id.toString(),
       repairEvent.done, 
+      repairEvent._id.toString(),
     );
   }
 

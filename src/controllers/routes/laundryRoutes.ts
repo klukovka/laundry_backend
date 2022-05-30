@@ -51,26 +51,26 @@ router.get(
   }
 );
 
-// router.get(
-//   "/:laundryId",
-//   checkAuth,
-//   checkAdmin,
-//   (req: Request, res: Response, next: any) => {
-//     laundryService
-//       .getLaundryById(req.params.laundryId)
-//       .then((data) => {
-//         if (data){
-//           return res.status(StatusCodes.OK).json(data);
-//         }
-//         return res.status(StatusCodes.NOT_FOUND).json();
-//       })
-//       .catch((error) => {
-//         return res
-//           .status(StatusCodes.INTERNAL_ERROR)
-//           .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
-//       });
-//   }
-// );
+ router.get(
+   "/by-id/:laundryId",
+   checkAuth,
+   checkAdmin,
+   (req: Request, res: Response, next: any) => {
+    laundryService
+       .getLaundryById(req.params.laundryId)
+       .then((data) => {
+         if (data){
+         return res.status(StatusCodes.OK).json(data);
+        }
+         return res.status(StatusCodes.NOT_FOUND).json();
+              })
+       .catch((error) => {
+         return res
+           .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+       });
+   }
+ );
 
 router.put(
   "/update-laundry",
