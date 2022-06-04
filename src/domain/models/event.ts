@@ -22,7 +22,7 @@ export class Event {
   paidBonuses: number;
   paidMoney: number;
   taken: Boolean;
-  rating: number;
+  rating: number | null;
 
   constructor(
     washMachineId: string,
@@ -42,7 +42,7 @@ export class Event {
     paidBonuses: number = 0,
     paidMoney: number = 0,
     taken: Boolean = false,
-    rating: number = 5
+    rating: number | null = null,
   ) {
     this.eventId = eventId;
     this.washMachineId = washMachineId;

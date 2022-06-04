@@ -184,4 +184,22 @@ router.get(
   }
 );
 
+router.get(
+  "/by-id/:eventId",
+  checkAuth,
+  checkClient,
+  (req: Request, res: Response, next: any) => {
+    eventService
+      .getEvent(req.params.eventId)
+      .then((event) => {
+        return res.status(StatusCodes.OK).json(event);
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
 export default router;

@@ -918,6 +918,7 @@ export class DatabaseMongo {
     try {
       return await Event.find(options)
         .populate("mode additionalMode")
+        .sort({ "taken": 1, "timeBegin": -1})
         .skip(page * size)
         .limit(size);
     } catch (error: any) {

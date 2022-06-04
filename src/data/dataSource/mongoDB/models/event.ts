@@ -52,7 +52,6 @@ const Event = new Schema({
   },
   rating: {
     type: Number,
-    default: 5,
   },
 });
 
