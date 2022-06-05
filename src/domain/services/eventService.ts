@@ -117,8 +117,8 @@ export class EventService {
         ) {
           const notifications = firestore.collection("Notifications");
           notifications.doc(eventId).set({
-            title: "Wathing is over!",
-            body: "Don't forget to take your clothes",
+            title: "Washing is over!",
+            body: "Don't forget to take your laundry",
           });
           eventRepository
             .updateEvent(eventId, {
