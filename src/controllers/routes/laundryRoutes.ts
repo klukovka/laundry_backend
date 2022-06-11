@@ -9,6 +9,7 @@ import checkLaundryEmployee from "../middleware/checkLaundryEmployee";
 import saveLaundryId from "../middleware/saveLaundryId";
 import StatusCodes from "../utils/statusCodes";
 import { ErrorMessage } from "../../domain/models/errorMessage";
+import checkIOT from "../middleware/checkIOT";
 
 const router = Router();
 const laundryService = new LaundryService(new LaundryMongoRepository());
@@ -299,6 +300,24 @@ router.get(
   }
 );
 
+router.get(
+  "/all-additional-modes-iot/:laundryId",
+  checkAuth,
+  checkIOT,
+  (req: Request, res: Response, next: any) => {
+    laundryService
+      .getAdditionalModes(req.params.laundryId)
+      .then((data) => {
+        return res.status(StatusCodes.OK).json(data.content);
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
 router.post(
   "/create-mode",
   checkAuth,
@@ -357,6 +376,24 @@ router.delete(
 );
 
 router.get(
+  "/all-modes-iot/:laundryId",
+  checkAuth,
+  checkIOT,
+  (req: Request, res: Response, next: any) => {
+    laundryService
+      .getModes(req.params.laundryId)
+      .then((data) => {
+        return res.status(StatusCodes.OK).json(data.content);
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.get(
   "/all-modes",
   checkAuth,
   checkLaundryEmployee,
@@ -364,6 +401,24 @@ router.get(
   (req: Request, res: Response, next: any) => {
     laundryService
       .getModes(req.body.userData.laundryId)
+      .then((data) => {
+        return res.status(StatusCodes.OK).json(data);
+      })
+      .catch((error) => {
+        return res
+          .status(StatusCodes.INTERNAL_ERROR)
+          .json(new ErrorMessage(StatusCodes.INTERNAL_ERROR, error.toString()));
+      });
+  }
+);
+
+router.get(
+  "/wash-machine-by-id/:washMachineId",
+  checkAuth,
+  checkIOT,
+  (req: Request, res: Response, next: any) => {
+    laundryService
+      .getWashMachine(req.params.washMachineId)
       .then((data) => {
         return res.status(StatusCodes.OK).json(data);
       })

@@ -228,6 +228,15 @@ export class LaundryService {
     }
   }
 
+  async getWashMachine(washMachineId: string): Promise<WashMachine|null> {
+    try {
+   return   await this._laundryRepository.getWashMachineById(washMachineId);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+
   async getLaundryWashMachines(
     laundryId: string,
     query: any
