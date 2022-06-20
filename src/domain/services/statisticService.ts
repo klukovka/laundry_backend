@@ -8,6 +8,7 @@ import { EventRepository } from "../repositories/eventRepository";
 import { LaundryRepository } from "../repositories/laundryRepository";
 import { RepairCompanyRepository } from "../repositories/repairCompanyRepository";
 import { WashMachineEntry } from "../models/washMachineEntry";
+import { timeEnd } from "console";
 
 export class StatisticService {
   private _eventRepository: EventRepository;
@@ -355,7 +356,8 @@ export class StatisticService {
       let sum = { time: 0, powerUsage: 0 };
 
       for (let i = 0; i < events.length; i++) {
-        const diff =
+        if (events[i]!.timeEnd!=null&&events[i]!.timeBegin!=null){
+          const diff =
           Math.abs(
             events[i]!.timeEnd!.getTime() - events[i]!.timeBegin!.getTime()
           ) /
@@ -363,6 +365,7 @@ export class StatisticService {
           60;
         sum.time += diff;
         sum.powerUsage += diff * washMachine.powerUsage;
+        }
       }
       return sum;
     } catch (error) {
